@@ -1,0 +1,23 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 0px 320px;
+  margin-bottom: 30px;
+}
+.top {
+  height: min-content;
+  border-top: solid 1px #e5e5e5;
+}
+.top h1 {
+  text-transform: uppercase;
+  font-size: 25px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.bot {
+  height: 260px;
+  display: grid;
+  grid-gap: 10px;
+  grid-auto-flow: column;
+  overflow: visible;
+}

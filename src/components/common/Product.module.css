@@ -1,0 +1,50 @@
+.container {
+  position: relative;
+  width: 200px;
+  display: grid;
+  z-index: 1;
+}
+.container:hover {
+  outline: solid 2px #214d0e;
+  height: fit-content;
+}
+.top {
+  display: grid;
+  text-decoration: none;
+  color: #214d0e;
+}
+.top img {
+  width: 100%;
+  height: 200px;
+}
+.top h1 {
+  text-transform: uppercase;
+  font-weight: bold;
+  line-height: 22px;
+  font-size: 0.875em;
+  text-align: center;
+}
+.top h2 {
+  font-weight: bold;
+  color: #8a171a;
+  font-size: 1.125em;
+  text-align: center;
+}
+.buttonCart {
+  background-color: forestgreen;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: none;
+  border: none;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding: 5px 10px;
+}
+.container:hover .buttonCart{
+    display: block;
+}
+.iconCart {
+  font-size: 20px;
+  color: #fefefe;
+}

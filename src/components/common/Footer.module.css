@@ -1,0 +1,85 @@
+.container {
+  width: 100%;
+  height: fit-content;
+  grid-row: 3;
+  background-color: #fbfbfb;
+  border: 1px solid #e5e5e5;
+  box-sizing: border-box;
+}
+.top {
+  height: fit-content;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0px 320px;
+  border: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.top div {
+  height: fit-content;
+  display: grid;
+  grid-template-columns: min-content auto;
+}
+.policyIcon {
+  font-size: 40px;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  padding-top: 3px;
+  padding-right: 10px;
+}
+.top h1 {
+  font-size: 16px;
+  grid-column: 2;
+  grid-row: 1;
+}
+.top h2 {
+  font-size: 13px;
+  grid-column: 2;
+  grid-row: 2;
+  font-weight: normal;
+}
+.mid {
+  min-height: 200px;
+  height: fit-content;
+  background-color: white;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 10px 320px;
+}
+.mid img {
+  height: 75px;
+}
+.mid h1 {
+  font-size: 16px;
+  grid-column: 2;
+  grid-row: 1;
+}
+.mid h2 {
+  font-size: 13px;
+  grid-column: 2;
+  grid-row: 2;
+  font-weight: normal;
+}
+.colLeft {
+  justify-self: left;
+}
+.colMid {
+  justify-self: center;
+}
+.colRight {
+  justify-self: right;
+}
+.bot {
+  height: fit-content;
+  background-color: #f0f0f0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  padding: 0px 320px;
+}
+.bot p {
+  font-size: 13px;
+  margin: 0;
+}
