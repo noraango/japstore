@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/japstore/static/css/main.feb4b786.chunk.css",
-    "main.js": "/japstore/static/js/main.6be410bf.chunk.js",
-    "main.js.map": "/japstore/static/js/main.6be410bf.chunk.js.map",
+    "main.js": "/japstore/static/js/main.321e65e4.chunk.js",
+    "main.js.map": "/japstore/static/js/main.321e65e4.chunk.js.map",
     "runtime-main.js": "/japstore/static/js/runtime-main.de64947c.js",
     "runtime-main.js.map": "/japstore/static/js/runtime-main.de64947c.js.map",
     "static/css/2.40129e82.chunk.css": "/japstore/static/css/2.40129e82.chunk.css",
@@ -18,6 +18,6 @@
     "static/css/2.40129e82.chunk.css",
     "static/js/2.8c010b73.chunk.js",
     "static/css/main.feb4b786.chunk.css",
-    "static/js/main.6be410bf.chunk.js"
+    "static/js/main.321e65e4.chunk.js"
   ]
 }
