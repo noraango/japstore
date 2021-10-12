@@ -2,26 +2,27 @@ import React from "react";
 import styles from "./Header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <div className={`${styles.container} colLeft`}>
       <div className={styles.navList}>
-        <a className={`${styles.navItem}`} href="customerService">
+        <Link className={`${styles.navItem} colLeft`} to="/cart">
           CHĂM SÓC KHÁCH HÀNG
-        </a>
+        </Link>
       </div>
       <div className={`${styles.navList} colRight`}>
-        <a className={`${styles.navItem}`} href="cart">
+        <Link className={`${styles.navItem}`} to="/cart">
           <FontAwesomeIcon icon={faShoppingCart}></FontAwesomeIcon>
-        </a>
-        <div className={`${styles.line}`}/>
-        <a className={`${styles.navItem}`} href="login">
+        </Link>
+        <div className={`${styles.line}`} />
+        <Link className={`${styles.navItem}`} to="/login">
           ĐĂNG NHẬP
-        </a>
-        <div className={`${styles.line}`}/>
-        <a className={`${styles.navItem}`} href="register">
+        </Link>
+        <div className={`${styles.line}`} />
+        <Link className={`${styles.navItem}`} to="/register">
           ĐĂNG KÝ
-        </a>
+        </Link>
       </div>
     </div>
   );

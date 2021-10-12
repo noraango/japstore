@@ -15,7 +15,7 @@ const Search = () => {
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.searchContainer}`}>
-        <a href="/">
+        <a href="/japstore">
           <img
             className={`${styles.logo}`}
             src={path + "/logo-2.PNG"}

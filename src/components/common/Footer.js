@@ -38,7 +38,7 @@ const Footer = () => {
       </div>
       <div className={`${styles.mid}`}>
         <div className={`${styles.colLeft}`}>
-          <a href="/">
+          <a href="/japstore">
             <img src={path + "/logo-2.PNG"} alt="text" />
           </a>
           <h2>Giới thiệu công ty</h2>
