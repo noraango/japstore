@@ -2,12 +2,10 @@ import { faFacebookSquare, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import Search from "../common/Search";
 import Styles from "./Login.module.css";
 export default function Login() {
   return (
     <div>
-      <Search />
       <div className={`${Styles.container}`}>
         <h1>Đăng nhập</h1>
         <div className={`${Styles.divInput}`}>

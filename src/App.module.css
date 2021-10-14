@@ -1,5 +1,21 @@
-.container{
-    min-height: 100vh;
-    display: grid;
-    grid-template-rows: auto 1fr auto;
+.container {
+  width: 100vw;
+  min-height: 100vh;
+  display: grid;
+  grid-gap: 20px;
+  grid-template-rows: auto 1fr auto;
+}
+.colLeft {
+  justify-self: left;
+}
+.colMid {
+  justify-self: center;
+}
+.colRight {
+  justify-self: right;
+}
+.commonContainer {
+  display: grid;
+  grid-gap: 20px;
+  grid-auto-flow: row;
 }

@@ -1,15 +1,29 @@
 .container {
+  width: 100vw;
+  height: fit-content;
+}
+.content {
   display: grid;
-  grid-template-columns: auto min-content;
   grid-gap: 10px;
-  padding: 20px 320px;
+  grid-template-columns: auto auto;
+  padding: 0px 20px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.slideshow{
-    width: 630px;
-    border-radius: 20px;
-    overflow: hidden;
-    z-index: 0;
-}
-.slideshow img{
+@media only screen and (max-width: 768px) {
+  .content {
     width: 100%;
+    grid-template-columns: auto;
+    padding: 0px 5px;
+  }
+}
+@media only screen and (min-width: 769px) and (max-width: 1279px) {
+  .content {
+    width: 100%;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .content {
+    width: 1280px;
+  }
 }

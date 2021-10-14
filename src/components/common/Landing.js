@@ -1,5 +1,5 @@
 import React from "react";
-import Styles from "./Landing.module.css";
+import styles from "./Landing.module.css";
 import Product from "./Product";
 export default function Landing(category) {
   const products = [
@@ -65,14 +65,16 @@ export default function Landing(category) {
     },
   ];
   return (
-    <div className={`${Styles.container}`}>
-      <div className={`${Styles.top}`}>
-        <h1>{category.values.categoryName}</h1>
-      </div>
-      <div className={`${Styles.bot}`}>
-        {products.map((product) => (
-          <Product key={product.id} values={product} />
-        ))}
+    <div className={`${styles.container}`}>
+      <div className={`${styles.content}`}>
+        <div className={`${styles.top}`}>
+          <h1>{category.values.categoryName}</h1>
+        </div>
+        <div className={`${styles.bot}`}>
+          {products.map((product) => (
+            <Product key={product.id} values={product} />
+          ))}
+        </div>
       </div>
     </div>
   );

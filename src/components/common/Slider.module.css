@@ -1,0 +1,102 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.btnContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btnContainer button {
+  width: 5%;
+  height: 10%;
+  background-color: transparent;
+  border: none;
+}
+.btnContainer button:hover {
+  background-color: #000000;
+  color: #ffffff;
+  opacity: 0.2;
+}
+.btnIcon {
+  font-size: 20px;
+}
+.background {
+  visibility: hidden;
+}
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity ease-in-out 0.4s;
+}
+.container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.show {
+  opacity: 1;
+}
+.hide {
+  opacity: 0;
+}
+.fromLeft {
+  animation-name: fromLeft;
+  animation-duration: 1;
+}
+.fromRight {
+  animation-name: fromRight;
+  animation-duration: 1;
+}
+.toLeft {
+  animation-name: toLeft;
+  animation-duration: 1;
+}
+.toRight {
+  animation-name: toRight;
+  animation-duration: 1;
+}
+
+@keyframes fromLeft {
+  0% {
+    left: -500px;
+  }
+  100% {
+    left: 0px;
+  }
+}
+@keyframes fromRight {
+  0% {
+    left: 500px;
+  }
+  100% {
+    left: 0px;
+  }
+}
+@keyframes toLeft {
+  0% {
+    left: 0px;
+  }
+  100% {
+    left: -500px;
+  }
+}
+@keyframes toRight {
+  0% {
+    left: 0px;
+  }
+  100% {
+    left: 500px;
+  }
+}

@@ -7,13 +7,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import Search from "../common/Search";
 import Styles from "./Register.module.css";
 
 export default function Register() {
   return (
     <div>
-      <Search />
       <div className={`${Styles.container}`}>
         <h1>Đăng ký</h1>
         <div className={`${Styles.divInput}`}>

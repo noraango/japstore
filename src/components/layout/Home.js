@@ -1,7 +1,7 @@
 import React from "react";
-import Search from "../common/Search";
 import Banner from "../common/Banner";
 import Landing from "../common/Landing";
+import app from "../../App.module.css";
 export default function Home() {
   const categories = [
     {
@@ -9,17 +9,16 @@ export default function Home() {
       categoryName: "Khuyến mãi",
     },
     {
-      id: "1",
+      id: "2",
       categoryName: "Mẹ - bé",
     },
     {
-      id: "1",
+      id: "3",
       categoryName: "Chăm sóc sắc đẹp",
     },
   ];
   return (
-    <div>
-      <Search />
+    <div className={`${app.commonContainer}`}>
       <Banner />
       {categories.map((category) => (
         <Landing key={category.id} values={category} />

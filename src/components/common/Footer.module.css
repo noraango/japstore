@@ -1,20 +1,32 @@
-.container {
-  width: 100%;
+.footer {
+  width: 100vw;
   height: fit-content;
-  grid-row: 3;
+  border-top: 1px solid #e5e5e5;
+  box-sizing: border-box;
+}
+.containerTop {
   background-color: #fbfbfb;
   border: 1px solid #e5e5e5;
   box-sizing: border-box;
+  padding: 20px 20px;
+}
+.containerMid {
+  background-color: #ffffff;
+  padding: 20px 20px;
+}
+.containerBot {
+  background-color: #fbfbfb;
+  border: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  padding: 0px 20px;
 }
 .top {
   height: fit-content;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  padding: 0px 320px;
-  border: 1px solid #e5e5e5;
-  box-sizing: border-box;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  grid-gap: 20px;
+  grid-auto-flow: column;
+  margin-left: auto;
+  margin-right: auto;
 }
 .top div {
   height: fit-content;
@@ -40,12 +52,13 @@
   font-weight: normal;
 }
 .mid {
-  min-height: 200px;
   height: fit-content;
   background-color: white;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  padding: 10px 320px;
+  grid-gap: 20px;
+  grid-auto-flow: column;
+  margin-left: auto;
+  margin-right: auto;
 }
 .mid img {
   height: 75px;
@@ -72,14 +85,53 @@
 }
 .bot {
   height: fit-content;
-  background-color: #f0f0f0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  border: 1px solid #e5e5e5;
-  box-sizing: border-box;
-  padding: 0px 320px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .bot p {
   font-size: 13px;
   margin: 0;
+}
+@media only screen and (max-width: 768px) {
+  .top {
+    width: 100vw;
+    grid-auto-flow: row;
+  }
+  .top div {
+    justify-self: center;
+  }
+  .mid {
+    width: 100vw;
+    grid-auto-flow: row;
+  }
+  .mid div {
+    justify-self: center;
+  }
+  .bot {
+    width: 100vw;
+  }
+}
+@media only screen and (min-width: 769px) and (max-width: 1279px) {
+  .top {
+    width: 100vw;
+  }
+  .mid {
+    width: 100vw;
+  }
+  .bot {
+    width: 100vw;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .top {
+    width: 1280px;
+  }
+  .mid {
+    width: 1280px;
+  }
+  .bot {
+    width: 1280px;
+  }
 }
