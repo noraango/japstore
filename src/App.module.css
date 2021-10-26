@@ -3,7 +3,13 @@
   min-height: 100vh;
   display: grid;
   grid-gap: 20px;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: min-content 1fr auto;
+}
+.layout {
+  height: fit-content;
+  background-color: transparent;
+  margin-left: auto;
+  margin-right: auto;
 }
 .colLeft {
   justify-self: left;
@@ -18,4 +24,19 @@
   display: grid;
   grid-gap: 20px;
   grid-auto-flow: row;
+}
+@media only screen and (max-width: 768px) {
+  .layout {
+    width: 100%;
+  }
+}
+@media only screen and (min-width: 769px) and (max-width: 1279px) {
+  .layout {
+    width: 100%;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  .layout {
+    width: 1280px;
+  }
 }

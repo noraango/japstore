@@ -7,6 +7,7 @@ import {
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
 const Footer = () => {
+  
   var path = process.env.PUBLIC_URL + "/images";
   return (
     <div className={`${styles.footer}`}>
@@ -44,8 +45,6 @@ const Footer = () => {
             <a href="/japstore">
               <img src={path + "/logo-2.png"} alt="text" />
             </a>
-            <h2>Giới thiệu công ty</h2>
-            <h2>Thông tin liên hệ</h2>
           </div>
           <div className={`${styles.colMid}`}>
             <h1>HỖ TRỢ KHÁCH HÀNG</h1>

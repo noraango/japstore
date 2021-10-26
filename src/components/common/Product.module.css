@@ -2,10 +2,11 @@
   position: relative;
   width: 200px;
   display: grid;
+  border-radius: 10px;
   z-index: 1;
 }
 .container:hover {
-  outline: solid 2px #214d0e;
+  outline: solid 2px #bc8c4e;
   height: fit-content;
 }
 .top {
@@ -31,7 +32,7 @@
   text-align: center;
 }
 .buttonCart {
-  background-color: forestgreen;
+  background-color: #bc8c4e;
   position: absolute;
   right: 0;
   bottom: 0;

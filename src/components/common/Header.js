@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import styles from "./Header.module.css";
 import app from "../../App.module.css";
 import { Link } from "react-router-dom";
@@ -11,8 +12,18 @@ import {
   faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 const Header = () => {
+  const history = useHistory();
   var path = process.env.PUBLIC_URL + "/images";
+  let user = JSON.parse(localStorage.getItem("user"));
   const [styler, setStyle] = useState({ display: "none" });
+  function logout() {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    window.location.reload();
+  }
+  function redirectStaff() {
+    history.push("/staff");
+  }
   return (
     <div>
       <div className={`${styles.container} ${styles.topContainer}`}>
@@ -26,14 +37,43 @@ const Header = () => {
             <Link className={`${styles.navItem}`} to="/cart">
               <FontAwesomeIcon icon={faShoppingCart}></FontAwesomeIcon>
             </Link>
-            <div className={`${styles.line}`} />
-            <Link className={`${styles.navItem}`} to="/login">
-              ĐĂNG NHẬP
-            </Link>
-            <div className={`${styles.line}`} />
-            <Link className={`${styles.navItem}`} to="/register">
-              ĐĂNG KÝ
-            </Link>
+            {user === null ? <div className={`${styles.line}`} /> : ""}
+            {user === null ? (
+              <Link className={`${styles.navItem}`} to="/login">
+                ĐĂNG NHẬP
+              </Link>
+            ) : (
+              ""
+            )}
+            {user === null ? <div className={`${styles.line}`} /> : ""}
+            {user === null ? (
+              <Link className={`${styles.navItem}`} to="/register">
+                ĐĂNG KÝ
+              </Link>
+            ) : (
+              ""
+            )}
+            {user != null ? <div className={`${styles.line}`} /> : ""}
+            {user != null ? (
+              <button className={`${styles.btnProfile}`}>
+                {user != null ? user.Username : ""}
+              </button>
+            ) : (
+              ""
+            )}
+            <div className={`${styles.profileContainer}`}>
+              {user != null ? (
+                user.RoleNames.indexOf("admin") !== -1 ? (
+                  <button onClick={redirectStaff}>Quản lí</button>
+                ) : (
+                  ""
+                )
+              ) : (
+                ""
+              )}
+              <button>Thông tin người dùng</button>
+              <button onClick={logout}>Đăng xuất</button>
+            </div>
           </div>
         </div>
       </div>
@@ -312,5 +352,4 @@ const Header = () => {
     </div>
   );
 };
-
 export default Header;

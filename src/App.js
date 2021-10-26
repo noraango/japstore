@@ -6,14 +6,19 @@ import Footer from "./components/common/Footer";
 import Home from "./components/layout/Home";
 import Login from "./components/layout/Login";
 import Register from "./components/layout/Register";
+import styles from "./App.module.css";
+import Staff from "./components/layout/Staff";
 export default function App() {
   return (
     <div className={`${Style.container}`}>
       <BrowserRouter>
         <Header></Header>
-        <Route exact path={["/", "/japstore"]} component={Home} />
-        <Route path="/login" component={Login} />
-        <Route path="/register" component={Register} />
+        <div className={styles.layout}>
+          <Route exact path={["/", "/japstore"]} component={Home} />
+          <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
+          <Route path="/staff" component={Staff} />
+        </div>
         <Footer></Footer>
       </BrowserRouter>
     </div>
