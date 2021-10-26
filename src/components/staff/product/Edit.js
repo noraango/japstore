@@ -33,6 +33,12 @@ export default class Edit extends Component {
         <div className={`${styles.header}`}>
           <h1>Sửa sản phẩm</h1>
         </div>
+        <div className={`${styles.content}`}>
+          <div className={`${styles.inputCode}`}>
+            <h2>Mã sản phẩm</h2>
+            <input placeholder="Nhập mã sản phẩm"></input>
+          </div>
+        </div>
       </div>
     );
   }
