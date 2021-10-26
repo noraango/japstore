@@ -34,7 +34,7 @@ export var products = [
     size: 444.5,
     quantity: 100,
     origin: "Nhật Bổn",
-    originId: 1,
+    originId: 3,
     packingMethod: "Đóng gói",
     packingMethodId: 2,
     shortDescription: "Đây là một sản phẩm nhập từ Nhật Bản",

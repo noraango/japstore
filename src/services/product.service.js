@@ -16,8 +16,9 @@ class ProductService {
     return http.post("/product", data);
   }
 
-  update(id, data) {
-    return http.put(`/product/${id}`, data);
+  update(data) {
+    return "OK";
+    //return http.put(`/product/${id}`, data);
   }
 
   delete(id) {
