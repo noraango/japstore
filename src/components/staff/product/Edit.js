@@ -142,14 +142,16 @@ export default class Edit extends Component {
         packingMethodId: e.target.value
       }
     }))
-    console.log(this.state.product.packingMethodId);
+    
   }
 
   onChangeImage(e) {
-    this.setState({
-      product: { displayImage: URL.createObjectURL(e.target.files[0]) }
-
-    })
+    this.setState((prev) => ({
+      product: {
+      ...prev.product,
+       displayImage: URL.createObjectURL(e.target.files[0]) 
+      }
+    }))
   }
 
 
