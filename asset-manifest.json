@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/japstore/static/css/main.b1ac685c.chunk.css",
-    "main.js": "/japstore/static/js/main.ab507705.chunk.js",
-    "main.js.map": "/japstore/static/js/main.ab507705.chunk.js.map",
+    "main.css": "/japstore/static/css/main.e2a31ef8.chunk.css",
+    "main.js": "/japstore/static/js/main.628e2859.chunk.js",
+    "main.js.map": "/japstore/static/js/main.628e2859.chunk.js.map",
     "runtime-main.js": "/japstore/static/js/runtime-main.de64947c.js",
     "runtime-main.js.map": "/japstore/static/js/runtime-main.de64947c.js.map",
     "static/css/2.b57b7cfd.chunk.css": "/japstore/static/css/2.b57b7cfd.chunk.css",
-    "static/js/2.58cb6e67.chunk.js": "/japstore/static/js/2.58cb6e67.chunk.js",
-    "static/js/2.58cb6e67.chunk.js.map": "/japstore/static/js/2.58cb6e67.chunk.js.map",
+    "static/js/2.a58dbcb3.chunk.js": "/japstore/static/js/2.a58dbcb3.chunk.js",
+    "static/js/2.a58dbcb3.chunk.js.map": "/japstore/static/js/2.a58dbcb3.chunk.js.map",
     "index.html": "/japstore/index.html",
     "static/css/2.b57b7cfd.chunk.css.map": "/japstore/static/css/2.b57b7cfd.chunk.css.map",
-    "static/css/main.b1ac685c.chunk.css.map": "/japstore/static/css/main.b1ac685c.chunk.css.map",
-    "static/js/2.58cb6e67.chunk.js.LICENSE.txt": "/japstore/static/js/2.58cb6e67.chunk.js.LICENSE.txt"
+    "static/css/main.e2a31ef8.chunk.css.map": "/japstore/static/css/main.e2a31ef8.chunk.css.map",
+    "static/js/2.a58dbcb3.chunk.js.LICENSE.txt": "/japstore/static/js/2.a58dbcb3.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.de64947c.js",
     "static/css/2.b57b7cfd.chunk.css",
-    "static/js/2.58cb6e67.chunk.js",
-    "static/css/main.b1ac685c.chunk.css",
-    "static/js/main.ab507705.chunk.js"
+    "static/js/2.a58dbcb3.chunk.js",
+    "static/css/main.e2a31ef8.chunk.css",
+    "static/js/main.628e2859.chunk.js"
   ]
 }
