@@ -1,5 +1,4 @@
 import React from "react";
-import Style from "./App.module.css";
 import { BrowserRouter, Route } from "react-router-dom";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
@@ -10,7 +9,7 @@ import styles from "./App.module.css";
 import Staff from "./components/layout/Staff";
 export default function App() {
   return (
-    <div className={`${Style.container}`}>
+    <div className={`${styles.container}`}>
       <BrowserRouter>
         <Header></Header>
         <div className={styles.layout}>
