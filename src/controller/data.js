@@ -1,4 +1,122 @@
 export default this;
+export var users = [
+  {
+    UserId: 1,
+    Username: "vitcon2000",
+    RoleIds: [1],
+    RoleNames: ["admin"],
+    Name: "Ngô Thế Anh",
+    Email: "timer217@gmail.com",
+  },
+  {
+    UserId: 2,
+    Username: "anhnt",
+    RoleIds: [2],
+    RoleNames: ["manager"],
+    Name: "Ngô Thế Anh",
+    Email: "timer218@gmail.com",
+  },
+  {
+    UserId: 3,
+    Username: "duy99",
+    RoleIds: [3],
+    RoleNames: ["staff"],
+    Name: "Duy",
+    Email: "timer218@gmail.com",
+  },
+];
+export var categories = [
+  {
+    id: 1,
+    name: "Mẹ - Bé",
+    level: 1,
+    superCateId: 0,
+    hasSub: true,
+  },
+  {
+    id: 2,
+    name: "Đồ điện tử",
+    level: 1,
+    superCateId: 0,
+    hasSub: true,
+  },
+  {
+    id: 3,
+    name: "Đồ gia dụng",
+    level: 1,
+    superCateId: 0,
+    hasSub: false,
+  },
+  {
+    id: 4,
+    name: "Thực phẩm",
+    level: 1,
+    superCateId: 0,
+    hasSub: false,
+  },
+  {
+    id: 5,
+    name: "Sữa",
+    level: 2,
+    superCateId: 1,
+  },
+  {
+    id: 6,
+    name: "Dụng cụ",
+    level: 2,
+    superCateId: 1,
+    hasSub: false,
+  },
+  {
+    id: 7,
+    name: "Quần áo",
+    level: 2,
+    superCateId: 1,
+    hasSub: false,
+  },
+  {
+    id: 8,
+    name: "Trang trí",
+    level: 2,
+    superCateId: 2,
+    hasSub: false,
+  },
+  {
+    id: 9,
+    name: "Sữa",
+    level: 3,
+    superCateId: 2,
+    hasSub: true,
+  },
+  {
+    id: 10,
+    name: "Dụng cụ",
+    level: 3,
+    superCateId: 2,
+    hasSub: false,
+  },
+  {
+    id: 11,
+    name: "Quần áo",
+    level: 3,
+    superCateId: 2,
+    hasSub: false,
+  },
+  {
+    id: 12,
+    name: "Trang trí",
+    level: 3,
+    superCateId: 2,
+    hasSub: false,
+  },
+  {
+    id: 13,
+    name: "Sữa ông thọ",
+    level: 4,
+    superCateId: 9,
+    hasSub: false,
+  },
+];
 export var products = [
   {
     id: 1,
@@ -77,23 +195,5 @@ export var products = [
       "https://product.hstatic.net/1000282430/product/57_7a69cce04b0040cdb238cca78f2064c4_grande.jpg",
       "https://product.hstatic.net/1000282430/product/57_7a69cce04b0040cdb238cca78f2064c4_grande.jpg",
     ],
-  },
-];
-export var users = [
-  {
-    UserId: 1,
-    Username: "vitcon2000",
-    RoleIds: [1],
-    RoleNames: ["admin"],
-    Name: "Ngô Thế Anh",
-    Email: "timer217@gmail.com",
-  },
-  {
-    UserId: 1,
-    Username: "anhnt",
-    RoleIds: [2],
-    RoleNames: ["manager"],
-    Name: "Ngô Thế Anh",
-    Email: "timer218@gmail.com",
   },
 ];
