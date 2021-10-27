@@ -15,8 +15,7 @@ export default class Edit extends Component {
     this.onChangeImage = this.onChangeImage.bind(this);
     this.onChangeOrigin = this.onChangeOrigin.bind(this);
     this.onChangePakingMethod = this.onChangePakingMethod.bind(this);
-
-
+    this.onReturn = this.onReturn.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.state = {
       product: {
@@ -60,7 +59,6 @@ export default class Edit extends Component {
         code: value,
       },
     }));
-
   }
   onChangePrice(e) {
     let value = e.target.value;
@@ -70,7 +68,6 @@ export default class Edit extends Component {
         price: value,
       },
     }));
-
   }
   onChangeQuantity(e) {
     let value = e.target.value;
@@ -90,7 +87,6 @@ export default class Edit extends Component {
         brand: value,
       },
     }));
-
   }
   onChangeManufacturer(e) {
     let value = e.target.value;
@@ -100,7 +96,6 @@ export default class Edit extends Component {
         manufacturer: value,
       },
     }));
-
   }
   onChangeShortDescription(e) {
     let value = e.target.value;
@@ -110,9 +105,7 @@ export default class Edit extends Component {
         shortDescription: value,
       },
     }));
-
   }
-
 
   onChangeDescription(e) {
     let value = e.target.value;
@@ -122,42 +115,40 @@ export default class Edit extends Component {
         description: value,
       },
     }));
-
   }
   onChangeOrigin(e) {
     this.setState((prev) => ({
       product: {
         ...prev.product,
-        originId: e.target.value
-      }
-    }))
-    
+        originId: e.target.value,
+      },
+    }));
   }
 
   onChangePakingMethod(e) {
-
     this.setState((prev) => ({
       product: {
         ...prev.product,
-        packingMethodId: e.target.value
-      }
-    }))
-    
+        packingMethodId: e.target.value,
+      },
+    }));
   }
 
   onChangeImage(e) {
     this.setState((prev) => ({
       product: {
-      ...prev.product,
-       displayImage: URL.createObjectURL(e.target.files[0]) 
-      }
-    }))
+        ...prev.product,
+        displayImage: URL.createObjectURL(e.target.files[0]),
+      },
+    }));
   }
-
 
   onSubmit() {
     productService.update(this.state.product);
     console.log(this.state.product);
+  }
+  onReturn() {
+    this.props.history.goBack();
   }
   render() {
     return (
@@ -209,26 +200,30 @@ export default class Edit extends Component {
           </div>
           <div className={`${styles.inputOrigin}`}>
             <h2>Xuất xứ</h2>
-            {this.state.product.originId &&
-              <select defaultValue={this.state.product.originId} onChange={this.onChangeOrigin}>
+            {this.state.product.originId && (
+              <select
+                defaultValue={this.state.product.originId}
+                onChange={this.onChangeOrigin}
+              >
                 <option value="1">Nhật Bản</option>
                 <option value="2">Trung Quốc</option>
                 <option value="3">Việt Nam</option>
               </select>
-            }
-
+            )}
           </div>
           <div className={`${styles.inputPacking}`}>
             <h2>Phương thức đóng gói</h2>
-            {this.state.product.packingMethodId &&
-              <select defaultValue={this.state.product.packingMethodId} onChange={this.onChangePakingMethod}>
+            {this.state.product.packingMethodId && (
+              <select
+                defaultValue={this.state.product.packingMethodId}
+                onChange={this.onChangePakingMethod}
+              >
                 <option value="1">Hộp 250ml</option>
                 <option value="2">Thùng 24 lon</option>
                 <option value="3">Chai 750ml</option>
                 <option value="4">Hộp 30cm x 30cm x 30cm</option>
               </select>
-            }
-
+            )}
           </div>
           <div className={`${styles.inputBrand}`}>
             <h2>Thương hiệu</h2>
@@ -251,7 +246,6 @@ export default class Edit extends Component {
             <img
               src={this.state.product.displayImage}
               alt="Không load được ảnh"
-
             />
           </div>
           <div className={`${styles.inputShort}`}>
@@ -273,7 +267,7 @@ export default class Edit extends Component {
           <button className={`${styles.btnAdd}`} onClick={this.onSubmit}>
             Chỉnh sửa sản phẩm
           </button>
-          <button className={`${styles.btnBack}`}>Quay lại</button>
+          <button className={`${styles.btnBack}`} onClick={this.onReturn}>Quay lại</button>
         </div>
       </div>
     );
