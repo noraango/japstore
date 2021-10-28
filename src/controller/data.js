@@ -81,19 +81,61 @@ export var products = [
 ];
 export var users = [
   {
-    UserId: 1,
-    Username: "vitcon2000",
-    RoleIds: [1],
-    RoleNames: ["admin"],
-    Name: "Ngô Thế Anh",
-    Email: "timer217@gmail.com",
+    userid: 1,
+    username: "duy123",
+    password: "admin",
+    name: "Ngô Thế Anh",
+    phone: "09626128151",
+    email: "timer217@gmail.com",
+    address: "2174 Đại Lộ Hùng Vương",
+    avatar: 
+    "https://product.hstatic.net/1000282430/product/57_7a69cce04b0040cdb238cca78f2064c4_grande.jpg",
+    villageId:1,
+    village: "Dong Anh",
+    wardId:1,
+    ward:"Hoan Kiem",
+    districId:1,
+    distric:"Hai Ba Trung",
+    provinceId:1,
+    province:"TpHoChiMinh"
   },
   {
-    UserId: 1,
-    Username: "anhnt",
-    RoleIds: [2],
-    RoleNames: ["manager"],
-    Name: "Ngô Thế Anh",
-    Email: "timer218@gmail.com",
+    userid: 2,
+    username: "duy12345",
+    password: "admin1",
+    name: "Ngô Thế Anh1",
+    phone: "09626128151",
+    email: "timer217@gmail.com",
+    address: "Ha Noi",
+    avatar: 
+    "https://product.hstatic.net/1000282430/product/57_7a69cce04b0040cdb238cca78f2064c4_grande.jpg",
+    villageId:2,
+    village: "Dong Anh",
+    wardId:2,
+    ward:"Hoan Kiem",
+    districId:2,
+    distric:"Hai Ba Trung",
+    provinceId:2,
+    province:"TpHoChiMinh"
   },
+  {
+    userid: 3,
+    username: "duy1233567",
+    password: "admin346",
+    name: "Ngô Thế Anh678",
+    phone: "09626128151",
+    email: "timer217@gmail.com",
+    address: "Ha Noi",
+    avatar: 
+    "https://product.hstatic.net/1000282430/product/57_7a69cce04b0040cdb238cca78f2064c4_grande.jpg",
+    villageId:3,
+    village: "Dong Anh",
+    wardId:3,
+    ward:"Hoan Kiem",
+    districId:3,
+    distric:"Hai Ba Trung",
+    provinceId:3,
+    province:"TpHoChiMinh"
+  },
+ 
 ];
