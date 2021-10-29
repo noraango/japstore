@@ -6,7 +6,7 @@ import List from './employee/List'
 export default function Employee(prop) {
     return (
         <div>
-            <Route exact path={`${prop.match.path}`} component={List}/>
+            <Route exact yoyo="yoyo" path={`${prop.match.path}`} component={List}/>
             <Route exact path={`${prop.match.path}/create`} component={Create}/>
         </div>
     )

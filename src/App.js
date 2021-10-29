@@ -7,6 +7,7 @@ import Login from "./components/layout/Login";
 import Register from "./components/layout/Register";
 import styles from "./App.module.css";
 import Staff from "./components/layout/Staff";
+import Search from "./components/layout/Search";
 export default function App() {
   return (
     <div className={`${styles.container}`}>
@@ -14,6 +15,8 @@ export default function App() {
         <Header></Header>
         <div className={styles.layout}>
           <Route exact path={["/", "/japstore"]} component={Home} />
+          <Route exact path="/search" component={Search} />
+          <Route path="/search/:search" component={Search} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/staff" component={Staff} />

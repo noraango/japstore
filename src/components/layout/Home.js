@@ -1,7 +1,9 @@
 import React from "react";
 import Banner from "../common/Banner";
-import Landing from "../common/Landing";
+import Landing from "../common/Landing/Landing";
 import app from "../../App.module.css";
+import productService from "../../services/product.service";
+import styles from "./Home.module.css";
 export default function Home() {
   const categories = [
     {
@@ -20,8 +22,11 @@ export default function Home() {
   return (
     <div className={`${app.commonContainer}`}>
       <Banner />
-      {categories.map((category) => (
-        <Landing key={category.id} values={category} />
+      {categories.map((category, index) => (
+        <div key={index} className={styles.productList}>
+          <h1>{category.categoryName}</h1>
+          <Landing data={productService.getSome(6)} col={6} />
+        </div>
       ))}
     </div>
   );
