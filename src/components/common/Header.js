@@ -1,4 +1,3 @@
-import React from "react";
 import { useHistory } from "react-router-dom";
 import styles from "./Header.module.css";
 import app from "../../App.module.css";
@@ -6,10 +5,26 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import CategoryBar from "./CategoryBar/CategoryBar";
-const Header = () => {
+import { useState } from "react";
+export default function Header(props) {
+  const [searchText, setSearchText] = useState("");
   const history = useHistory();
   var path = process.env.PUBLIC_URL + "/images";
   let user = JSON.parse(localStorage.getItem("user"));
+  function onChangeSearchText(e) {
+    setSearchText(e.target.value);
+  }
+  function onEnter(e) {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      onSubmitSearch();
+    }
+  }
+
+  function onSubmitSearch(e) {
+    history.push("/search/" + searchText);
+    window.location.reload();
+  }
   function logout() {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -28,10 +43,6 @@ const Header = () => {
             </Link>
           </div>
           <div className={`${styles.navList} ${app.colRight}`}>
-            <Link className={`${styles.navItem}`} to="/cart">
-              <FontAwesomeIcon icon={faShoppingCart}></FontAwesomeIcon>
-            </Link>
-            {user === null ? <div className={`${styles.line}`} /> : ""}
             {user === null ? (
               <Link className={`${styles.navItem}`} to="/login">
                 ĐĂNG NHẬP
@@ -47,7 +58,6 @@ const Header = () => {
             ) : (
               ""
             )}
-            {user != null ? <div className={`${styles.line}`} /> : ""}
             {user != null ? (
               <button className={`${styles.btnProfile}`}>
                 {user != null ? user.Username : ""}
@@ -85,8 +95,10 @@ const Header = () => {
           <input
             className={`${styles.searchInput}`}
             placeholder="Tìm kiếm sản phẩm"
+            onChange={onChangeSearchText}
+            onKeyUp={onEnter}
           ></input>
-          <button className={`${styles.searchButton}`}>
+          <button className={`${styles.searchButton}`} onClick={onSubmitSearch}>
             <FontAwesomeIcon
               className={`${styles.searchIcon}`}
               icon={faSearch}
@@ -110,9 +122,8 @@ const Header = () => {
         </button>
       </div>
       <div className={`${styles.bot}`}>
-        <CategoryBar  />
+        <CategoryBar />
       </div>
     </div>
   );
-};
-export default Header;
+}
