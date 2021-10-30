@@ -8,13 +8,23 @@ export default function CategoryBar() {
   const [dropListState, setDropListState] = useState(false);
   const [categories, setCategories] = useState([]);
   useEffect(() => {
-    setCategories(categoryService.getLevel(1));
-  }, []);
+    retrieveCategory();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   function showList() {
     setDropListState(true);
   }
   function hideList() {
     setDropListState(false);
+  }
+  function retrieveCategory() {
+    categoryService
+      .getLevel(1)
+      .then((res) => {
+        setCategories(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
   return (
     <div className={styles.container}>
@@ -25,7 +35,11 @@ export default function CategoryBar() {
         state={dropListState}
       />
       {dropListState && categories.length > 0 ? (
-        <CategoryList categories={categories} showList={showList} hideList={hideList} />
+        <CategoryList
+          categories={categories}
+          showList={showList}
+          hideList={hideList}
+        />
       ) : (
         ""
       )}
