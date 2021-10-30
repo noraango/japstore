@@ -2,17 +2,16 @@ import http from "../http-common";
 import { categories } from "../controller/data";
 class CategoryService {
   getAll() {
-    return categories;
-    // return http.get("/product");
+    return http.get("/category/getlist");
   }
 
   getLevel(level) {
-    return categories.filter((x) => x.level === level);
+    return http.get("/category/level/" + level);
     // return http.get(`/product/${id}`);
   }
 
   getAllSubCategory(parentId) {
-    return categories.filter((x) => x.superCateId === parentId);
+    return http.get("/category/subcategory/" + parentId);
   }
 
   getId(id) {

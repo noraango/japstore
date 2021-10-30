@@ -8,7 +8,7 @@ export default function CategoryList(props) {
       onMouseLeave={props.hideList}
     >
       {props.categories.map((category, index) => (
-        <Category key={index} category={category}/>
+        <Category key={index} data={category}/>
       ))}
     </ul>
   );
