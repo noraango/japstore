@@ -3,11 +3,7 @@
   border-top: 1px solid #e5e5e5;
   box-sizing: border-box;
 }
-.containerTop {
-  background-color: #fbfbfb;
-  border-bottom: 1px solid #e5e5e5;
-  box-sizing: border-box;
-}
+
 .containerMid {
   background-color: #fbfbfb;
 }
@@ -17,41 +13,7 @@
   border-top: 1px solid #e5e5e5;
   box-sizing: border-box;
 }
-.top {
-  height: fit-content;
-  display: grid;
-  grid-gap: 20px;
-  grid-auto-flow: column;
-  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-  -moz-box-sizing: border-box; /* Firefox, other Gecko */
-  box-sizing: border-box;
-  padding: 20px 0px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.top div {
-  height: fit-content;
-  display: grid;
-  grid-template-columns: min-content auto;
-}
-.policyIcon {
-  font-size: 40px;
-  grid-column: 1;
-  grid-row: 1 / span 2;
-  padding-top: 3px;
-  padding-right: 10px;
-}
-.top h1 {
-  font-size: 16px;
-  grid-column: 2;
-  grid-row: 1;
-}
-.top h2 {
-  font-size: 13px;
-  grid-column: 2;
-  grid-row: 2;
-  font-weight: normal;
-}
+
 .mid {
   height: fit-content;
   background-color: transparent;

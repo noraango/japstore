@@ -1,44 +1,12 @@
 import React from "react";
 import styles from "./Footer.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTruck,
-  faCreditCard,
-  faComments,
-} from "@fortawesome/free-solid-svg-icons";
+
+
 const Footer = () => {
   
   var path = process.env.PUBLIC_URL + "/images";
   return (
     <div className={`${styles.footer}`}>
-      <div className={`${styles.containerTop}`}>
-        <div className={`${styles.top}`}>
-          <div className={`${styles.colLeft} ${styles.topItem}`}>
-            <FontAwesomeIcon
-              icon={faTruck}
-              className={styles.policyIcon}
-            ></FontAwesomeIcon>
-            <h1>CHÍNH SÁCH GIAO HÀNG</h1>
-            <h2>Nhận hàng và thanh toán tại nhà</h2>
-          </div>
-          <div className={`${styles.colMid} ${styles.topItem}`}>
-            <FontAwesomeIcon
-              icon={faComments}
-              className={styles.policyIcon}
-            ></FontAwesomeIcon>
-            <h1>HỖ TRỢ NHIỆT TÌNH</h1>
-            <h2>Tư vấn, giải đáp mọi thắc mắc</h2>
-          </div>
-          <div className={`${styles.colRight} ${styles.topItem}`}>
-            <FontAwesomeIcon
-              icon={faCreditCard}
-              className={styles.policyIcon}
-            ></FontAwesomeIcon>
-            <h1>THANH TOÁN TIỆN LỢI</h1>
-            <h2>Trả tiền mặt, CK, trả góp 0%</h2>
-          </div>
-        </div>
-      </div>
       <div className={`${styles.containerMid}`}>
         <div className={`${styles.mid}`}>
           <div className={`${styles.colLeft}`}>
