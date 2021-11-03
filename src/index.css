@@ -5,7 +5,7 @@
 }
 body {
   width: 100vw;
-  background-color: #efefef;
+  background-color: #efefef !important;
   font-family: "Work Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -23,4 +23,73 @@ code {
 }
 .colRight {
   justify-self: right;
+}
+.np {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.container {
+  padding: 0 !important;
+}
+.row {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.row > * {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.title {
+  font-size: 25px;
+}
+.label {
+  font-size: 20px;
+}
+.input {
+  font-size: 15px;
+}
+@media (max-width: 576px) {
+  .title {
+    font-size: 17px;
+  }
+  .label {
+    font-size: 14px;
+  }
+  .input {
+    font-size: 11px;
+  }
+}
+@media (max-width: 768px) and (min-width: 577px) {
+  .title {
+    font-size: 18px;
+  }
+  .label {
+    font-size: 15px;
+  }
+  .input {
+    font-size: 11px;
+  }
+}
+@media (max-width: 992px) and (min-width: 769px) {
+  .title {
+    font-size: 19px;
+  }
+  .label {
+    font-size: 16px;
+  }
+  .input {
+    font-size: 12px;
+  }
+}
+@media (max-width: 1200px) and (min-width: 993px) {
+  .title {
+    font-size: 22px;
+  }
+  .label {
+    font-size: 16px;
+  }
+  .input {
+    font-size: 13px;
+  }
 }

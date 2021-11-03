@@ -46,12 +46,19 @@
   animation-duration: 0.2s;
 }
 .imgContainer {
+  position: relative;
   width: 100%;
+  padding-top: 100%;
+  margin-bottom: 20px;
+  border-radius: 7px 7px 0px 0px;
   overflow: hidden;
 }
 .imgContainer img {
+  position: absolute;
+  top: 0;
   width: 100%;
-  object-fit: center;
+  height: 100%;
+  object-fit: cover;
   transition: transform 0.5s;
 }
 .productCard img:hover {

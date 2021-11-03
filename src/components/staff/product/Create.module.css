@@ -1,19 +1,16 @@
 .container {
   width: 100%;
   min-height: 100%;
-  white-space: nowrap;
-  display: grid;
-  grid-gap: 20px;
-  grid-template-rows: fit-content auto;
+  padding: 20px;
 }
 .header {
   height: fit-content;
   display: grid;
   grid-auto-flow: column;
   border-bottom: 1px solid #bc8c4e;
+  margin-bottom: 20px;
 }
 .header h1 {
-  font-size: 25px;
   font-weight: 600;
 }
 .content {
@@ -21,7 +18,7 @@
   display: grid;
   grid-gap: 20px;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(6, fit-content);
+  grid-template-rows: repeat(minmax(fit-content, 1fr));
 }
 .content *:focus {
   outline: 0px;
@@ -32,35 +29,27 @@
   flex-direction: column;
 }
 .content h2 {
-  font-size: 20px;
   font-weight: 500;
 }
 .content input,
 select,
 textarea {
-  font-size: 15px;
   font-weight: 525;
   color: rgba(0, 0, 0, 1);
   background: #ffffff;
   border: 1px solid #bc8c4e;
   box-sizing: border-box;
   border-radius: 5px;
-  padding: 10px;
+  padding: 5px 10px;
   margin-top: 5px;
 }
-.inputName {
-  grid-row: 1;
-  grid-column: 1 / span 2;
-}
-.inputCode {
-  grid-row: 1;
-  grid-column: 3;
-}
 .inputImage {
-  grid-row: 1 / span 3;
-  grid-column: 4;
+  position: relative;
+  top: 0;
   width: 100%;
-  height: 100%;
+  height: fit-content;
+  padding-top: 100%;
+  object-fit: cover;
   background-color: transparent;
   position: relative;
   border: 1px solid #bc8c4e;
@@ -80,54 +69,53 @@ textarea {
 .inputImage img {
   position: absolute;
   top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.inputPrice {
-  grid-row: 2;
-  grid-column: 1;
+.span11 {
+  grid-row: span 1;
+  grid-column: span 1;
 }
-.inputQuantity {
-  grid-row: 2;
-  grid-column: 2;
+.span12 {
+  grid-row: span 1;
+  grid-column: span 2;
 }
-.inputOrigin {
-  grid-row: 3;
-  grid-column: 1;
+.span21 {
+  grid-row: span 2;
+  grid-column: span 1;
 }
-.inputPacking {
-  grid-row: 3;
-  grid-column: 2;
-}
-.inputBrand {
-  grid-row: 2;
-  grid-column: 3;
-}
-.inputManu {
-  grid-row: 3;
-  grid-column: 3;
+.span31 {
+  grid-row: span 3;
+  grid-column: span 1;
 }
 .inputShort {
-  grid-row: 4;
-  grid-column: 1 / span 4;
-  grid-template-rows: fit-content auto;
-}
-.inputShort textarea {
-  height: 75px;
+  grid-row: span 2;
+  grid-column: span 4;
 }
 .inputDes {
-  grid-row: 5;
-  grid-column: 1 / span 4;
-  grid-template-rows: fit-content auto;
+  grid-row: span 2;
+  grid-column: span 4;
 }
 .inputDes textarea {
-  height: 150px;
+  min-height: 150px;
+}
+.btnContainer {
+  grid-row: span 1;
+  grid-column: span 4;
+  display: grid !important;
+  grid-gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: end;
+}
+.btnContainer button:nth-child(1) {
+  grid-column: 3;
+}
+.btnContainer button:nth-child(2) {
+  grid-column: 4;
 }
 .content button {
   background: #b8894e;
-  font-size: 15px;
   font-weight: 525;
   color: #ffffff;
   border: none;
@@ -135,11 +123,77 @@ textarea {
   padding: 11px;
   cursor: pointer;
 }
-.btnAdd {
-  grid-row: 6;
-  grid-column: 3;
+@media (max-width: 576px) {
+  .content {
+    grid-template-columns: repeat(1, minmax(75px, 1fr));
+  }
+  .content > * {
+    grid-column: span 1;
+  }
+  .btnContainer {
+    grid-column: span 1;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .btnContainer button:nth-child(1) {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .btnContainer button:nth-child(2) {
+    grid-row: 2;
+    grid-column: 1;
+  }
 }
-.btnBack {
-  grid-row: 6;
-  grid-column: 4;
+
+@media (max-width: 768px) and (min-width: 577px) {
+  .content {
+    grid-template-columns: repeat(2, minmax(75px, 1fr));
+  }
+  .inputShort {
+    grid-row: span 1;
+    grid-column: span 1;
+  }
+  .inputDes {
+    grid-row: span 2;
+    grid-column: span 2;
+  }
+  .btnContainer {
+    grid-column: span 2;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .btnContainer button:nth-child(1) {
+    grid-column: 1;
+  }
+  .btnContainer button:nth-child(2) {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 992px) and (min-width: 769px) {
+  .content {
+    grid-template-columns: repeat(3, minmax(75px, 1fr));
+  }
+  .inputShort {
+    grid-row: span 1;
+    grid-column: span 2;
+  }
+  .inputDes {
+    grid-row: span 2;
+    grid-column: span 3;
+  }
+  .btnContainer {
+    grid-column: span 3;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .btnContainer button:nth-child(1) {
+    grid-column: 2;
+  }
+  .btnContainer button:nth-child(2) {
+    grid-column: 3;
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 993px) {
+  .content {
+    grid-template-columns: repeat(4, minmax(75px, 1fr));
+  }
 }

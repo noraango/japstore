@@ -7,6 +7,7 @@ import {
   faPlus,
   faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
+import imageService from "../../../services/imageService";
 export default function ProductCard(props) {
   const minQuantity = 1,
     maxQuantity = 99;
@@ -31,7 +32,10 @@ export default function ProductCard(props) {
   return (
     <div className={styles.productCard}>
       <div className={styles.imgContainer}>
-        <img src={props.data.displayImage} alt="Hình ảnh" />
+        <img
+          src={imageService.get(props.data.displayImageName)}
+          alt="Hình ảnh"
+        />
       </div>
       <h1>{props.data.name}</h1>
       <h2>{formatVND(props.data.price)}đ</h2>

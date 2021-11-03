@@ -8,8 +8,18 @@ export default function Search(props) {
   const filterHeader2 = "Không tìm thấy kết quả nào!";
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    setProducts(productService.searchByName(props.match.params.search));
+    searchProducts();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  function searchProducts() {
+    productService
+      .search(props.match.params.search, 1, 9)
+      .then((res) => {
+        setProducts(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
   return (
     <div>
       <Banner />

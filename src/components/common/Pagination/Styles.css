@@ -1,0 +1,9 @@
+.paginationContainer {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.page-item.active .page-link {
+  background-color: #b8894e !important;
+  border-color: #b8894e !important;
+}
