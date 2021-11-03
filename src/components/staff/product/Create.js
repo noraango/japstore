@@ -1,22 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styles from "./Create.module.css";
 import { path } from "../../../controller/constants";
 import productService from "../../../services/product.service";
 export default function CreateProduct(prop) {
   let history = useHistory();
+  const [statuses, setStatuses] = useState([]);
+  const [packMethods, setPackMethods] = useState([]);
+  const [origins, setOrigins] = useState([]);
+  const [storages, setStorages] = useState([]);
+  const [imageFile, setImageFile] = useState(undefined);
+  const [imageURL, setImageURL] = useState(path + "/images/upload.jpg");
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
+  const [weight, setWeight] = useState(0);
+  const [size, setSize] = useState(0);
   const [originId, setOriginId] = useState(null);
   const [packingId, setPackingId] = useState(null);
+  const [statusId, setStatusId] = useState(null);
+  const [storageId, setStorageId] = useState(null);
   const [brand, setBrand] = useState("");
   const [manu, setManu] = useState("");
-  const [imageURL, setImageURL] = useState(path + "/images/upload.jpg");
   const [short, setShort] = useState("");
   const [des, setDes] = useState("");
   const [submit, setSubmit] = useState(true);
+  useEffect(() => {
+    retreiveStatus();
+    retreivePacking();
+    retreiveOrigin();
+    retreiveStorage();
+  }, []);
+
+  function onChangeImage(e) {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+      setImageURL(URL.createObjectURL(e.target.files[0]));
+    }
+  }
   function onChangeName(e) {
     setName(e.target.value);
   }
@@ -41,11 +63,7 @@ export default function CreateProduct(prop) {
   function onChangeManu(e) {
     setManu(e.target.value);
   }
-  function onChangeImage(e) {
-    if (e.target.files && e.target.files[0]) {
-      setImageURL(URL.createObjectURL(e.target.files[0]));
-    }
-  }
+
   function onChangeShort(e) {
     setShort(e.target.value);
   }
@@ -55,19 +73,71 @@ export default function CreateProduct(prop) {
   function onReturn() {
     history.push(prop.match.path.replace("/create", ""));
   }
+  function retreiveStatus() {
+    productService
+      .getStatus()
+      .then((res) => {
+        setStatuses(res.data);
+        setStatusId(res.data[0].id);
+        // console.log(res.data[0].id);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  function retreivePacking() {
+    productService
+      .getPacking()
+      .then((res) => {
+        setPackMethods(res.data);
+        setPackingId(res.data[0].id);
+        // console.log(res.data[0].id);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  function retreiveOrigin() {
+    productService
+      .getOrgin()
+      .then((res) => {
+        setOrigins(res.data);
+        setOriginId(res.data[0].id);
+        // console.log(res.data[0].id);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  function retreiveStorage() {
+    productService
+      .getStorage()
+      .then((res) => {
+        setStorages(res.data);
+        setStorageId(res.data[0].id);
+        // console.log(res.data[0].id);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
   function onSubmit() {
     var data = {
       code: code,
       name: name,
       price: price,
+      size: size,
+      weight: weight,
       quantity: quantity,
+      manufacturer: manu,
+      shortDes: short,
+      des: des,
+      brand: brand,
       originId: originId,
       packingMethodId: packingId,
-      shortDescription: short,
-      description: des,
-      manufacturer: manu,
-      brand: brand,
-      displayImage: imageURL,
+      statusId: statusId,
+      storageId: storageId,
+      displayImage: imageFile,
     };
     productService
       .create(data)
@@ -82,23 +152,33 @@ export default function CreateProduct(prop) {
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.header}`}>
-        <h1>Thêm sản phẩm</h1>
+        <h1 className={`title`}>Thêm sản phẩm</h1>
       </div>
       <div className={`${styles.content}`}>
-        <div className={`${styles.inputName}`}>
-          <h2>Tên sản phẩm</h2>
+        <div className={`${styles.inputImage} ${styles.span31}`}>
+          <input type="file" title="" onChange={onChangeImage} />
+          <img src={`${imageURL}`} alt="Không load được ảnh" />
+        </div>
+        <div className={`${styles.span12}`}>
+          <h2 className={`label`}>Tên sản phẩm</h2>
           <input
+            className={`input`}
             onChange={onChangeName}
             placeholder="Nhập tên sản phẩm"
           ></input>
         </div>
-        <div className={`${styles.inputCode}`}>
-          <h2>Mã sản phẩm</h2>
-          <input onChange={onChangeCode} placeholder="Nhập mã sản phẩm"></input>
-        </div>
-        <div className={`${styles.inputPrice}`}>
-          <h2>Giá</h2>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Mã sản phẩm</h2>
           <input
+            className={`input`}
+            onChange={onChangeCode}
+            placeholder="Nhập mã sản phẩm"
+          ></input>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Giá</h2>
+          <input
+            className={`input`}
             placeholder="Nhập giá"
             type="number"
             min="0"
@@ -107,9 +187,10 @@ export default function CreateProduct(prop) {
             onChange={onChangePrice}
           />
         </div>
-        <div className={`${styles.inputQuantity}`}>
-          <h2>Số lượng</h2>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Số lượng</h2>
           <input
+            className={`input`}
             placeholder="Nhập số lượng"
             type="number"
             min="0"
@@ -118,61 +199,112 @@ export default function CreateProduct(prop) {
             onChange={onChangeQuantity}
           ></input>
         </div>
-        <div className={`${styles.inputOrigin}`}>
-          <h2>Xuất xứ</h2>
-          <select onChange={onChangeOrigin}>
-            <option value="1">Nhật Bản</option>
-            <option value="2">Trung Quốc</option>
-            <option value="3">Việt Nam</option>
-          </select>
-        </div>
-        <div className={`${styles.inputPacking}`}>
-          <h2>Phương thức đóng gói</h2>
-          <select onChange={onChangePacking}>
-            <option value="1">Hộp 250ml</option>
-            <option value="2">Thùng 24 lon</option>
-            <option value="3">Chai 750ml</option>
-            <option value="4">Hộp 30cm x 30cm x 30cm</option>
-          </select>
-        </div>
-        <div className={`${styles.inputBrand}`}>
-          <h2>Thương hiệu</h2>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Cân nặng</h2>
           <input
+            className={`input`}
+            placeholder="Nhập cân nặng"
+            type="number"
+            min="0"
+            max="999999"
+            step="1"
+            onChange={(e) => setWeight(e.target.value)}
+          ></input>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Kích thước</h2>
+          <input
+            className={`input`}
+            placeholder="Nhập kích thước"
+            type="number"
+            min="0"
+            max="999999"
+            step="1"
+            onChange={(e) => setSize(e.target.value)}
+          ></input>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Thương hiệu</h2>
+          <input
+            className={`input`}
             placeholder="Nhập tên thương hiệu"
             onChange={onChangeBrand}
           ></input>
         </div>
-        <div className={`${styles.inputManu}`}>
-          <h2>Nơi sản xuất</h2>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Nơi sản xuất</h2>
           <input
+            className={`input`}
             placeholder="Nhập nơi sản xuất"
             onChange={onChangeManu}
           ></input>
         </div>
-        <div className={`${styles.inputImage}`}>
-          <input type="file" title="" onChange={onChangeImage} />
-          <img src={`${imageURL}`} alt="Không load được ảnh" />
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Xuất xứ</h2>
+          <select className={`input`} onChange={onChangeOrigin}>
+            {origins.map((origin, index) => (
+              <option className={`input`} key={index} value={origin.id}>
+                {origin.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Phương thức đóng gói</h2>
+          <select className={`input`} onChange={onChangePacking}>
+            {packMethods.map((packing, index) => (
+              <option key={index} value={packing.id}>
+                {packing.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Trạng thái</h2>
+          <select
+            className={`input`}
+            onChange={(e) => setStatusId(e.target.value)}
+          >
+            {statuses.map((status, index) => (
+              <option key={index} value={status.id}>
+                {status.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Kho hàng</h2>
+          <select
+            className={`input`}
+            onChange={(e) => setStorageId(e.target.value)}
+          >
+            {storages.map((storage, index) => (
+              <option key={index} value={storage.id}>
+                {storage.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className={`${styles.inputShort}`}>
-          <h2>Mô tả ngắn gọn</h2>
+          <h2 className={`label`}>Mô tả ngắn gọn</h2>
           <textarea
+            className={`input`}
             placeholder="Nhập mô tả ngắn gọn"
             onChange={onChangeShort}
           ></textarea>
         </div>
         <div className={`${styles.inputDes}`}>
-          <h2>Mô tả đầy đủ</h2>
+          <h2 className={`label`}>Mô tả đầy đủ</h2>
           <textarea
+            className={`input`}
             placeholder="Nhập mô tả chi tiết về sản phẩm"
             onChange={onChangeDes}
           ></textarea>
         </div>
-        <button className={`${styles.btnAdd}`} onClick={onSubmit}>
-          Thêm sản phẩm
-        </button>
-        <button className={`${styles.btnBack}`} onClick={onReturn}>
-          Quay lại
-        </button>
+        <div className={styles.btnContainer}>
+          <button onClick={onSubmit}>Thêm sản phẩm</button>
+          <button onClick={onReturn}>Quay lại</button>
+        </div>
       </div>
     </div>
   );
