@@ -8,6 +8,7 @@ import Register from "./components/layout/Register";
 import styles from "./App.module.css";
 import Staff from "./components/layout/Staff";
 import Search from "./components/layout/Search";
+import Cart from "./components/layout/Cart/Cart";
 export default function App() {
   return (
     <div className={`${styles.container}`}>
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/staff" component={Staff} />
+          <Route path="/cart" component={Cart} />
         </div>
         <Footer></Footer>
       </BrowserRouter>

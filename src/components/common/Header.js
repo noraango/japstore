@@ -33,6 +33,9 @@ export default function Header(props) {
   function redirectStaff() {
     history.push("/staff");
   }
+  function onClickCart() {
+    history.push("/cart");
+  }
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.topContainer}`}>
@@ -51,8 +54,8 @@ export default function Header(props) {
             </Link>
           </div>
           <div className={`${styles.navList} ${app.colRight}`}>
-            <Link className={`${styles.navItem}`} to="/cart">
-             TRA CỨU ĐƠN HÀNG
+            <Link className={`${styles.navItem}`} to="/order">
+              TRA CỨU ĐƠN HÀNG
             </Link>
             {user === null ? <div className={`${styles.line}`} /> : ""}
             {user === null ? (
@@ -70,6 +73,7 @@ export default function Header(props) {
             ) : (
               ""
             )}
+            {user != null ? <div className={`${styles.line}`} /> : ""}
             {user != null ? (
               <button className={`${styles.btnProfile}`}>
                 {user != null ? user.Username : ""}
@@ -117,7 +121,7 @@ export default function Header(props) {
             ></FontAwesomeIcon>
           </button>
         </div>
-        <button className={`${styles.cartButton}`}>
+        <button onClick={onClickCart} className={`${styles.cartButton}`}>
           <div className={styles.cart1}>
             <p>0</p>
           </div>

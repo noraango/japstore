@@ -196,6 +196,8 @@ export var products = [
       "https://product.hstatic.net/1000282430/product/57_7a69cce04b0040cdb238cca78f2064c4_grande.jpg",
     ],
   },
+];
+export var user2 = [
   {
     userid: 1,
     username: "duy123",
@@ -204,16 +206,16 @@ export var products = [
     phone: "09626128151",
     email: "timer217@gmail.com",
     address: "2174 Đại Lộ Hùng Vương",
-    avatar: 
-    "https://product.hstatic.net/1000282430/product/57_7a69cce04b0040cdb238cca78f2064c4_grande.jpg",
-    villageId:1,
+    avatar:
+      "https://product.hstatic.net/1000282430/product/57_7a69cce04b0040cdb238cca78f2064c4_grande.jpg",
+    villageId: 1,
     village: "Dong Anh",
-    wardId:1,
-    ward:"Hoan Kiem",
-    districId:1,
-    distric:"Hai Ba Trung",
-    provinceId:1,
-    province:"TpHoChiMinh"
+    wardId: 1,
+    ward: "Hoan Kiem",
+    districId: 1,
+    distric: "Hai Ba Trung",
+    provinceId: 1,
+    province: "TpHoChiMinh",
   },
   {
     userid: 2,
@@ -223,16 +225,16 @@ export var products = [
     phone: "09626128151",
     email: "timer217@gmail.com",
     address: "Ha Noi",
-    avatar: 
-    "https://product.hstatic.net/1000282430/product/57_7a69cce04b0040cdb238cca78f2064c4_grande.jpg",
-    villageId:2,
+    avatar:
+      "https://product.hstatic.net/1000282430/product/57_7a69cce04b0040cdb238cca78f2064c4_grande.jpg",
+    villageId: 2,
     village: "Dong Anh",
-    wardId:2,
-    ward:"Hoan Kiem",
-    districId:2,
-    distric:"Hai Ba Trung",
-    provinceId:2,
-    province:"TpHoChiMinh"
+    wardId: 2,
+    ward: "Hoan Kiem",
+    districId: 2,
+    distric: "Hai Ba Trung",
+    provinceId: 2,
+    province: "TpHoChiMinh",
   },
   {
     userid: 3,
@@ -242,16 +244,15 @@ export var products = [
     phone: "09626128151",
     email: "timer217@gmail.com",
     address: "Ha Noi",
-    avatar: 
-    "https://product.hstatic.net/1000282430/product/57_7a69cce04b0040cdb238cca78f2064c4_grande.jpg",
-    villageId:3,
+    avatar:
+      "https://product.hstatic.net/1000282430/product/57_7a69cce04b0040cdb238cca78f2064c4_grande.jpg",
+    villageId: 3,
     village: "Dong Anh",
-    wardId:3,
-    ward:"Hoan Kiem",
-    districId:3,
-    distric:"Hai Ba Trung",
-    provinceId:3,
-    province:"TpHoChiMinh"
+    wardId: 3,
+    ward: "Hoan Kiem",
+    districId: 3,
+    distric: "Hai Ba Trung",
+    provinceId: 3,
+    province: "TpHoChiMinh",
   },
- 
 ];
