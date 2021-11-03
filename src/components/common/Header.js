@@ -41,8 +41,20 @@ export default function Header(props) {
             <Link className={`${styles.navItem}`} to="/contact">
               CHĂM SÓC KHÁCH HÀNG
             </Link>
+            <div className={`${styles.line}`} />
+            <Link className={`${styles.navItem}`} to="/support">
+              HỖ TRỢ
+            </Link>
+            <div className={`${styles.line}`} />
+            <Link className={`${styles.navItem}`} to="/introduce">
+              GIỚI THIỆU
+            </Link>
           </div>
           <div className={`${styles.navList} ${app.colRight}`}>
+            <Link className={`${styles.navItem}`} to="/cart">
+             TRA CỨU ĐƠN HÀNG
+            </Link>
+            {user === null ? <div className={`${styles.line}`} /> : ""}
             {user === null ? (
               <Link className={`${styles.navItem}`} to="/login">
                 ĐĂNG NHẬP
