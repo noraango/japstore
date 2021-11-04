@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Cart.module.css";
-import { formatVND, numberOnly } from "../../../controller/constants";
 import cartService from "../../../services/cartService";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
- faTrash
-} from "@fortawesome/free-solid-svg-icons";
 export default function Cart() {
 
   let user = JSON.parse(localStorage.getItem("user"));
@@ -33,35 +27,33 @@ export default function Cart() {
         <span>Giỏ hàng</span>
       </div>
       <div className={`${styles.content}`}>
-        
+        <button className={`${styles.btnAdd}`} onClick={onClickCreateEmployee}>
+          Thêm nhân viên
+        </button>
         <table>
           <tbody>
             <tr>
+              <th>#</th>
               <th>Tên sản phẩm</th>
-              <th>Giá bán lẻ</th>
-              <th>Số lượng </th>
-              <th>Tổng tiền</th>
-              <th>Xóa</th>
+              <th>Mã</th>
+              <th>SĐT</th>
+              <th>Email</th>
+              <th>Address</th>
+              <th></th>
             </tr>
-            {cartitems.map((cartitem) => (
-              <tr >
-                <td>{cartitem.name}</td>
-                <td>{formatVND(cartitem.price)}đ</td>
-                <td>{cartitem.quantity}</td>
-                <td>{formatVND((cartitem.quantity)*(cartitem.price))}đ</td>
-                <td>
-                <button>
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
-                </td>
+            {users.map((user, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{user.name}</td>
+                <td>{user.username}</td>
+                <td>{user.phone}</td>
+                <td>{user.email}</td>
+                <td>{user.address}</td>
                 
               </tr>
             ))}
           </tbody>
         </table>
-        <button className={`${styles.btnAdd}`} >
-          Thanh toán
-        </button>
       </div>
     </div>
   );

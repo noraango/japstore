@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./Cart.module.css";
 import { formatVND, numberOnly } from "../../../controller/constants";
 import cartService from "../../../services/cartService";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
  faTrash
 } from "@fortawesome/free-solid-svg-icons";

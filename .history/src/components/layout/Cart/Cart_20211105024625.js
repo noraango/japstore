@@ -59,10 +59,11 @@ export default function Cart() {
             ))}
           </tbody>
         </table>
-        <button className={`${styles.btnAdd}`} >
+        
+      </div>
+      <button className={`${styles.btnAdd}`} >
           Thanh toán
         </button>
-      </div>
     </div>
   );
 }

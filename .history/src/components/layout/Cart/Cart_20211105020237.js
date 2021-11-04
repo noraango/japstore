@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Cart.module.css";
-import { formatVND, numberOnly } from "../../../controller/constants";
 import cartService from "../../../services/cartService";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
- faTrash
-} from "@fortawesome/free-solid-svg-icons";
 export default function Cart() {
 
   let user = JSON.parse(localStorage.getItem("user"));
@@ -43,20 +38,15 @@ export default function Cart() {
               <th>Tổng tiền</th>
               <th>Xóa</th>
             </tr>
-            {cartitems.map((cartitem) => (
+            
               <tr >
-                <td>{cartitem.name}</td>
-                <td>{formatVND(cartitem.price)}đ</td>
-                <td>{cartitem.quantity}</td>
-                <td>{formatVND((cartitem.quantity)*(cartitem.price))}đ</td>
-                <td>
-                <button>
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
-                </td>
+                <td>{user.name}</td>
+                <td>{user.username}</td>
+                <td>{user.phone}</td>
+                <td>{user.email}</td>
+                <td>{user.address}</td>
                 
               </tr>
-            ))}
           </tbody>
         </table>
         <button className={`${styles.btnAdd}`} >

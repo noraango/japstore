@@ -10,15 +10,7 @@
     height: fit-content;
     display: grid;
     grid-auto-flow: column;
-  /* border-bottom: 1px solid #bc8c4e;*/
-    color: #000;
-    line-height: 40px;
-    margin: 0px;
-    border-left: solid 4px #bc8c4e;
-    padding-left: 10px;
-    font-size: 1.25em;
-    text-transform: uppercase;
-    margin-bottom: 20px;
+    border-bottom: 1px solid #bc8c4e;
   }
   .header h1 {
     font-size: 25px;
@@ -41,7 +33,6 @@
     border-radius: 5px;
     padding: 11px;
     cursor: pointer;
-   
   }
   .btnAdd {
     grid-row: 1;
@@ -77,17 +68,17 @@
   th:nth-child(1),
   td:nth-child(1) {
     width: 1%;
-    text-align: left;
+    text-align: center;
   }
   th:nth-child(2),
   td:nth-child(2) {
     width: 1%;
-    text-align: right;
+    text-align: left;
   }
   th:nth-child(3),
   td:nth-child(3) {
     width: 1%;
-    text-align: right;
+    text-align: left;
   }
   th:nth-child(4),
   td:nth-child(4) {
@@ -100,3 +91,13 @@
     text-align: right;
   }
   
+  .header {
+    color: #000;
+    line-height: 40px;
+    margin: 0px;
+    border-left: solid 4px #4bae4f;
+    padding-left: 10px;
+    font-size: 1.25em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
