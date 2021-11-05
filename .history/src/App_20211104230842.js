@@ -9,7 +9,6 @@ import styles from "./App.module.css";
 import Staff from "./components/layout/Staff";
 import Search from "./components/layout/Search";
 import Cart from "./components/layout/Cart/Cart";
-import Order from "./components/layout/Order/Order";
 export default function App() {
   return (
     <div className={`${styles.container}`}>
@@ -23,7 +22,6 @@ export default function App() {
           <Route path="/register" component={Register} />
           <Route path="/staff" component={Staff} />
           <Route path="/cart" component={Cart} />
-          <Route path="/order" component={Order} />
         </div>
         <Footer></Footer>
       </BrowserRouter>

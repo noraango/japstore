@@ -36,7 +36,9 @@ export default function Header(props) {
   function onClickCart() {
     history.push("/cart");
   }
- 
+  function onClickOrder() {
+    history.push("/order");
+  }
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.topContainer}`}>

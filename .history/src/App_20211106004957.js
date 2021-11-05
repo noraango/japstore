@@ -23,7 +23,7 @@ export default function App() {
           <Route path="/register" component={Register} />
           <Route path="/staff" component={Staff} />
           <Route path="/cart" component={Cart} />
-          <Route path="/order" component={Order} />
+          <Route path="/cart" component={Order} />
         </div>
         <Footer></Footer>
       </BrowserRouter>
