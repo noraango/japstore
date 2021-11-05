@@ -255,4 +255,70 @@ export var user2 = [
     provinceId: 3,
     province: "TpHoChiMinh",
   },
+
+ 
+  
+
 ];
+export var storages = [
+  {
+    id: 1,
+    name: "Siêu product 1",
+    address: "16 dong da",
+    wardId: 3,
+    ward: "Hoan Kiem",
+    districId: 3,
+    distric: "Hai Ba Trung",
+    provinceId: 3,
+    province: "TpHoChiMinh",
+   
+  },
+  {
+    id: 2,
+    name: "Siêu product 2",
+    address: "16 dong da",
+    wardId: 3,
+    ward: "Hoan Kiem",
+    districId: 3,
+    distric: "Hai Ba Trung",
+    provinceId: 3,
+    province: "TpHoChiMinh",
+   
+  },
+  {
+    id: 3,
+    name: "Siêu product 3",
+    address: "16 dong da",
+    wardId: 3,
+    ward: "Hoan Kiem",
+    districId: 3,
+    distric: "Hai Ba Trung",
+    provinceId: 3,
+    province: "TpHoChiMinh",
+   
+  },
+ ];
+
+ export var cart = 
+ [
+  {
+    id: 1,
+    name: "sieuproduct1",
+    price: "123123",
+    quantity:"50",
+  },
+  {
+    id: 1,
+    name: "sieuproduct2",
+    price: "34545",
+    quantity:"16",
+  } ,
+  {
+    id: 1,
+    name: "sieuproduct3",
+    price: "123123",
+    quantity:"19",
+  } ,
+
+
+ ];

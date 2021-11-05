@@ -5,6 +5,7 @@ import Product from "../staff/Product";
 import { useHistory } from "react-router-dom";
 import Report from "../staff/Report";
 import Employee from "../staff/Employee";
+import Storage from "../staff/Storage";
 export default function Staff(prop) {
   var pathz = process.env.PUBLIC_URL + "/images";
   let user = JSON.parse(localStorage.getItem("user"));
@@ -68,6 +69,21 @@ export default function Staff(prop) {
               >
                 Quản lí nhân viên
               </button>
+              
+              <button
+                className={`${
+                  tab.indexOf("/staff/storage") !== -1
+                    ? styles.buttonChosen
+                    : ""
+                }`}
+                onClick={(e) => {
+                  setTab("/staff/storage");
+                  history.push(prop.match.path + "/storage");
+                }}
+              >
+                Quản lí kho
+              </button>
+
             </div>
           </div>
           <div className={`col-0 col-sm-10 col-md-10 col-lg-10 col-xl-10`}>
@@ -77,6 +93,10 @@ export default function Staff(prop) {
               <Route
                 path={`${prop.match.path}/employee`}
                 component={Employee}
+              />
+               <Route
+                path={`${prop.match.path}/storage`}
+                component={Storage}
               />
             </div>
           </div>
