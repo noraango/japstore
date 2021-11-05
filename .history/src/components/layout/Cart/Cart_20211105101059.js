@@ -47,7 +47,23 @@ export default function Cart() {
               <tr >
                 <td>{cartitem.name}</td>
                 <td>{formatVND(cartitem.price)}đ</td>
-                <td>{cartitem.quantity}</td>
+                <td>
+                  {/* {cartitem.quantity} */}
+                 
+                  <div className={styles.quantityContainer}>
+          <button className={styles.btnSub} onClick={onSubQuantity}>
+            <FontAwesomeIcon icon={faMinus} />
+          </button>
+          <input
+            value={quantity}
+            onKeyPress={numberOnly}
+            onChange={onChangeInputQuantity}
+          />
+          <button className={styles.btnAdd} onClick={onAddQuantity}>
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+        </div>
+                  </td>
                 <td>{formatVND((cartitem.quantity)*(cartitem.price))}đ</td>
                 <td>
                 <button>

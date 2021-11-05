@@ -47,7 +47,10 @@ export default function Cart() {
               <tr >
                 <td>{cartitem.name}</td>
                 <td>{formatVND(cartitem.price)}đ</td>
-                <td>{cartitem.quantity}</td>
+                <td>
+                  {/* {cartitem.quantity} */}
+                  
+                  </td>
                 <td>{formatVND((cartitem.quantity)*(cartitem.price))}đ</td>
                 <td>
                 <button>

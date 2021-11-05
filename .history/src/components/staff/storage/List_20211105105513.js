@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import styles from "./List.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-regular-svg-icons";
-import { faTrash,faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import storageService from "../../../services/storageService";
 export default function List(props) {
 
   let user = JSON.parse(localStorage.getItem("user"));
-  const[dbitems, setDbitem] = useState([]);
+  const[dbitem, setDbitem] = useState([]);
 
   function retrieveStorageitems() {
     storageService
-    .getStorage(user.UserId)
+    .getCart(user.UserId)
     .then((res) => {
       setDbitem(res.data)
       console.log(res.data);
@@ -22,7 +22,7 @@ export default function List(props) {
   }
 
   useEffect(() => {
-   retrieveStorageitems();
+   
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function onClickCreateEmployee() {
@@ -49,18 +49,6 @@ export default function List(props) {
         <h1>Danh sách kho</h1>
       </div>
       <div className={`${styles.content}`}>
-      <div className={`${styles.searchBox}`}>
-            <input
-              className={`${styles.searchInput}`}
-              placeholder="Tìm kiếm sản phẩm"
-            ></input>
-            <button className={`${styles.searchButton}`}>
-              <FontAwesomeIcon
-                className={`${styles.searchIcon}`}
-                icon={faSearch}
-              ></FontAwesomeIcon>
-            </button>
-          </div>
         <button className={`${styles.btnAdd}`} onClick={onClickCreateEmployee}>
           Thêm kho
         </button>
@@ -69,34 +57,29 @@ export default function List(props) {
             <tr>
               <th>#</th>
               <th>Tên kho</th>
-              <th>Diện Tích</th>
-              <th>Tầng</th>
               <th>Địa chỉ</th>
               <th>Xã</th>
               <th>Huyện</th>
               <th>Tỉnh</th>
               <th></th>
             </tr>
-            {dbitems.map((dbitem,index) => (
-              <tr className={`${index % 2 === 1 ? styles.grey : ""}`}
-               key={index}>
+            {storages.map((storage,index) => (
+              <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{dbitem.name}</td>
-                <td>{dbitem.square}</td>
-                <td>{dbitem.floor}</td>
-                <td>{dbitem.address}</td>
-                <td>{dbitem.ward}</td>
-                <td>{dbitem.distric}</td>
-                <td>{dbitem.province}</td>
+                <td>{storage.name}</td>
+                <td>{storage.address}</td>
+                <td>{storage.ward}</td>
+                <td>{storage.distric}</td>
+                <td>{storage.province}</td>
                 <td>
                   <div>
                     <button
-                      onClick={() => onClickReadlEmployee(dbitems.userid)}
+                      onClick={() => onClickReadlEmployee(storages.userid)}
                     >
                       <FontAwesomeIcon icon={faEye} />
                     </button>
                     <button
-                      onClick={() => onClickEditEmployee(dbitems.userid)}
+                      onClick={() => onClickEditEmployee(storages.userid)}
                     >
                       <FontAwesomeIcon icon={faEdit} />
                     </button>

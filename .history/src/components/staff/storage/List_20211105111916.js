@@ -72,9 +72,9 @@ export default function List(props) {
               <th>Diện Tích</th>
               <th>Tầng</th>
               <th>Địa chỉ</th>
-              <th>Xã</th>
-              <th>Huyện</th>
-              <th>Tỉnh</th>
+              <th>Xã/Phường</th>
+              <th>Quận/Huyện</th>
+              <th>Tỉnh/Thành Phố</th>
               <th></th>
             </tr>
             {dbitems.map((dbitem,index) => (

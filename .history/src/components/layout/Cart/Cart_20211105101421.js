@@ -1,15 +1,37 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Cart.module.css";
-import { formatVND } from "../../../controller/constants";
+import constants, { formatVND, numberOnly} from "../../../controller/constants";
 import cartService from "../../../services/cartService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faMinus,
+  faPlus,
  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 export default function Cart() {
-
+  const minQuantity = 1,
+    maxQuantity = 99;
   let user = JSON.parse(localStorage.getItem("user"));
   const [cartitems, setCartitems] = useState([]);
+
+  const [quantity, setQuantity] = useState(1);
+  function onSubQuantity() {
+    setQuantity(quantity > minQuantity ? quantity - 1 : quantity);
+  }
+  function onAddQuantity() {
+    setQuantity(quantity < maxQuantity ? quantity + 1 : quantity);
+  }
+  function onChangeInputQuantity(e) {
+    if (!e.target.value) {
+      setQuantity(minQuantity);
+      return;
+    }
+    let val = parseInt(e.target.value);
+    val = val < minQuantity ? minQuantity : val;
+    val = val > maxQuantity ? maxQuantity : val;
+    setQuantity(val);
+  }
+
   function retrieveCartItems() {
     cartService
       .getCart(user.UserId)
@@ -47,7 +69,23 @@ export default function Cart() {
               <tr >
                 <td>{cartitem.name}</td>
                 <td>{formatVND(cartitem.price)}đ</td>
-                <td>{cartitem.quantity}</td>
+                <td>
+                  {/* {cartitem.quantity} */}
+                 
+                  <div className={styles.quantityContainer}>
+          <button className={styles.btnSub} onClick={onSubQuantity}>
+            <FontAwesomeIcon icon={faMinus} />
+          </button>
+          <input
+            value={quantity}
+            onKeyPress={numberOnly}
+            onChange={onChangeInputQuantity}
+          />
+          <button className={styles.btnAdd} onClick={onAddQuantity}>
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+        </div>
+                  </td>
                 <td>{formatVND((cartitem.quantity)*(cartitem.price))}đ</td>
                 <td>
                 <button>

@@ -1,4 +1,4 @@
-import http from "../http-common";
+
 import {storages} from "../controller/data";
 class StorageService {
   getAll() {
@@ -6,8 +6,8 @@ class StorageService {
     // return http.get("/product");
   }
 
-  getStorage(userId) {
-    return http.get("/storage/get/");
+  get(userid) {
+    return storages.find((x) => x.userid === userid);
     // return http.get(`/product/${id}`);
   }
 }

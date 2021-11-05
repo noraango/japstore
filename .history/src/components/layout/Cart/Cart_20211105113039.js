@@ -48,7 +48,7 @@ export default function Cart() {
                 <td>{cartitem.name}</td>
                 <td>{formatVND(cartitem.price)}đ</td>
                 <td>{cartitem.quantity}</td>
-                <td>{formatVND((cartitem.quantity)*(cartitem.price))}đ</td>
+                <td>{formatVND(props.data.price * quantity)}đ</td>
                 <td>
                 <button>
             <FontAwesomeIcon icon={faTrash} />

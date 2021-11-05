@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./List.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-regular-svg-icons";
-import { faTrash,faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import storageService from "../../../services/storageService";
 export default function List(props) {
 

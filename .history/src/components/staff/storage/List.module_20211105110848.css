@@ -142,8 +142,3 @@ td:nth-child(7) {
   width: 1%;
   text-align: right;
 }
-th:nth-child(8),
-td:nth-child(8) {
-  width: 1%;
-  text-align: right;
-}
