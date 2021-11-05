@@ -14,7 +14,7 @@ export default function Search(props) {
     productService
       .search(props.match.params.search, 1, 9)
       .then((res) => {
-        setProducts(res.data);
+        setProducts(res.data.list);
       })
       .catch((e) => {
         console.log(e);

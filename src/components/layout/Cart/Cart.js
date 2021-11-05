@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Cart.module.css";
-import { formatVND, numberOnly } from "../../../controller/constants";
+import { formatVND } from "../../../controller/constants";
 import cartService from "../../../services/cartService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -41,6 +41,19 @@ export default function Cart(props) {
     cartService
       .updateCartItem(productId, user.UserId, quantity)
       .then((res) => {
+        // console.log(res.data);
+        retrieveCartItems();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  function onClickDeleteCartItem(cartItem) {
+    let user = JSON.parse(localStorage.getItem("user"));
+    cartService
+      .deleteCartItem(cartItem.id, user.UserId)
+      .then((res) => {
+        console.log(res.data);
         retrieveCartItems();
       })
       .catch((e) => {
@@ -83,23 +96,20 @@ export default function Cart(props) {
                     >
                       <FontAwesomeIcon icon={faMinus} />
                     </button>
-                    <input
-                      value={cartitem.quantity}
-                      onKeyPress={numberOnly}
-                      onChange={updateQuantity}
-                    />
+                    <button className={styles.btnDisplay}>
+                      {cartitem.quantity}
+                    </button>
                     <button
                       className={styles.btnAdd}
                       onClick={() => onAddQuantity(cartitem)}
                     >
-                      <input type="hidden" value={cartitem.quantity} />
                       <FontAwesomeIcon icon={faPlus} />
                     </button>
                   </div>
                 </td>
                 <td>{formatVND(cartitem.quantity * cartitem.price)}đ</td>
                 <td>
-                  <button>
+                  <button onClick={() => onClickDeleteCartItem(cartitem)}>
                     <FontAwesomeIcon icon={faTrash} />
                   </button>
                 </td>

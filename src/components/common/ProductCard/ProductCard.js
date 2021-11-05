@@ -8,6 +8,7 @@ import {
   faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 import imageService from "../../../services/imageService";
+import cartService from "../../../services/cartService";
 export default function ProductCard(props) {
   const minQuantity = 1,
     maxQuantity = 99;
@@ -28,7 +29,17 @@ export default function ProductCard(props) {
     val = val > maxQuantity ? maxQuantity : val;
     setQuantity(val);
   }
-
+  function onClickAddCart() {
+    let user = JSON.parse(localStorage.getItem("user"));
+    cartService
+      .addCart(props.data.id, user.UserId, quantity)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
   return (
     <div className={styles.productCard}>
       <div className={styles.imgContainer}>
@@ -57,7 +68,7 @@ export default function ProductCard(props) {
           <h1>
             Total:<span>{formatVND(props.data.price * quantity)}đ</span>
           </h1>
-          <button>
+          <button onClick={onClickAddCart}>
             <FontAwesomeIcon icon={faShoppingCart} />
           </button>
         </div>

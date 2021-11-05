@@ -8,5 +8,11 @@ class CartService {
       "/cart/update/" + productId + "/" + userId + "/" + quantity
     );
   }
+  addCart(productId, userId, quantity) {
+    return http.post("/cart/add/" + productId + "/" + userId + "/" + quantity);
+  }
+  deleteCartItem(productId, userId) {
+    return http.delete("/cart/delete/" + productId + "/" + userId);
+  }
 }
 export default new CartService();
