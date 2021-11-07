@@ -30,43 +30,6 @@ class ProductService {
     formData.append("storageId", data.storageId);
     formData.append("displayImage", data.displayImage);
     return http.post("/product/create", formData);
-    // formData.append("file", data.imageFile);
-    // return http.post(
-    //   "/product/create?code=" +
-    //     data.code +
-    //     "&name=" +
-    //     data.name +
-    //     "&price=" +
-    //     data.price +
-    //     "&size=" +
-    //     data.size +
-    //     "&weight=" +
-    //     data.weight +
-    //     "&quantity=" +
-    //     data.quantity +
-    //     "&manufacturer=" +
-    //     data.manufacturer +
-    //     "&shortDes=" +
-    //     data.shortDes +
-    //     "&des=" +
-    //     data.des +
-    //     "&brand=" +
-    //     data.brand +
-    //     "&originId=" +
-    //     data.originId +
-    //     "&packingMethodId=" +
-    //     data.packingMethodId +
-    //     "&statusId=" +
-    //     data.statusId +
-    //     "&storageId=" +
-    //     data.storageId,
-    //   formData,
-    //   {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   }
-    // );
   }
   getList(quantity) {
     return http.get("/product/getlist?quantity=" + quantity);
@@ -80,6 +43,9 @@ class ProductService {
         "&PageSize=" +
         pageSize
     );
+  }
+  getDetail(productId) {
+    return http.get("/product/get/" + productId);
   }
 }
 export default new ProductService();
