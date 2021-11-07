@@ -1,5 +1,5 @@
 import styles from "./Styles.module.css";
-import ProductCard from "../ProductCard/ProductCard";
+import ProductCard from "../Product/ProductCard";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 export default function Landing(props) {
