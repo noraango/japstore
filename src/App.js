@@ -10,6 +10,7 @@ import Staff from "./components/layout/Staff";
 import Search from "./components/layout/Search";
 import Cart from "./components/layout/Cart/Cart";
 import Order from "./components/layout/Order/Order";
+import Detail from "./components/common/Product/Detail";
 export default function App() {
   return (
     <div className={`${styles.container}`}>
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/staff" component={Staff} />
           <Route path="/cart" component={Cart} />
           <Route path="/order" component={Order} />
+          <Route path="/product/:id" component={Detail} />
         </div>
         <Footer></Footer>
       </BrowserRouter>

@@ -25,9 +25,9 @@ export default class ListProduct extends Component {
       .search("", 1, 9)
       .then((res) => {
         this.setState({
-          products: res.data,
+          products: res.data.list,
         });
-        // console.log(res.data);
+        console.log(res.data.list);
       })
       .catch((e) => {
         console.log(e);

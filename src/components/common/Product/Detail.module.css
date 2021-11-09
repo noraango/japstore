@@ -1,0 +1,11 @@
+.container {
+  width: 100%;
+}
+.imageContainer {
+  min-height: 500px;
+  background-color: aqua;
+}
+.infoContainer {
+  min-height: 500px;
+  background-color: aquamarine;
+}
