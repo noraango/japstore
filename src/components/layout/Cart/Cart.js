@@ -10,6 +10,7 @@ export default function Cart(props) {
   const minQuantity = 1,
     maxQuantity = 99;
   const [cartitems, setCartitems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
     retrieveCartItems();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -30,6 +31,11 @@ export default function Cart(props) {
       .getCart(user.UserId)
       .then((res) => {
         setCartitems(res.data);
+        let sum = 0;
+        res.data.forEach((e) => {
+          sum += e.price * e.quantity;
+        });
+        setTotalPrice(sum);
         // console.log(res.data);
       })
       .catch((e) => {
@@ -66,6 +72,11 @@ export default function Cart(props) {
         <span>Giỏ hàng</span>
       </div>
       <div className={`${styles.content}`}>
+        <p className={`${styles.totalPrice}`}>
+          Tổng tiền:{" "}
+          <span className={styles.price}>{formatVND(totalPrice)}đ</span>
+        </p>
+        <button className={`${styles.btnAdd}`}>Thanh toán</button>
         <table>
           <tbody>
             <tr>
@@ -87,7 +98,7 @@ export default function Cart(props) {
                   </div>
                 </td>
                 <td>{cartitem.name}</td>
-                <td>{formatVND(cartitem.price)}đ</td>
+                <td className={styles.price}>{formatVND(cartitem.price)}đ</td>
                 <td>
                   <div className={styles.quantityContainer}>
                     <button
@@ -107,7 +118,9 @@ export default function Cart(props) {
                     </button>
                   </div>
                 </td>
-                <td>{formatVND(cartitem.quantity * cartitem.price)}đ</td>
+                <td className={styles.price}>
+                  {formatVND(cartitem.quantity * cartitem.price)}đ
+                </td>
                 <td>
                   <button onClick={() => onClickDeleteCartItem(cartitem)}>
                     <FontAwesomeIcon icon={faTrash} />
@@ -117,7 +130,6 @@ export default function Cart(props) {
             ))}
           </tbody>
         </table>
-        <button className={`${styles.btnAdd}`}>Thanh toán</button>
       </div>
     </div>
   );
