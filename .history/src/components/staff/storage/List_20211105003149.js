@@ -3,15 +3,15 @@ import styles from "./List.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-regular-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import storageService from "../../../services/storageService";
+import storeService from "../../../services/storeService";
 export default function List(props) {
-  const [storages, setstorages] = useState([]);
+  const [stores, setStores] = useState([]);
 
 
 
   useEffect(() => {
-    setstorages(storageService.getAll());
-    console.log(storages);
+    setStores(storeService.getAll());
+    console.log(stores);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function onClickCreateEmployee() {
@@ -52,7 +52,7 @@ export default function List(props) {
               <th>Tỉnh</th>
               <th></th>
             </tr>
-            {storages.map((storage) => (
+            {stores.map((storage) => (
               <tr >
                
                 <td>{storage.name}</td>
@@ -63,12 +63,12 @@ export default function List(props) {
                 <td>
                   <div>
                     <button
-                      onClick={() => onClickReadlEmployee(storages.userid)}
+                      onClick={() => onClickReadlEmployee(stores.userid)}
                     >
                       <FontAwesomeIcon icon={faEye} />
                     </button>
                     <button
-                      onClick={() => onClickEditEmployee(storages.userid)}
+                      onClick={() => onClickEditEmployee(stores.userid)}
                     >
                       <FontAwesomeIcon icon={faEdit} />
                     </button>

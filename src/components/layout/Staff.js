@@ -5,7 +5,7 @@ import Product from "../staff/Product";
 import { useHistory } from "react-router-dom";
 import Report from "../staff/Report";
 import Employee from "../staff/Employee";
-import Storage from "../staff/Storage";
+import Store from "../staff/Store";
 export default function Staff(prop) {
   var pathz = process.env.PUBLIC_URL + "/images";
   let user = JSON.parse(localStorage.getItem("user"));
@@ -22,7 +22,7 @@ export default function Staff(prop) {
     <div className={`container`}>
       <div className={`${styles.container}`}>
         <div className={`row`}>
-          <div className={`col-0 col-sm-2 col-md-2 col-lg-2 col-xl-2`}>
+          <div className={`col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2`}>
             <div className={`${styles.menu}`}>
               <div className={`${styles.userBox}`}>
                 <div className={`${styles.avatar}`}>
@@ -69,7 +69,7 @@ export default function Staff(prop) {
               >
                 Quản lí nhân viên
               </button>
-              
+
               <button
                 className={`${
                   tab.indexOf("/staff/storage") !== -1
@@ -83,10 +83,9 @@ export default function Staff(prop) {
               >
                 Quản lí kho
               </button>
-
             </div>
           </div>
-          <div className={`col-0 col-sm-10 col-md-10 col-lg-10 col-xl-10`}>
+          <div className={`col-12 col-sm-12 col-md-12 col-lg-9 col-xl-10`}>
             <div className={`${styles.content}`}>
               <Route path={`${prop.match.path}/report`} component={Report} />
               <Route path={`${prop.match.path}/product`} component={Product} />
@@ -94,10 +93,7 @@ export default function Staff(prop) {
                 path={`${prop.match.path}/employee`}
                 component={Employee}
               />
-               <Route
-                path={`${prop.match.path}/storage`}
-                component={Storage}
-              />
+              <Route path={`${prop.match.path}/storage`} component={Store} />
             </div>
           </div>
         </div>

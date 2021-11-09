@@ -3,15 +3,15 @@ import styles from "./List.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-regular-svg-icons";
 import { faTrash,faSearch } from "@fortawesome/free-solid-svg-icons";
-import storageService from "../../../services/storageService";
+import storeService from "../../../services/storeService";
 export default function List(props) {
 
   let user = JSON.parse(localStorage.getItem("user"));
   const[dbitems, setDbitem] = useState([]);
 
-  function retrieveStorageitems() {
-    storageService
-    .getStorage(user.UserId)
+  function retrieveStores() {
+    storeService
+    .getStore(user.UserId)
     .then((res) => {
       setDbitem(res.data)
       console.log(res.data);
@@ -22,7 +22,7 @@ export default function List(props) {
   }
 
   useEffect(() => {
-   retrieveStorageitems();
+   retrieveStores();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function onClickCreateEmployee() {

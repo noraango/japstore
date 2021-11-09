@@ -8,7 +8,7 @@ export default function CreateProduct(prop) {
   const [statuses, setStatuses] = useState([]);
   const [packMethods, setPackMethods] = useState([]);
   const [origins, setOrigins] = useState([]);
-  const [storages, setStorages] = useState([]);
+  const [store, setStore] = useState([]);
   const [imageFile, setImageFile] = useState(undefined);
   const [imageURL, setImageURL] = useState(path + "/images/upload.jpg");
   const [name, setName] = useState("");
@@ -20,10 +20,11 @@ export default function CreateProduct(prop) {
   const [originId, setOriginId] = useState(null);
   const [packingId, setPackingId] = useState(null);
   const [statusId, setStatusId] = useState(null);
-  const [storageId, setStorageId] = useState(null);
+  const [storeId, setStoreId] = useState(null);
   const [brand, setBrand] = useState("");
   const [manu, setManu] = useState("");
   const [short, setShort] = useState("");
+  const [imageFiles, setImageFiles] = useState([]);
   const [des, setDes] = useState("");
   const [submit, setSubmit] = useState(true);
   useEffect(() => {
@@ -63,9 +64,15 @@ export default function CreateProduct(prop) {
   function onChangeManu(e) {
     setManu(e.target.value);
   }
-
   function onChangeShort(e) {
     setShort(e.target.value);
+  }
+  function onChangeImages(e) {
+    console.log(e.target);
+    // if (e.target.files && e.target.files[0]) {
+    //   setImageFile(e.target.files[0]);
+    //   setImageURL(URL.createObjectURL(e.target.files[0]));
+    // }
   }
   function onChangeDes(e) {
     setDes(e.target.value);
@@ -111,10 +118,10 @@ export default function CreateProduct(prop) {
   }
   function retreiveStorage() {
     productService
-      .getStorage()
+      .getStore()
       .then((res) => {
-        setStorages(res.data);
-        setStorageId(res.data[0].id);
+        setStore(res.data);
+        setStoreId(res.data[0].id);
         // console.log(res.data[0].id);
       })
       .catch((e) => {
@@ -131,12 +138,13 @@ export default function CreateProduct(prop) {
       quantity: quantity,
       manufacturer: manu,
       shortDes: short,
+      images: imageFiles,
       des: des,
       brand: brand,
       originId: originId,
       packingMethodId: packingId,
       statusId: statusId,
-      storageId: storageId,
+      storageId: storeId,
       displayImage: imageFile,
     };
     productService
@@ -216,10 +224,6 @@ export default function CreateProduct(prop) {
           <input
             className={`input`}
             placeholder="Nhập kích thước"
-            type="number"
-            min="0"
-            max="999999"
-            step="1"
             onChange={(e) => setSize(e.target.value)}
           ></input>
         </div>
@@ -276,14 +280,18 @@ export default function CreateProduct(prop) {
           <h2 className={`label`}>Kho hàng</h2>
           <select
             className={`input`}
-            onChange={(e) => setStorageId(e.target.value)}
+            onChange={(e) => setStoreId(e.target.value)}
           >
-            {storages.map((storage, index) => (
+            {store.map((storage, index) => (
               <option key={index} value={storage.id}>
                 {storage.name}
               </option>
             ))}
           </select>
+        </div>
+        <div className={`${styles.inputImages}`}>
+          <h2 className={`label`}>Hình ảnh sản phẩm</h2>
+          <input type="file" multiple />
         </div>
         <div className={`${styles.inputShort}`}>
           <h2 className={`label`}>Mô tả ngắn gọn</h2>
@@ -302,8 +310,8 @@ export default function CreateProduct(prop) {
           ></textarea>
         </div>
         <div className={styles.btnContainer}>
-          <button onClick={onSubmit}>Thêm sản phẩm</button>
-          <button onClick={onReturn}>Quay lại</button>
+          <button className={`label`} onClick={onSubmit}>Thêm sản phẩm</button>
+          <button className={`label`} onClick={onReturn}>Quay lại</button>
         </div>
       </div>
     </div>

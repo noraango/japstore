@@ -28,6 +28,7 @@ export default function Detail(props) {
       .then((res) => {
         setProduct(res.data);
         console.log(res.data);
+        console.log(product);
       })
       .catch((e) => {
         console.log(e);

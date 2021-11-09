@@ -1,123 +1,150 @@
-import React, { Component } from "react";
 import styles from "./List.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-regular-svg-icons";
 import { faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import productService from "../../../services/product.service";
 import Pagination from "../../common/Pagination/Pagination";
-export default class ListProduct extends Component {
-  constructor(props) {
-    super(props);
-    this.retrieveProducts = this.retrieveProducts.bind(this);
-    this.onClickCreateProduct = this.onClickCreateProduct.bind(this);
-    this.onClickReadProduct = this.onClickReadProduct.bind(this);
-    this.onClickEditProduct = this.onClickEditProduct.bind(this);
-    this.onClickDeleteProduct = this.onClickDeleteProduct.bind(this);
-    this.state = {
-      products: [],
+import { useEffect, useState } from "react";
+import { formatVND } from "../../../controller/constants";
+export default function ListProduct(props) {
+  const [products, setProducts] = useState([]);
+  const [pages, setPages] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      retrieveProducts();
     };
+    fetchProducts();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    retrieveProducts();
+  }, [pageSize, currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
+  function onChangeCurrentPage(value) {
+    setCurrentPage(value);
+    // console.log(value);
   }
-  componentDidMount() {
-    this.retrieveProducts();
-  }
-  retrieveProducts() {
+  function retrieveProducts() {
     productService
-      .search("", 1, 9)
+      .search(searchText, currentPage, pageSize)
       .then((res) => {
-        this.setState({
-          products: res.data.list,
-        });
-        console.log(res.data.list);
+        setProducts(res.data.list);
+        setPages(res.data.numberOfPage);
+        // console.log(res.data.list);
       })
       .catch((e) => {
         console.log(e);
       });
   }
-  onClickCreateProduct() {
-    this.props.history.push(this.props.match.path + "/create");
+  function onChangePageSize(e) {
+    setPageSize(e.target.value);
+    // console.log(e.target.value);
   }
-  onClickReadProduct(id) {
-    this.props.history.push(this.props.match.path + "/detail/" + id);
+  function onChangeSearchText(e) {
+    setSearchText(e.target.value);
+    // console.log(e.target.value);
   }
-  onClickEditProduct(id) {
-    this.props.history.push(this.props.match.path + "/edit/" + id);
+  function onEnterSearchInput(e) {
+    if (e.key === "Enter") {
+      // console.log(searchText);
+      retrieveProducts();
+    }
   }
-  onClickDeleteProduct() {
-    console.log(this.props.match.path + "/delete");
+  function onClickCreateProduct() {
+    props.history.push(props.match.path + "/create");
   }
-  render() {
-    return (
-      <div className={`${styles.container}`}>
-        <div className={`${styles.header}`}>
-          <h1>Danh sách sản phẩm</h1>
-        </div>
-        <div className={`${styles.content}`}>
-          <div className={`${styles.searchBox}`}>
-            <input
-              className={`${styles.searchInput}`}
-              placeholder="Tìm kiếm sản phẩm"
-            ></input>
-            <button className={`${styles.searchButton}`}>
-              <FontAwesomeIcon
-                className={`${styles.searchIcon}`}
-                icon={faSearch}
-              ></FontAwesomeIcon>
-            </button>
-          </div>
+  function onClickReadProduct(id) {
+    props.history.push(props.match.path + "/detail/" + id);
+  }
+  function onClickEditProduct(id) {
+    props.history.push(props.match.path + "/edit/" + id);
+  }
+  function onClickDeleteProduct() {
+    console.log(props.match.path + "/delete");
+  }
+  return (
+    <div className={`${styles.container}`}>
+      <div className={`${styles.header}`}>
+        <h1>Danh sách sản phẩm</h1>
+      </div>
+      <div className={`${styles.content}`}>
+        <div className={`${styles.searchBox}`}>
+          <input
+            className={`${styles.searchInput}`}
+            placeholder="Tìm kiếm sản phẩm"
+            onKeyPress={onEnterSearchInput}
+            onChange={onChangeSearchText}
+          ></input>
           <button
-            className={`${styles.btnAdd}`}
-            onClick={this.onClickCreateProduct}
+            className={`${styles.searchButton}`}
+            onClick={retrieveProducts}
           >
-            Thêm sản phẩm
+            <FontAwesomeIcon
+              className={`${styles.searchIcon}`}
+              icon={faSearch}
+            ></FontAwesomeIcon>
           </button>
-          <div className={styles.tbbb}>
+        </div>
+        <select onChange={onChangePageSize}>
+          <option value={10}>Hiện 10 sản phẩm</option>
+          <option value={20}>Hiện 20 sản phẩm</option>
+          <option value={50}>Hiện 50 sản phẩm</option>
+        </select>
+        <button className={`${styles.btnAdd}`} onClick={onClickCreateProduct}>
+          Thêm sản phẩm
+        </button>
+        <div className={styles.tbbb}>
+          {products.length > 0 ? (
             <table>
               <tbody>
                 <tr>
-                  <th>#</th>
+                  <th></th>
                   <th>Tên sản phẩm</th>
                   <th>Mã</th>
                   <th>Giá(VND)</th>
-                  <th>Số lượng</th>
                   <th>Trạng thái</th>
-                  <th></th>
                 </tr>
-                {this.state.products.map((product, index) => (
+                {products.map((product, index) => (
                   <tr
                     className={`${index % 2 === 1 ? styles.grey : ""}`}
                     key={index}
                   >
-                    <td>{index + 1}</td>
-                    <td>{product.name}</td>
-                    <td>{product.code}</td>
-                    <td>{product.price}</td>
-                    <td>{product.quantity}</td>
-                    <td>{product.status}</td>
                     <td>
                       <div>
-                        <button
-                          onClick={() => this.onClickReadProduct(product.id)}
-                        >
+                        <button onClick={() => onClickReadProduct(product.id)}>
                           <FontAwesomeIcon icon={faEye} />
                         </button>
-                        <button
-                          onClick={() => this.onClickEditProduct(product.id)}
-                        >
+                        <button onClick={() => onClickEditProduct(product.id)}>
                           <FontAwesomeIcon icon={faEdit} />
                         </button>
-                        <button onClick={this.onClickDeleteProduct}>
+                        <button onClick={onClickDeleteProduct}>
                           <FontAwesomeIcon icon={faTrash} />
                         </button>
                       </div>
                     </td>
+                    <td>{product.name}</td>
+                    <td>{product.code}</td>
+                    <td>{formatVND(product.price)}đ</td>
+                    <td>{product.status}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
+          ) : (
+            <p>Không tìm thấy sản phẩm</p>
+          )}
         </div>
-        <Pagination className={styles.pagingBox} />
       </div>
-    );
-  }
+      {pages > 1 ? (
+        <Pagination
+          currentPage={currentPage}
+          pages={pages}
+          setCurrentPage={onChangeCurrentPage}
+        />
+      ) : (
+        ""
+      )}
+    </div>
+  );
 }

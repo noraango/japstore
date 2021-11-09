@@ -9,8 +9,8 @@ class ProductService {
   getOrgin() {
     return http.get("/product/origin");
   }
-  getStorage() {
-    return http.get("/storage/get");
+  getStore() {
+    return http.get("/store/get");
   }
   create(data) {
     let formData = new FormData();
