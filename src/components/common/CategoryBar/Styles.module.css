@@ -5,6 +5,7 @@
 }
 .container ul {
   list-style-type: none;
+  padding: 0 !important;
 }
 .container a:hover {
   color: #b8894e;
@@ -18,6 +19,7 @@
   display: flex;
   justify-content: space-between;
   padding: 10px 20px;
+  text-decoration: none !important;
 }
 .dropDownButton {
   width: 100%;
