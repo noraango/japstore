@@ -11,6 +11,7 @@ import Search from "./components/layout/Search";
 import Cart from "./components/layout/Cart/Cart";
 import Order from "./components/layout/Order/Order";
 import Detail from "./components/common/Product/Detail";
+import 'bootstrap/dist/css/bootstrap.min.css';
 export default function App() {
   return (
     <div className={`${styles.container}`}>

@@ -7,7 +7,15 @@ import Pagination from "../../common/Pagination/Pagination";
 import { useEffect, useState } from "react";
 import { formatVND } from "../../../controller/constants";
 export default function ListProduct(props) {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([
+    //example list
+    {
+      name:'1234',
+      code:'45445',
+      price:'2344',
+      status:'2344'
+    }
+  ]);
   const [pages, setPages] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
