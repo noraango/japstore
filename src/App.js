@@ -12,6 +12,7 @@ import Cart from "./components/layout/Cart/Cart";
 import Order from "./components/layout/Order/Order";
 import Detail from "./components/common/Product/Detail";
 import Payment from "./components/common/Payment/Payment";
+import "bootstrap/dist/css/bootstrap.min.css";
 export default function App() {
   return (
     <div className={`${styles.container}`}>

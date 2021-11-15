@@ -10,7 +10,7 @@
     height: fit-content;
     display: grid;
     grid-auto-flow: column;
-  /* border-bottom: 1px solid #bc8c4e;*/
+    border-bottom: 1px solid #bc8c4e;
     color: #000;
     line-height: 40px;
     margin: 0px;
@@ -31,17 +31,18 @@
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, fit-content);
   }
-  .content button {
-    height: fit-content;
+  .button {
+    height: max-content;
+    width: 100px;
     background: #b8894e;
     font-size: 15px;
     font-weight: 525;
-    color: #ffffff;
+    text-align: center;
+    color: #000;
     border: none;
-    border-radius: 5px;
-    padding: 11px;
+    padding: 5px 10px;
+    margin: 0 20px;
     cursor: pointer;
-   
   }
   .btnAdd {
     grid-row: 1;
@@ -53,7 +54,7 @@
     width: 100%;
     background: #f9f9f9;
     border-spacing: 0;
-    border: 1px solid #bc8c4e;
+    /* border: 1px solid #bc8c4e; */
     box-sizing: border-box;
     border-radius: 5px;
     overflow: hidden;
@@ -72,7 +73,7 @@
   }
   td {
     padding: 5px 10px;
-    border-bottom: 1px solid #bc8c4e;
+    /* border-bottom: 1px solid #bc8c4e; */
   }
   th:nth-child(1),
   td:nth-child(1) {
@@ -109,5 +110,80 @@
     width: 1%;
     text-align: left;
   }
+  .card{
+    margin: 20px auto;
+  }
+  .cardInfo{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .row{
+    margin: 20px auto;
+    background-color: #ffffff;
+  }
+  .col{
+    column-width: 1px;
+    column-count: 3;
+    column-gap: 10px;
+  }
+  .img {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+  }
+  .vl{
+      display: flex;
+      justify-content: end;
+      margin: 0 10px;
+      padding: 10px 30px;
+  }
+  .vl span:first-child{
+    border-right:3px solid red;
+  }
+  .sts{
+    width: fit-content;
+    height: fit-content;
+    padding: 0 20px;
+  }
 
+  .button13 {
+    width: fit-content;
+    background-color: #fff;
+    border: 1px solid #343339;
+    border-radius: 3px;
+    box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+    box-sizing: border-box;
+    color: #0f1111;
+    cursor: pointer;
+    display: inline-block;
+    /* font-family: "Amazon Ember",sans-serif; */
+    font-family: '-moz-initial';
+    font-size: 16px;
+    line-height: 29px;
+    padding: 0 10px 0 11px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    margin: 0 20px;
+  }
   
+  .button13:hover {
+    background-color: #f7fafa;
+  }
+  
+  .button13:focus {
+    border-color: #008296;
+    box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+    outline: 0;
+  }
+  .icon{
+    font-style: normal;
+    font-weight: 900;
+    font-size: 15px;
+    color: #ffffff;
+    margin-right: 5px;
+  }
