@@ -11,6 +11,7 @@ import Search from "./components/layout/Search";
 import Cart from "./components/layout/Cart/Cart";
 import Order from "./components/layout/Order/Order";
 import Detail from "./components/common/Product/Detail";
+import Payment from "./components/common/Payment/Payment";
 export default function App() {
   return (
     <div className={`${styles.container}`}>
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/cart" component={Cart} />
           <Route path="/order" component={Order} />
           <Route path="/product/:id" component={Detail} />
+          <Route path="/payment" component={Payment} />
         </div>
         <Footer></Footer>
       </BrowserRouter>
