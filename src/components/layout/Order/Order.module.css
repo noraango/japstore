@@ -5,6 +5,8 @@
     display: grid;
     grid-gap: 20px;
     grid-template-rows: fit-content auto;
+    margin: 2% 0 20% 0;
+    background-color: #f9f9f9;
   }
   .header {
     height: fit-content;
@@ -72,8 +74,9 @@
     padding: 10px 10px;
   }
   td {
-    padding: 5px 10px;
+    /* padding: 5px 10px; */
     /* border-bottom: 1px solid #bc8c4e; */
+    width: 50%;
   }
   th:nth-child(1),
   td:nth-child(1) {
@@ -111,20 +114,27 @@
     text-align: left;
   }
   .card{
-    margin: 20px auto;
+    border-radius: 10px;
+    background-color: #f9f9f9;
   }
   .cardInfo{
     display: flex;
     flex-wrap: wrap;
+    margin: 10px;
   }
   .row{
-    margin: 20px auto;
-    background-color: #ffffff;
+    background-color: #bc8c4e;
+    height: 30%;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center; 
+    border-radius: 10px 10px 0 0;
   }
   .col{
-    column-width: 1px;
-    column-count: 3;
-    column-gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .img {
     width: 100px;
@@ -187,3 +197,21 @@
     color: #ffffff;
     margin-right: 5px;
   }
+  .price {
+    font-weight: bold;
+    color: #8a171a;
+    font-size: 1.125em;
+  }
+  .tab{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    margin: 0;
+    padding: 0;
+  }  
+
+.tabItem{
+  flex: 1;
+  text-align: center
+
+}
