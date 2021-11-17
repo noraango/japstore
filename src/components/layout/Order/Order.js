@@ -1,101 +1,148 @@
 import React from 'react'
 import { useState } from 'react';
 import styles from './Order.module.css'
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab, Container, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCommentAlt, faStoreAlt } from '@fortawesome/free-solid-svg-icons'
-import { style } from 'dom-helpers';
+import { faCommentAlt, faStoreAlt, faUser } from '@fortawesome/free-solid-svg-icons'
+import { formatVND } from "../../../controller/constants";
+
+const productDetail = (product) => {
+  const pathz = process.env.PUBLIC_URL + "/images";
+  const priceQuantity = parseInt(product.price) * parseInt(product.quanity)
+  return (
+    <Row>
+      <Col>
+        <div className={`${styles.cardInfo}`}>
+          <div className={`${styles.img}`}>
+            <img src={pathz + product.displayImageName} />
+          </div>
+          <td>
+            <p>{product.name}</p>
+            <small>X {product.quanity}</small>
+          </td>
+        </div>
+      </Col>
+
+      <Col>
+      </Col>
+      <Col style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <div className={styles.price}
+          style={{ marginRight: '10%' }}
+        >
+          {formatVND(priceQuantity)}đ
+        </div>
+      </Col>
+    </Row>
+  )
+}
+
 const OrderDetail = (order) => {
-  var pathz = process.env.PUBLIC_URL + "/images";
-  console.log(order)
-  const totalPrice = parseInt(order.price) * parseInt(order.quanity) + parseInt(order.ship)
-  console.log(order.price)
+  const totalPrice = (order)=>{
+    if(order.product.length>0){
+      let totalPrice=0;
+      for(let p of order.product){
+        totalPrice+= (p.price * p.quanity);
+      }
+      return totalPrice+order.ship;
+    }
+    else{
+      return 0
+    }
+  }
   return (
     <div>
-      <div className={styles.card}>
-        <table className={styles.table}>
-          <tr style={{backgroundColor:'#bc8c4e'}}>
-            <td className={styles.td}>
-              <a style={{ margin: '0 20px', }}><mark>{order.shopName}</mark></a>
-              <button className={styles.button13} style={{ backgroundColor: 'crimson', color: 'white' }}>
-                <FontAwesomeIcon className={styles.icon} icon={faCommentAlt} />
-                Chat
-              </button>
-              <button className={styles.button13} >
-                <FontAwesomeIcon className={styles.icon} style={{ color: 'black' }} icon={faStoreAlt} />
-                Xem shop
-              </button>
-            </td>
-            <td className={styles.td}>
-              <p className={styles.vl}>
-                <span className={styles.sts} style={{ color: 'royalblue' }}>{order.status}</span>
-                <span className={styles.sts} style={{ color: 'crimson', textTransform: 'uppercase' }}>
-                  {order.status}
-                </span>
-              </p>
-            </td>
-          </tr>
-
-          <tr className={styles.tr}>
-            <td >
-              <div className={`${styles.cardInfo}`}>
-                <div className={`${styles.img}`}>
-                  <img src={`${pathz}/user-icon.png`} />
-                </div>
-                <td>
-                  <p>{order.productName}</p>
-                  <small>X {order.quanity}</small>
-                </td>
+      <div className={styles.container}>
+        <Container className={styles.card}>
+          <Row className={styles.row} >
+            <Col xs sm md lg='6' className={styles.td} >
+              <div>
+                <Row style={{ margin: '5px 10px' }}>
+                  <Col className={styles.col}>
+                    <a className={styles.button13}><mark>
+                      <FontAwesomeIcon className={styles.icon} style={{ color: 'black' }} icon={faUser} />
+                      {order.shopName}
+                    </mark></a>
+                  </Col>
+                  <Col className={styles.col}>
+                    <button className={styles.button13} style={{ backgroundColor: 'crimson', color: 'white' }}>
+                      <FontAwesomeIcon className={styles.icon} icon={faCommentAlt} />
+                      Chat
+                    </button>
+                  </Col>
+                  <Col className={styles.col}>
+                    <button className={styles.button13}>
+                      <FontAwesomeIcon className={styles.icon} style={{ color: 'black' }} icon={faStoreAlt} />
+                      Xem shop
+                    </button>
+                  </Col>
+                </Row>
               </div>
-            </td>
-            <td>
-              <div
-                style={{display: 'flex',
-                  justifyContent: 'start',
-                  marginLeft:'725px'}} 
-              >
-                <sup>đ</sup>{order.price}
-              </div>
-            </td>
-          </tr>
+            </Col>
 
-          <tr>
-            <td></td>
-            <td>
-              <span className={styles.vl} style={{borderTop:'2px solid red'}}>
+            <Col xs sm md lg='6'>
+              <Row>
+                <Col></Col>
+                <Col xs sm md lg='6' className={styles.col} style={{ justifyContent: 'end' }}>
+                  <span className={styles.sts} style={{ color: 'royalblue' }}>
+                    {order.status}
+                  </span>
+                </Col>
+
+                <Col className={styles.col} style={{ borderLeft: '3px solid red' }}>
+                  <span className={styles.sts} style={{ color: 'crimson', textTransform: 'uppercase' }}>
+                    {order.status}
+                  </span>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+
+          {
+            order.product.map((p,key)=>{
+              return productDetail(p)
+            })
+          }
+
+          <Row style={{ borderTop: '2px solid red' }}>
+            <Col>
+              <span className={styles.vl}>
                 <small style={{ margin: '0 50px' }}>Tổng số tiền</small>
                 <h5 style={{ color: 'crimson' }}>
-                  <sup>đ</sup> {totalPrice}
+                  {formatVND(totalPrice(order))}đ
                 </h5>
               </span>
-            </td>
-          </tr>
+            </Col>
+          </Row>
 
-          <tr>
-            <td></td>
-            <td>
-              <td>
-                <button className={styles.button}
-                  style={{ width: '200px', backgroundColor: 'crimson', color: 'white', fontFamily: '-moz-initial', fontWeight: 'bold' }}>
-                  Mua lại
-                </button>
-              </td>
-              <td>
-                <button className={styles.button}
-                  style={{ width: '200px', backgroundColor: 'transparent', color: 'gray', fontFamily: '-moz-initial', fontWeight: 'bold', border: '1px solid black' }}>
-                  Liên hệ người bán
-                </button>
-              </td>
-              <td>
-                <button className={styles.button}
-                  style={{ width: '200px', backgroundColor: 'transparent', color: 'gray', fontFamily: '-moz-initial', fontWeight: 'bold', border: '1px solid black' }}>
-                  Xem đánh giá người mua
-                </button>
-              </td>
-            </td>
-          </tr>
-        </table>
-      </div>
+          <Row className={styles.row} style={{ backgroundColor: 'gray', borderRadius: '0 0 10px 10px' }}>
+            <Col xs sm md lg='6'></Col>
+            <Col xs sm md lg='6' className={styles.td} >
+              <div>
+                <Row style={{ margin: '5px 10px' }}>
+                  <Col className={styles.col}>
+                    <button className={styles.button}
+                      style={{ backgroundColor: 'crimson', color: 'white', fontFamily: '-moz-initial', fontWeight: 'bold' }}>
+                      Mua lại
+                    </button>
+                  </Col>
+                  <Col className={styles.col}>
+                    <button className={styles.button}
+                      style={{ width: 'fit-content', backgroundColor: 'transparent', color: 'white', fontFamily: '-moz-initial', fontWeight: 'bold', border: '1px solid black' }}>
+                      Liên hệ người bán
+                    </button>
+                  </Col>
+                  <Col className={styles.col}>
+                    <button className={styles.button}
+                      style={{ width: 'fit-content', backgroundColor: 'transparent', color: 'white', fontFamily: '-moz-initial', fontWeight: 'bold', border: '1px solid black' }}>
+                      Xem đánh giá người mua
+                    </button>
+                  </Col>
+                </Row>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </div >
     </div>
   )
 }
@@ -106,20 +153,47 @@ const Order = () => {
     {
       id: 1,
       shopName: 'Astusy',
-      productName: 'Qfsdggggfdghjghkhjasdahsbdjikhguiofydhsfiosdfoi',
-      quanity: 3,
-      status: 'Đã giao',
-      price: 20000,
+      product: [
+        {
+          id: 1,
+          name: 'Qfsdggggfdghjghkhjasdahsbdjikhguiofydhsfiosdfofffff',
+          quanity: 2,
+          price: 50000,
+          displayImageName: 'fsfdsf.jpg'
+        },
+        {
+          id: 2,
+          name: 'Qfsdggggfdghjghkh',
+          quanity: 4,
+          price: 50000,
+          displayImageName: 'fsfdsf.jpg'
+        }
+      ],
       ship: 15000,
+      status: 'Đã giao',
     },
     {
       id: 2,
       shopName: 'fdfdfg',
-      productName: 'Qfsdggggfdghjghkhjasdahsbdjikhguiofydhsfiosdfoi',
-      quanity: 2,
-      status: 'Đã giao',
-      price: 50000,
+      product: [
+        {
+          id: 1,
+          name: 'Qfsdggggfdghjghkhjasdahsbdjikhguiofydhsfiosdfoffffffff',
+          quanity: 2,
+          price: 50000,
+          displayImageName: 'fsfdsf.jpg'
+        },
+        {
+          id: 2,
+          name: 'Qfsdggggfdghjghkh',
+          quanity: 4,
+          price: 50000,
+          displayImageName: 'fsfdsf.jpg'
+        }
+      ],
       ship: 15000,
+      status: 'Đã giao',
+
     },
   ]
   const [orders, setOrders] = useState([ordersRaw]);
@@ -148,27 +222,30 @@ const Order = () => {
 
   const displayTabTitle = (tabTitle) =>
     tabTitle.map((t) =>
-      <Tab eventKey={t.key} title={t.name}>
+      <Tab eventKey={t.key} title={t.name} className={styles.tabItem}>
         {
-          ordersRaw.map((o,key)=>{
+          ordersRaw.map((o, key) => {
             return OrderDetail(o)
           })
+
         }
-        
+
       </Tab>
     )
 
   return (
-    <div className={`${styles.container}`}>
-      <Tabs
+    <div style={{ margin: '30px' }}>
+      <Tabs justify
         id="controlled-tab-example"
         activeKey={key}
         onSelect={(k) => setKey(k)}
-        className="mb-3">
+        className={styles.tab}
+      >
         {displayTabTitle(tabTitle)}
       </Tabs>
 
     </div>
+
   )
 }
 
