@@ -36,7 +36,9 @@ export default function Header(props) {
   function onClickCart() {
     history.push("/cart");
   }
- 
+  function redirectUser() {
+    history.push("/user");
+  }
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.topContainer}`}>
@@ -92,7 +94,7 @@ export default function Header(props) {
               ) : (
                 ""
               )}
-              <button>Thông tin người dùng</button>
+              <button onClick={redirectUser}>Thông tin người dùng</button>
               <button onClick={logout}>Đăng xuất</button>
             </div>
           </div>
