@@ -6,7 +6,7 @@ export default function Payment(props) {
     <div className={`container`}>
       <div id="check-out">
         <div className="row m-center">
-          <div className=" order-lg-last col-lg-5 container pt-4 summary">
+          <div className=" order-lg-last offset-md-1  col-lg-5 container pt-4 summary">
             <div className="container-input-2">
               <div className="statistical">
                 <h4 className="summary-buttom">
@@ -15,21 +15,6 @@ export default function Payment(props) {
               </div>
               <div id="view-back">
                 <div className="cart-view">
-                  <div className="row cart-product">
-                    <div className="col-2">
-                      <img
-                        src={process.env.PUBLIC_URL + "/images/user.png"}
-                        alt=""
-                      />
-                    </div>
-                    <div className="col-6 cart-body">
-                      <span>sniky</span>
-                    </div>
-                    <div className="col-4 cart-body">
-                      <p>Số lượng : 3</p>
-                      <p>2000000d</p>
-                    </div>
-                  </div>
                   <div className="row cart-product">
                     <div className="col-2">
                       <img
@@ -74,7 +59,7 @@ export default function Payment(props) {
                 </form>
                 <button
                   type="submit"
-                  className="btn btn-primary btn-check-coupons"
+                  className="btn btn-check-coupons"
                   onclick="fnSubmit()"
                 >
                   Kiểm Tra
@@ -95,18 +80,12 @@ export default function Payment(props) {
                 </div>
                 <div className="summary-buttom">
                   <a href="ds">
-                    <button
-                      type="submit"
-                      className="btn btn-primary button-back"
-                    >
+                    <button type="submit" className="btn button-back">
                       <span>Quay về giỏ hàng</span>
                     </button>
                   </a>
                   <a href="ds">
-                    <button
-                      type="submit"
-                      className="btn btn-primary  button-next"
-                    >
+                    <button type="submit" className="btn  button-next">
                       <span>Đặt hàng</span>
                     </button>
                   </a>
@@ -114,7 +93,7 @@ export default function Payment(props) {
               </div>
             </div>
           </div>
-
+          <div className=""></div>
           <div className="col-lg-6 input order-lg-1">
             <div className="container m-center">
               <div className=" pl-4 pr-4 input-infor">
@@ -129,8 +108,8 @@ export default function Payment(props) {
                       placeholder="name@example.com"
                     />
                   </div>
-                  <div className="row">
-                    <div className="form-group col col-md-6 col-12">
+                  <div className="row ">
+                    <div className="form-group col col-md-6 col-12  double-col">
                       <label for="name">Họ tên</label>
                       <input
                         type="email"
@@ -139,7 +118,7 @@ export default function Payment(props) {
                         placeholder="Họ và Tên"
                       />
                     </div>
-                    <div className="form-group  col col-md-6  col-12">
+                    <div className="form-group  col col-md-6  col-12 pr-none">
                       <label for="phone">Số điện thoại</label>
                       <input
                         type="email"
@@ -149,8 +128,8 @@ export default function Payment(props) {
                       />
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="form-group col col-md-6  col-12">
+                  <div className="row ">
+                    <div className="form-group col col-md-6  col-12  double-col">
                       <label for="city">Tỉnh,Thành phố</label>
                       <select className="form-control" name="city">
                         <option>1</option>
@@ -161,7 +140,7 @@ export default function Payment(props) {
                       </select>
                     </div>
                     <div
-                      className="form-group col col-md-6  col-12"
+                      className="form-group col col-md-6  col-12 pr-none"
                       id="other-take-hide"
                     >
                       <label for="county">Quận,huyện</label>
@@ -193,7 +172,28 @@ export default function Payment(props) {
                     ></textarea>
                   </div>
                 </form>
-
+                <div className="">
+                  <div className="payment">
+                    <div className="way">
+                      <div className="radio">
+                        <div class="custom-control custom-checkbox">
+                          <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="customCheck1"
+                          />
+                          <label
+                            class="custom-control-label"
+                            for="customCheck1"
+                          >
+                            <span>Giao hàng trong giờ hành chính</span>
+                          </label>
+                        </div>
+                      </div>
+                      <p>Hàng sẽ được giao trong khung giờ hành chính 8h-17h</p>
+                    </div>
+                  </div>
+                </div>
                 <div className="">
                   <div className="payment">
                     <div className="way">
@@ -220,18 +220,12 @@ export default function Payment(props) {
                 </div>
                 <div className="summary-buttom ">
                   <a href="ds">
-                    <button
-                      type="submit"
-                      className="btn btn-primary button-back"
-                    >
+                    <button type="submit" className="btn  button-back">
                       <span>Quay về giỏ hàng</span>
                     </button>
                   </a>
                   <a href="ds">
-                    <button
-                      type="submit"
-                      className="btn btn-primary  button-next"
-                    >
+                    <button type="submit" className="btn  button-next">
                       <span>Đặt hàng</span>
                     </button>
                   </a>

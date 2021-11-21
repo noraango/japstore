@@ -120,8 +120,10 @@ export default function Detail(props) {
     <div className={`container ${styles.container}`}>
       <h3 className={"product-name"}>{product.name}</h3>
       <div className={`row`}>
-        <div className={`col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 `}>
-          <ImageMagnifiers linkImage={"/images/nike.jpg"} />
+        <div
+          className={`col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 product-img`}
+        >
+          <ImageMagnifiers linkImage={"/images/nike2.jpg"} />
         </div>
         <div className={`col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6`}>
           <div className={"product-infor"}>
@@ -190,26 +192,6 @@ export default function Detail(props) {
       <div className="product-rate">
         <div className="rate">
           <h3>Đánh giá của khách hàng</h3>
-          <button className="add-comment" onClick={openModal}>
-            Thêm Nhận Xét
-          </button>
-          <Modal
-            isOpen={modalIsOpen}
-            onAfterOpen={afterOpenModal}
-            onRequestClose={closeModal}
-            style={customStyles}
-            contentLabel="Example Modal"
-          >
-            <div>
-              <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Thêm Nhận Xét</h2>
-              <button onClick={closeModal}>X</button>
-            </div>
-            <form>
-              <ReactStars count={5} edit={true} size={24} color={"#b1b148"} />
-              <input />
-              <button onClick={closeModal}>X</button>
-            </form>
-          </Modal>
         </div>
 
         <div className="comment">

@@ -410,8 +410,15 @@ section
   width: 25%;
   display: inline-block;
   margin-top: -5px;
+  margin-left: 10px;
+  background-color: #bc8c4e;
+  background: #bc8c4e;
+  color: white;
 }
-
+.btn-check-coupons {
+  background-color: #bc8c4e;
+  background: #bc8c4e;
+}
 /*Tổng kết*/
 
 .summary-second-section {
@@ -439,12 +446,17 @@ section
 .summary-text p,
 .summary-text span {
   font-weight: 450;
-  font-size: 18px;
+  font-size: 16px;
   margin: 0px 10px 10px;
 }
 
 /*Amimation buttom*/
-
+a .button-back,
+a .button-next {
+  background-color: #bc8c4e;
+  background: #bc8c4e;
+  color: white;
+}
 .button-back {
   font-size: 18px;
   padding: 10px;
@@ -452,12 +464,14 @@ section
   transition: all 0.5s;
   cursor: pointer;
   margin: 5px;
+  background: #bc8c4e;
 }
 
 .button-back span {
   cursor: pointer;
   display: inline-block;
   position: relative;
+  color: white;
   transition: 0.5s;
 }
 
@@ -472,6 +486,7 @@ section
 
 .button-back:hover span {
   padding-left: 25px;
+  color: white;
 }
 
 .button-back:hover span:after {
@@ -487,6 +502,7 @@ section
   transition: all 0.5s;
   cursor: pointer;
   margin: 5px;
+  background-color: #bc8c4e;
 }
 
 .button-next span {
@@ -494,6 +510,8 @@ section
   display: inline-block;
   position: relative;
   transition: 0.5s;
+  background: #bc8c4e;
+  color: white;
 }
 
 .button-next span:after {
@@ -503,6 +521,7 @@ section
   top: 0;
   right: -20px;
   transition: 0.5s;
+  background: #bc8c4e;
 }
 
 .button-next:hover span {
@@ -534,7 +553,7 @@ section
 .way .pay-radio {
   width: 18px;
   height: 18px;
-  margin-top: 10px;
+  margin-top: 6px;
   border-radius: 50%;
 }
 
@@ -602,6 +621,10 @@ label {
   .container-input {
     width: 82%;
   }
+  .double-col input,
+  .double-col select {
+    width: 97%;
+  }
 }
 
 @media (min-width: 992px) {
@@ -633,4 +656,29 @@ label {
 
 .pr-3 {
   padding-right: 30px !important;
+}
+
+.pl-none {
+  padding-left: 0 !important;
+}
+.pr-none {
+  padding-right: 0 !important;
+}
+@media (max-width: 576px) {
+  .pl-none {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .pr-none {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+}
+
+.custom-control-input {
+  width: 1rem;
+  height: 1.25rem;
+}
+.custom-control-label {
+  margin-top: 1px !important;
 }

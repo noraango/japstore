@@ -12,6 +12,7 @@ import Cart from "./components/layout/Cart/Cart";
 import Order from "./components/layout/Order/Order";
 import Detail from "./components/common/Product/Detail";
 import Payment from "./components/common/Payment/Payment";
+import UserRole from "./components/staff/UserRole/UserRole";
 import "bootstrap/dist/css/bootstrap.min.css";
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/order" component={Order} />
           <Route path="/product/:id" component={Detail} />
           <Route path="/payment" component={Payment} />
+          <Route path="/role" component={UserRole} />
         </div>
         <Footer></Footer>
       </BrowserRouter>
