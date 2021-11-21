@@ -14,6 +14,7 @@ import Detail from "./components/common/Product/Detail";
 import Payment from "./components/common/Payment/Payment";
 import UserRole from "./components/staff/UserRole/UserRole";
 import "bootstrap/dist/css/bootstrap.min.css";
+import User from "./components/layout/User/User";
 export default function App() {
   return (
     <div className={`${styles.container}`}>
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/product/:id" component={Detail} />
           <Route path="/payment" component={Payment} />
           <Route path="/role" component={UserRole} />
+          <Route path="/user" component={User} />
         </div>
         <Footer></Footer>
       </BrowserRouter>
