@@ -4,8 +4,6 @@ import "./ProductDetail.css";
 import productService from "../../../services/product.service";
 import ImageMagnifiers from "./../Image/ImageMagnifiers";
 import ProductRate from "./ProductRate";
-import ReactStars from "react-rating-stars-component";
-import Modal from "react-modal";
 
 export default function Detail(props) {
   /**
@@ -26,7 +24,7 @@ export default function Detail(props) {
     brand: "nike",
     origin: "",
     packingMethod: "",
-    displayImageName: ["/images/inke.jpg", ""],
+    displayImageName: ["/images/nike.jpg", "/images/nike2.jpg"],
   });
 
   const [number, setNumber] = useState(1);
@@ -95,23 +93,6 @@ export default function Detail(props) {
   function onAddCartClick() {
     alert("add cart now");
   }
-
-  let subtitle;
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    subtitle.style.color = "#f00";
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
   /**
    * View
    */
@@ -123,7 +104,7 @@ export default function Detail(props) {
         <div
           className={`col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 product-img`}
         >
-          <ImageMagnifiers linkImage={"/images/nike2.jpg"} />
+          <ImageMagnifiers linkImage={product.displayImageName} />
         </div>
         <div className={`col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6`}>
           <div className={"product-infor"}>
