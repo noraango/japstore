@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import styles from './User.module.css'
 import { Form, FloatingLabel } from 'react-bootstrap'
+import { path } from "../../../controller/constants";
 const User = () => {
     const radiosGender = [
         { name: 'Nam', value: '1' },
         { name: 'Nữ', value: '2' },
         { name: 'Khác', value: '3' },
     ]
+    const [imageFile, setImageFile] = useState(undefined);
+    const [imageURL, setImageURL] = useState(path + "/images/upload.jpg");
     const pushDate = (start, end, arr) => {
         for (let i = start; i <= end; i++) {
             arr.push(i)
@@ -19,6 +22,14 @@ const User = () => {
     pushDate(1, 12, month)
     pushDate(1910, yearCur, year);
     const pathz = process.env.PUBLIC_URL + "/images" + "/user-icon.png";
+
+    const onChangeImage = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            setImageFile(e.target.files[0]);
+            setImageURL(URL.createObjectURL(e.target.files[0]));
+        }
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.card}>
@@ -28,6 +39,21 @@ const User = () => {
                         <div className={styles.headerDiv}>Quản lý thông tin hồ sơ để bảo mật tài khoản</div>
                     </div>
                     <div className={styles.body}>
+                        <div className={styles.imgDiv}>
+                            <div className={styles.imgDiv2}>
+                                <div className={styles.img}>
+                                    <div className={`${styles.inputImage} ${styles.span31}`}>
+                                        <input type="file" accept=".jpg,.jpeg,.png" title="" onChange={onChangeImage} />
+                                        <img src={`${imageURL}`} alt="Không load được ảnh" />
+                                    </div>
+                                </div>
+
+                                <div style={{ marginTop: '0.75rem', display: 'block' }}>
+                                    <div className={styles.scrpitDiv}>Dụng lượng file tối đa 1 MB</div>
+                                    <div className={styles.scrpitDiv}>Định dạng:.JPEG, .PNG</div>
+                                </div>
+                            </div>
+                        </div>
                         <div className={styles.formInfo}>
                             <form className={styles.formInfoMain}>
                                 <div className={styles.label1}>
@@ -175,23 +201,7 @@ const User = () => {
                                 </div>
                             </form>
                         </div>
-                        <div className={styles.imgDiv}>
-                            <div className={styles.imgDiv2}>
-                                <div className={styles.img}>
-                                    <div className={styles.img2} style={{ backgroundImage: `url(${pathz})` }}>
-                                    </div>
-                                </div>
-                                <input type="file" accept=".jpg,.jpeg,.png" style={{ display: 'none', lineHeight: 'normal', color: 'inherit', font: 'inherit', margin: 0 }} />
-                                {/* <button type="button" className={styles.btnImg}>Chọn ảnh</button> */}
-                                <div style={{paddingLeft: '2em'}}>
-                                <Form.Control  type="file" accept=".jpg,.jpeg,.png" size="sm" />
-                                </div>   
-                                <div style={{ marginTop: '0.75rem', display: 'block' }}>
-                                    <div className={styles.scrpitDiv}>Dụng lượng file tối đa 1 MB</div>
-                                    <div className={styles.scrpitDiv}>Định dạng:.JPEG, .PNG</div>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
