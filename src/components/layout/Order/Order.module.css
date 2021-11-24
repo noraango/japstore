@@ -5,8 +5,9 @@
     display: grid;
     grid-gap: 20px;
     grid-template-rows: fit-content auto;
-    margin: 2% 0 20% 0;
-    background-color: #f9f9f9;
+    padding: 20px;
+    margin: 2% 0 10% 0;
+    background-color: #fff;
   }
   .header {
     height: fit-content;
@@ -32,19 +33,6 @@
     grid-gap: 20px;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(3, fit-content);
-  }
-  .button {
-    height: max-content;
-    width: 100px;
-    background: #b8894e;
-    font-size: 15px;
-    font-weight: 525;
-    text-align: center;
-    color: #000;
-    border: none;
-    padding: 5px 10px;
-    margin: 0 20px;
-    cursor: pointer;
   }
   .btnAdd {
     grid-row: 1;
@@ -76,7 +64,12 @@
   td {
     /* padding: 5px 10px; */
     /* border-bottom: 1px solid #bc8c4e; */
-    width: 50%;
+    /* width: 50%; */
+    height: fit-content;
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, fit-content);
   }
   th:nth-child(1),
   td:nth-child(1) {
@@ -116,6 +109,7 @@
   .card{
     border-radius: 10px;
     background-color: #f9f9f9;
+    border: solid 1px #bc8c4e;
   }
   .cardInfo{
     display: flex;
@@ -124,7 +118,7 @@
   }
   .row{
     background-color: #bc8c4e;
-    height: 30%;
+    height: 20%;
     display: flex;
     align-content: center;
     align-items: center;
@@ -156,40 +150,23 @@
     padding: 0 20px;
   }
 
-  .button13 {
-    width: fit-content;
-    background-color: #fff;
-    border: 1px solid #343339;
-    border-radius: 3px;
-    box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
-    box-sizing: border-box;
-    color: #0f1111;
+  .button {
+    height: 40px;
+    width: -webkit-fill-available;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 525;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
     cursor: pointer;
-    display: inline-block;
-    /* font-family: "Amazon Ember",sans-serif; */
-    font-family: '-moz-initial';
-    font-size: 16px;
-    line-height: 29px;
-    padding: 0 10px 0 11px;
-    position: relative;
-    text-align: center;
-    text-decoration: none;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    vertical-align: middle;
-    margin: 0 20px;
   }
-  
-  .button13:hover {
-    background-color: #f7fafa;
+  .btnAdd {
+    grid-row: span 1;
+    grid-column: span 1;
   }
-  
-  .button13:focus {
-    border-color: #008296;
-    box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
-    outline: 0;
-  }
+
   .icon{
     font-style: normal;
     font-weight: 900;
@@ -208,10 +185,26 @@
     align-items: stretch;
     margin: 0;
     padding: 0;
+    color: #000;
   }  
 
-.tabItem{
-  flex: 1;
-  text-align: center
+  .row1{
+    height: 20%;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center; 
+    border-radius: 10px 10px 0 0;
+    background-color: #343339;
+    border-radius: 0 0 10px 10px;
+  }
+  @media (max-width: 768px) {
+    .row1{
+      background-color: #343339;
+      height: 20%;
+    }
+    .button{
+      margin-bottom: 10px;
+    }
+  }
 
-}
