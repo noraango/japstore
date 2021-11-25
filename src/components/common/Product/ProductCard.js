@@ -40,8 +40,11 @@ export default function ProductCard(props) {
         console.log(e);
       });
   }
+  function redirectProduct() {
+    
+  }
   return (
-    <div className={styles.productCard}>
+    <div className={styles.productCard} onClick={redirectProduct}>
       <div className={styles.imgContainer}>
         <img
           src={imageService.get(props.data.displayImageName)}
