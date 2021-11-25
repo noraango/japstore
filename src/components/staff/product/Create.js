@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styles from "./Create.module.css";
-import { path } from "../../../controller/constants";
+import { isFileImage, path } from "../../../controller/constants";
 import productService from "../../../services/product.service";
+import MessageBox from "../../common/MessageBox/MessageBox";
 export default function CreateProduct(prop) {
   let history = useHistory();
   const [statuses, setStatuses] = useState([]);
   const [packMethods, setPackMethods] = useState([]);
   const [origins, setOrigins] = useState([]);
-  const [store, setStore] = useState([]);
   const [imageFile, setImageFile] = useState(undefined);
   const [imageURL, setImageURL] = useState(path + "/images/upload.jpg");
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [price, setPrice] = useState(0);
-  const [quantity, setQuantity] = useState(0);
   const [weight, setWeight] = useState(0);
   const [size, setSize] = useState(0);
   const [originId, setOriginId] = useState(null);
   const [packingId, setPackingId] = useState(null);
   const [statusId, setStatusId] = useState(null);
-  const [storeId, setStoreId] = useState(null);
   const [brand, setBrand] = useState("");
   const [manu, setManu] = useState("");
   const [short, setShort] = useState("");
@@ -31,7 +29,6 @@ export default function CreateProduct(prop) {
     retreiveStatus();
     retreivePacking();
     retreiveOrigin();
-    retreiveStorage();
   }, []);
 
   function onChangeImage(e) {
@@ -49,9 +46,6 @@ export default function CreateProduct(prop) {
   function onChangePrice(e) {
     setPrice(e.target.value);
   }
-  function onChangeQuantity(e) {
-    setQuantity(e.target.value);
-  }
   function onChangeOrigin(e) {
     setOriginId(e.target.value);
   }
@@ -68,11 +62,15 @@ export default function CreateProduct(prop) {
     setShort(e.target.value);
   }
   function onChangeImages(e) {
-    console.log(e.target);
-    // if (e.target.files && e.target.files[0]) {
-    //   setImageFile(e.target.files[0]);
-    //   setImageURL(URL.createObjectURL(e.target.files[0]));
-    // }
+    if (e.target.files) {
+      let files = Array.from(e.target.files);
+      if (isFileImage(files)) {
+        setImageFiles(files);
+        // console.log("Input images ngon");
+      } else {
+        console.log("Input images fail");
+      }
+    }
   }
   function onChangeDes(e) {
     setDes(e.target.value);
@@ -116,18 +114,6 @@ export default function CreateProduct(prop) {
         console.log(e);
       });
   }
-  function retreiveStorage() {
-    productService
-      .getStore()
-      .then((res) => {
-        setStore(res.data);
-        setStoreId(res.data[0].id);
-        // console.log(res.data[0].id);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
   function onSubmit() {
     var data = {
       code: code,
@@ -135,7 +121,6 @@ export default function CreateProduct(prop) {
       price: price,
       size: size,
       weight: weight,
-      quantity: quantity,
       manufacturer: manu,
       shortDes: short,
       images: imageFiles,
@@ -144,17 +129,17 @@ export default function CreateProduct(prop) {
       originId: originId,
       packingMethodId: packingId,
       statusId: statusId,
-      storageId: storeId,
       displayImage: imageFile,
     };
+
     productService
       .create(data)
       .then((res) => {
         console.log(res);
-        setSubmit(true);
+        setSubmit(false);
       })
       .catch((err) => {
-        console.log(submit);
+        setSubmit(true);
       });
   }
   return (
@@ -168,7 +153,9 @@ export default function CreateProduct(prop) {
           <img src={`${imageURL}`} alt="Không load được ảnh" />
         </div>
         <div className={`${styles.span12}`}>
-          <h2 className={`label`}>Tên sản phẩm</h2>
+          <h2 className={`label`}>
+            Tên sản phẩm <span className={`error`}>*</span>
+          </h2>
           <input
             className={`input`}
             onChange={onChangeName}
@@ -196,18 +183,6 @@ export default function CreateProduct(prop) {
           />
         </div>
         <div className={`${styles.span11}`}>
-          <h2 className={`label`}>Số lượng</h2>
-          <input
-            className={`input`}
-            placeholder="Nhập số lượng"
-            type="number"
-            min="0"
-            max="999999"
-            step="1"
-            onChange={onChangeQuantity}
-          ></input>
-        </div>
-        <div className={`${styles.span11}`}>
           <h2 className={`label`}>Cân nặng</h2>
           <input
             className={`input`}
@@ -226,6 +201,15 @@ export default function CreateProduct(prop) {
             placeholder="Nhập kích thước"
             onChange={(e) => setSize(e.target.value)}
           ></input>
+        </div>
+        <div className={`${styles.inputImages}`}>
+          <h2 className={`label`}>Hình ảnh sản phẩm</h2>
+          <input
+            className={`input`}
+            type="file"
+            multiple
+            onChange={onChangeImages}
+          />
         </div>
         <div className={`${styles.span11}`}>
           <h2 className={`label`}>Thương hiệu</h2>
@@ -276,23 +260,6 @@ export default function CreateProduct(prop) {
             ))}
           </select>
         </div>
-        <div className={`${styles.span11}`}>
-          <h2 className={`label`}>Kho hàng</h2>
-          <select
-            className={`input`}
-            onChange={(e) => setStoreId(e.target.value)}
-          >
-            {store.map((storage, index) => (
-              <option key={index} value={storage.id}>
-                {storage.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className={`${styles.inputImages}`}>
-          <h2 className={`label`}>Hình ảnh sản phẩm</h2>
-          <input type="file" multiple />
-        </div>
         <div className={`${styles.inputShort}`}>
           <h2 className={`label`}>Mô tả ngắn gọn</h2>
           <textarea
@@ -310,10 +277,15 @@ export default function CreateProduct(prop) {
           ></textarea>
         </div>
         <div className={styles.btnContainer}>
-          <button className={`label`} onClick={onSubmit}>Thêm sản phẩm</button>
-          <button className={`label`} onClick={onReturn}>Quay lại</button>
+          <button className={`label`} onClick={onSubmit}>
+            Thêm sản phẩm
+          </button>
+          <button className={`label`} onClick={onReturn}>
+            Quay lại
+          </button>
         </div>
       </div>
+      {!submit ? <MessageBox onClick={onReturn} /> : ""}
     </div>
   );
 }

@@ -28,7 +28,7 @@ export default function App() {
           <Route path="/cart" component={Cart} />
           <Route path="/order" component={Order} />
           <Route path="/product/:id" component={Detail} />
-          <Route path="/user" component={User} />
+          <Route path="/user/:id" component={User} />
         </div>
         <Footer></Footer>
       </BrowserRouter>

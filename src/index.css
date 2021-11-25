@@ -39,7 +39,9 @@ code {
   margin: 0 !important;
   padding: 0 !important;
 }
-
+.error{
+  color: red;
+}
 .title {
   font-size: 25px;
 }
