@@ -1,275 +1,244 @@
-import React, { Component } from "react";
-import productService from "../../../services/product.service";
 import styles from "./Edit.module.css";
-export default class Edit extends Component {
-  constructor(props) {
-    super(props);
-    this.onChangeName = this.onChangeName.bind(this);
-    this.onChangeCode = this.onChangeCode.bind(this);
-    this.onChangePrice = this.onChangePrice.bind(this);
-    this.onChangeQuantity = this.onChangeQuantity.bind(this);
-    this.onChangeBrand = this.onChangeBrand.bind(this);
-    this.onChangeManufacturer = this.onChangeManufacturer.bind(this);
-    this.onChangeShortDescription = this.onChangeShortDescription.bind(this);
-    this.onChangeDescription = this.onChangeDescription.bind(this);
-    this.onChangeImage = this.onChangeImage.bind(this);
-    this.onChangeOrigin = this.onChangeOrigin.bind(this);
-    this.onChangePakingMethod = this.onChangePakingMethod.bind(this);
-    this.onReturn = this.onReturn.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.state = {
-      product: {
-        id: null,
-        code: "",
-        name: "",
-        price: null,
-        size: null,
-        quantity: null,
-        brand: null,
-        manufacturer: null,
-        originId: null,
-        packingMethodId: null,
-        shortDescription: "",
-        description: "",
-        displayImage: "",
-      },
-    };
-  }
-  componentDidMount() {
-    let id = parseInt(this.props.match.params.id);
-    let product = productService.get(id);
-    this.setState({
-      product: product,
-    });
-  }
-  onChangeName(e) {
-    let value = e.target.value;
-    this.setState((prev) => ({
-      product: {
-        ...prev.product,
-        name: value,
-      },
-    }));
-  }
-  onChangeCode(e) {
-    let value = e.target.value;
-    this.setState((prev) => ({
-      product: {
-        ...prev.product,
-        code: value,
-      },
-    }));
-  }
-  onChangePrice(e) {
-    let value = e.target.value;
-    this.setState((prev) => ({
-      product: {
-        ...prev.product,
-        price: value,
-      },
-    }));
-  }
-  onChangeQuantity(e) {
-    let value = e.target.value;
-    this.setState((prev) => ({
-      product: {
-        ...prev.product,
-        quantity: value,
-      },
-    }));
-  }
+import MessageBox from "../../common/MessageBox/MessageBox";
+import { useEffect, useState } from "react";
+import productService from "../../../services/product.service";
+import imageService from "../../../services/imageService";
 
-  onChangeBrand(e) {
-    let value = e.target.value;
-    this.setState((prev) => ({
-      product: {
-        ...prev.product,
-        brand: value,
-      },
-    }));
+export default function Edit(props) {
+  const [submit, setSubmit] = useState(true);
+  const [product, setProduct] = useState({ 
+    brand: "",
+    code: "",
+    description: "",
+    displayImage: null,
+    displayImageName: "",
+    id: null,
+    imageNames: [],
+    manufacturer: "",
+    name: "",
+    origin: "",
+    originId: null,
+    packingMethod: "",
+    packingMethodId: null,
+    price: null,
+    productStatusId: null,
+    quantity: null,
+    shortDescription: "",
+    size: "",
+    status: "",
+    weight: null,
+  });
+  const [origins, setOrigins] = useState([]);
+  useEffect(() => {
+    fetchProduct();
+    retreiveOrigin();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  function fetchProduct() {
+    productService
+      .getDetail(props.match.params.id)
+      .then((res) => {
+        setProduct(res.data);
+        console.log(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
-  onChangeManufacturer(e) {
-    let value = e.target.value;
-    this.setState((prev) => ({
-      product: {
-        ...prev.product,
-        manufacturer: value,
-      },
-    }));
+  function retreiveOrigin() {
+    productService
+      .getOrgin()
+      .then((res) => {
+        setOrigins(res.data);
+        // console.log(res.data[0].id);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
-  onChangeShortDescription(e) {
-    let value = e.target.value;
-    this.setState((prev) => ({
-      product: {
-        ...prev.product,
-        shortDescription: value,
-      },
-    }));
+  function onSubmit() {
+    // var data = {
+    //   code: code,
+    //   name: name,
+    //   price: price,
+    //   size: size,
+    //   weight: weight,
+    //   manufacturer: manu,
+    //   shortDes: short,
+    //   images: imageFiles,
+    //   des: des,
+    //   brand: brand,
+    //   originId: originId,
+    //   packingMethodId: packingId,
+    //   statusId: statusId,
+    //   displayImage: imageFile,
+    // };
+    // productService
+    //   .create(data)
+    //   .then((res) => {
+    //     console.log(res);
+    //     setSubmit(false);
+    //   })
+    //   .catch((err) => {
+    //     setSubmit(true);
+    //   });
+    console.log(product.originId);
+    // setSubmit(false);
   }
-
-  onChangeDescription(e) {
-    let value = e.target.value;
-    this.setState((prev) => ({
-      product: {
-        ...prev.product,
-        description: value,
-      },
-    }));
+  function onReturn() {
+    props.history.push(props.match.path.split("/edit")[0]);
   }
-  onChangeOrigin(e) {
-    this.setState((prev) => ({
-      product: {
-        ...prev.product,
-        originId: e.target.value,
-      },
-    }));
-  }
-
-  onChangePakingMethod(e) {
-    this.setState((prev) => ({
-      product: {
-        ...prev.product,
-        packingMethodId: e.target.value,
-      },
-    }));
-  }
-
-  onChangeImage(e) {
-    this.setState((prev) => ({
-      product: {
-        ...prev.product,
-        displayImage: URL.createObjectURL(e.target.files[0]),
-      },
-    }));
-  }
-
-  onSubmit() {
-    productService.update(this.state.product);
-    console.log(this.state.product);
-  }
-  onReturn() {
-    this.props.history.goBack();
-  }
-  render() {
-    return (
-      <div className={styles.container}>
-        <div className={`${styles.header}`}>
-          <h1>Sửa sản phẩm</h1>
+  return (
+    <div className={`${styles.container}`}>
+      <div className={`${styles.header}`}>
+        <h1 className={`title`}>Sửa sản phẩm</h1>
+      </div>
+      <div className={`${styles.content}`}>
+        <div className={`${styles.inputImage} ${styles.span31}`}>
+          <input type="file" title="" />
+          <img
+            src={imageService.get(product.displayImageName)}
+            alt="Không load được ảnh"
+          />
         </div>
-        <div className={`${styles.content}`}>
-          <div className={`${styles.inputName}`}>
-            <h2>Tên sản phẩm</h2>
-            <input
-              defaultValue={this.state.product.name}
-              placeholder="Nhập tên sản phẩm"
-              onChange={this.onChangeName}
-            ></input>
-          </div>
-          <div className={`${styles.inputCode}`}>
-            <h2>Mã sản phẩm</h2>
-            <input
-              defaultValue={this.state.product.code}
-              placeholder="Nhập mã sản phẩm"
-              onChange={this.onChangeCode}
-            ></input>
-          </div>
-          <div className={`${styles.inputPrice}`}>
-            <h2>Giá</h2>
-            <input
-              defaultValue={this.state.product.price}
-              placeholder="Nhập giá"
-              type="number"
-              min="0"
-              max="999999999"
-              step="1000"
-              onChange={this.onChangePrice}
-            ></input>
-          </div>
-          <div className={`${styles.inputQuantity}`}>
-            <h2>Số lượng</h2>
-
-            <input
-              defaultValue={this.state.product.quantity}
-              placeholder="Nhập số lượng"
-              type="number"
-              min="0"
-              max="999999"
-              step="1"
-              onChange={this.onChangeQuantity}
-            ></input>
-          </div>
-          <div className={`${styles.inputOrigin}`}>
-            <h2>Xuất xứ</h2>
-            {this.state.product.originId && (
-              <select
-                defaultValue={this.state.product.originId}
-                onChange={this.onChangeOrigin}
-              >
-                <option value="1">Nhật Bản</option>
-                <option value="2">Trung Quốc</option>
-                <option value="3">Việt Nam</option>
-              </select>
-            )}
-          </div>
-          <div className={`${styles.inputPacking}`}>
-            <h2>Phương thức đóng gói</h2>
-            {this.state.product.packingMethodId && (
-              <select
-                defaultValue={this.state.product.packingMethodId}
-                onChange={this.onChangePakingMethod}
-              >
-                <option value="1">Hộp 250ml</option>
-                <option value="2">Thùng 24 lon</option>
-                <option value="3">Chai 750ml</option>
-                <option value="4">Hộp 30cm x 30cm x 30cm</option>
-              </select>
-            )}
-          </div>
-          <div className={`${styles.inputBrand}`}>
-            <h2>Thương hiệu</h2>
-            <input
-              defaultValue={this.state.product.brand}
-              placeholder="Nhập tên thương hiệu"
-              onChange={this.onChangeBrand}
-            ></input>
-          </div>
-          <div className={`${styles.inputManu}`}>
-            <h2>Nơi sản xuất</h2>
-            <input
-              defaultValue={this.state.product.manufacturer}
-              placeholder="Nhập nơi sản xuất"
-              onChange={this.onChangeManufacturer}
-            ></input>
-          </div>
-          <div className={`${styles.inputImage}`}>
-            <input type="file" title="" onChange={this.onChangeImage} />
-            <img
-              src={this.state.product.displayImage}
-              alt="Không load được ảnh"
-            />
-          </div>
-          <div className={`${styles.inputShort}`}>
-            <h2>Mô tả ngắn gọn</h2>
-            <textarea
-              defaultValue={this.state.product.shortDescription}
-              placeholder="Nhập mô tả ngắn gọn"
-              onChange={this.onChangeShortDescription}
-            ></textarea>
-          </div>
-          <div className={`${styles.inputDes}`}>
-            <h2>Mô tả đầy đủ</h2>
-            <textarea
-              defaultValue={this.state.product.description}
-              placeholder="Nhập mô tả chi tiết về sản phẩm"
-              onChange={this.onChangeDescription}
-            ></textarea>
-          </div>
-          <button className={`${styles.btnAdd}`} onClick={this.onSubmit}>
-            Chỉnh sửa sản phẩm
+        <div className={`${styles.span12}`}>
+          <h2 className={`label`}>Tên sản phẩm</h2>
+          <input
+            className={`input`}
+            placeholder="Nhập tên sản phẩm"
+            defaultValue={product.name}
+            onChange={(e) => (product.name = e.target.value)}
+          ></input>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Mã sản phẩm</h2>
+          <input
+            className={`input`}
+            placeholder="Nhập mã sản phẩm"
+            defaultValue={product.code}
+            onChange={(e) => (product.code = e.target.value)}
+          ></input>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Giá</h2>
+          <input
+            className={`input`}
+            type="number"
+            min="0"
+            max="999999999"
+            step="1000"
+            placeholder="Nhập giá"
+            defaultValue={product.price}
+            onChange={(e) => (product.price = e.target.value)}
+          />
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Cân nặng(Kg)</h2>
+          <input
+            className={`input`}
+            type="number"
+            min="0"
+            max="999999"
+            step="1"
+            placeholder="Nhập cân nặng"
+            defaultValue={product.weight}
+            onChange={(e) => (product.weight = e.target.value)}
+          ></input>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Kích thước</h2>
+          <input
+            className={`input`}
+            placeholder="Nhập kích thước"
+            defaultValue={product.size}
+            onChange={(e) => (product.size = e.target.value)}
+          ></input>
+        </div>
+        <div className={`${styles.inputImages}`}>
+          <h2 className={`label`}>Hình ảnh sản phẩm</h2>
+          <input className={`input`} type="file" multiple />
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Thương hiệu</h2>
+          <input
+            className={`input`}
+            placeholder="Nhập tên thương hiệu"
+            defaultValue={product.brand}
+            onChange={(e) => (product.brand = e.target.value)}
+          ></input>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Nơi sản xuất</h2>
+          <input
+            className={`input`}
+            placeholder="Nhập nơi sản xuất"
+            defaultValue={product.manufacturer}
+            onChange={(e) => (product.manufacturer = e.target.value)}
+          ></input>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Xuất xứ</h2>
+          <select
+            className={`input`}
+            onChange={(e) => {
+              product.originId = e.target.value;
+              e.target.value = 3;
+            }}
+          >
+            {origins.map((origin, index) => (
+              <option className={`input`} key={index} value={origin.id}>
+                {origin.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Phương thức đóng gói</h2>
+          <select className={`input`}>
+            {/* {packMethods.map((packing, index) => (
+              <option key={index} value={packing.id}>
+                {packing.name}
+              </option>
+            ))} */}
+          </select>
+        </div>
+        <div className={`${styles.span11}`}>
+          <h2 className={`label`}>Trạng thái</h2>
+          <select className={`input`}>
+            {/* {statuses.map((status, index) => (
+              <option key={index} value={status.id}>
+                {status.name}
+              </option>
+            ))} */}
+          </select>
+        </div>
+        <div className={`${styles.inputShort}`}>
+          <h2 className={`label`}>Mô tả ngắn gọn</h2>
+          <textarea
+            className={`input`}
+            placeholder="Nhập mô tả ngắn gọn"
+            defaultValue={product.shortDescription}
+            onChange={(e) => (product.shortDescription = e.target.value)}
+          ></textarea>
+        </div>
+        <div className={`${styles.inputDes}`}>
+          <h2 className={`label`}>Mô tả đầy đủ</h2>
+          <textarea
+            className={`input`}
+            placeholder="Nhập mô tả chi tiết về sản phẩm"
+            defaultValue={product.description}
+            onChange={(e) => (product.description = e.target.value)}
+          ></textarea>
+        </div>
+        <div className={styles.btnContainer}>
+          <button className={`label`} onClick={onSubmit}>
+            Cập nhật
           </button>
-          <button className={`${styles.btnBack}`} onClick={this.onReturn}>Quay lại</button>
+          <button className={`label`} onClick={onReturn}>
+            Quay lại
+          </button>
         </div>
       </div>
-    );
-  }
+      {!submit ? <MessageBox onClick={onReturn} /> : ""}
+    </div>
+  );
 }
