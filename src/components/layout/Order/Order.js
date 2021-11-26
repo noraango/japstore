@@ -59,7 +59,7 @@ const OrderDetail = (order) => {
     <div className={styles.container}>
       <Container className={styles.card}>
         <Row className={styles.row} >
-          <Col xs sm md lg='6' className={styles.td} >
+          <Col xs sm md lg='6'>
             <Row>
               <Col className={styles.col}>
                 <button className={styles.button} style={{ color: 'black', backgroundColor: '#ffffff', textDecoration: 'none', marginLeft: '20px' }}>
@@ -119,7 +119,7 @@ const OrderDetail = (order) => {
 
         <Row className={styles.row1}>
           <Col xs sm md lg='6'></Col>
-          <Col xs sm md lg='6' className={styles.td} >
+          <Col xs sm md lg='6'>
             <div>
               <Row>
                 <Col className={styles.col}>
