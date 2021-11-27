@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 import "./Payment.css";
 
 export default function Payment(props) {
+  const history = useHistory();
+  function redirectCart() {
+    history.push("/cart");
+  }
+  function redirectHome() {
+    history.push("/");
+  }
   return (
     <div className={`container`}>
       <div id="check-out">
@@ -80,12 +88,20 @@ export default function Payment(props) {
                 </div>
                 <div className="summary-buttom">
                   <a href="ds">
-                    <button type="submit" className="btn button-back">
+                    <button
+                      type="submit"
+                      className="btn button-back"
+                      onclick={redirectCart}
+                    >
                       <span>Quay về giỏ hàng</span>
                     </button>
                   </a>
                   <a href="ds">
-                    <button type="submit" className="btn  button-next">
+                    <button
+                      type="submit"
+                      className="btn  button-next"
+                      onclick={redirectHome}
+                    >
                       <span>Đặt hàng</span>
                     </button>
                   </a>

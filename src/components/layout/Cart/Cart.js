@@ -5,12 +5,15 @@ import cartService from "../../../services/cartService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import imageService from "../../../services/imageService";
+import { useHistory } from "react-router";
 export default function Cart(props) {
   let user = JSON.parse(localStorage.getItem("user"));
   const minQuantity = 1,
     maxQuantity = 99;
   const [cartitems, setCartitems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const history = useHistory();
+
   useEffect(() => {
     retrieveCartItems();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -66,6 +69,9 @@ export default function Cart(props) {
         console.log(e);
       });
   }
+  function redirectPayment() {
+    history.push("/payment")
+  }
   return (
     <div className={styles.container}>
       <div className={`${styles.header}`}>
@@ -76,7 +82,7 @@ export default function Cart(props) {
           Tổng tiền:{" "}
           <span className={styles.price}>{formatVND(totalPrice)}đ</span>
         </p>
-        <button className={`${styles.btnAdd}`}>Thanh toán</button>
+        <button className={`${styles.btnAdd}`} onClick={redirectPayment}>Thanh toán</button>
         <table>
           <tbody>
             <tr>

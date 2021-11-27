@@ -9,9 +9,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import imageService from "../../../services/imageService";
 import cartService from "../../../services/cartService";
+import { useHistory } from "react-router";
 export default function ProductCard(props) {
   const minQuantity = 1,
     maxQuantity = 99;
+  const history = useHistory();
   const [quantity, setQuantity] = useState(1);
   function onSubQuantity() {
     setQuantity(quantity > minQuantity ? quantity - 1 : quantity);
@@ -41,11 +43,11 @@ export default function ProductCard(props) {
       });
   }
   function redirectProduct() {
-    
+    history.push("/product/1");
   }
   return (
-    <div className={styles.productCard} onClick={redirectProduct}>
-      <div className={styles.imgContainer}>
+    <div className={styles.productCard}>
+      <div className={styles.imgContainer} onClick={redirectProduct}>
         <img
           src={imageService.get(props.data.displayImageName)}
           alt="Hình ảnh"
