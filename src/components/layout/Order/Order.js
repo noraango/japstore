@@ -68,16 +68,16 @@ const OrderDetail = (order) => {
                 </button>
               </Col>
               <Col className={styles.col}>
-                <button className={styles.button} style={{ backgroundColor: 'crimson', color: 'white', marginLeft: '20px' }}>
+                {/* <button className={styles.button} style={{ backgroundColor: 'crimson', color: 'white', marginLeft: '20px' }}>
                   <FontAwesomeIcon className={styles.icon} icon={faCommentAlt} />
                   Chat
-                </button>
+                </button> */}
               </Col>
               <Col className={styles.col}>
-                <button className={styles.button} style={{ color: 'black', backgroundColor: '#ffffff', marginLeft: '20px' }}>
+                {/* <button className={styles.button} style={{ color: 'black', backgroundColor: '#ffffff', marginLeft: '20px' }}>
                   <FontAwesomeIcon className={styles.icon} style={{ color: 'black' }} icon={faStoreAlt} />
                   Xem shop
-                </button>
+                </button> */}
               </Col>
             </Row>
           </Col>
@@ -117,7 +117,7 @@ const OrderDetail = (order) => {
           </Col>
         </Row>
 
-        <Row className={styles.row1}>
+        {/* <Row className={styles.row1}>
           <Col xs sm md lg='6'></Col>
           <Col xs sm md lg='6'>
             <div>
@@ -143,7 +143,7 @@ const OrderDetail = (order) => {
               </Row>
             </div>
           </Col>
-        </Row>
+        </Row> */}
       </Container>
     </div >
   )
