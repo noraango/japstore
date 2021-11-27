@@ -19,7 +19,6 @@ class ProductService {
     formData.append("price", data.price);
     formData.append("size", data.size);
     formData.append("weight", data.weight);
-    formData.append("quantity", data.quantity);
     formData.append("manufacturer", data.manufacturer);
     formData.append("shortDescription", data.shortDes);
     formData.append("description", data.des);
@@ -29,6 +28,9 @@ class ProductService {
     formData.append("productStatusId", data.statusId);
     formData.append("storageId", data.storageId);
     formData.append("displayImage", data.displayImage);
+    for (let i = 0; i < data.images.length; i++) {
+      formData.append("images[]", data.images[i]);
+    }
     return http.post("/product/create", formData);
   }
   getList(quantity) {

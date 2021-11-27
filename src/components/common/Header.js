@@ -33,10 +33,15 @@ export default function Header(props) {
   function redirectStaff() {
     history.push("/staff");
   }
+  function redirectOrder() {
+    history.push("/order");
+  }
   function onClickCart() {
     history.push("/cart");
   }
- 
+  function redirectUser() {
+    history.push("/user");
+  }
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.topContainer}`}>
@@ -55,10 +60,6 @@ export default function Header(props) {
             </Link>
           </div>
           <div className={`${styles.navList} ${app.colRight}`}>
-            <Link className={`${styles.navItem}`} to="/order">
-              TRA CỨU ĐƠN HÀNG
-            </Link>
-            {user === null ? <div className={`${styles.line}`} /> : ""}
             {user === null ? (
               <Link className={`${styles.navItem}`} to="/login">
                 ĐĂNG NHẬP
@@ -74,7 +75,6 @@ export default function Header(props) {
             ) : (
               ""
             )}
-            {user != null ? <div className={`${styles.line}`} /> : ""}
             {user != null ? (
               <button className={`${styles.btnProfile}`}>
                 {user != null ? user.Username : ""}
@@ -92,7 +92,8 @@ export default function Header(props) {
               ) : (
                 ""
               )}
-              <button>Thông tin người dùng</button>
+              <button onClick={redirectOrder}>Đơn hàng</button>
+              <button onClick={redirectUser}>Thông tin người dùng</button>
               <button onClick={logout}>Đăng xuất</button>
             </div>
           </div>
