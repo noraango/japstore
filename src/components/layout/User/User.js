@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import styles from './User.module.css'
-import { Form, FloatingLabel } from 'react-bootstrap'
+import DatePicker from "react-datepicker";
 import { path } from "../../../controller/constants";
+import "react-datepicker/dist/react-datepicker.css";
 const User = () => {
     const radiosGender = [
         { name: 'Nam', value: '1' },
@@ -29,7 +30,8 @@ const User = () => {
             setImageURL(URL.createObjectURL(e.target.files[0]));
         }
     }
-
+    // let DatePicker = require("react-bootstrap-date-picker");
+    const [startDate, setStartDate] = useState(new Date());
     return (
         <div className={styles.container}>
             <div className={styles.card}>
@@ -124,7 +126,7 @@ const User = () => {
                                         <div className={styles.input1}>
                                             <div className={styles.input2}>
                                                 <div className={styles.input3}>
-                                                    <input className={styles.inputMain} type="text" id="fname" name="fname" />
+                                                    <input className={styles.inputMain} type="text" id="fname" name="fname" readOnly/>
                                                 </div>
                                             </div>
                                         </div>
@@ -140,17 +142,23 @@ const User = () => {
                                                 <div className={styles.radioBtnGrp}>
                                                     {radiosGender.map((rad, id) =>
                                                     (
-                                                        <div className={styles.radio} tabindex="0" role="radio" aria-checked="false">
-                                                            <div className={styles.radioBtn}>
-                                                                <div className={styles.radioBtnCirO}>
-                                                                    <div class={styles.radioBtnCirI}>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className={styles.radioContent}>
-                                                                <div className="stardust-radio__label">{rad.name}</div>
-                                                            </div>
+                                                        // <div className={styles.radio} tabindex="0" role="radio" aria-checked="false">
+                                                        //     <div className={styles.radioBtn}>
+                                                        //         <div className={styles.radioBtnCirO}>
+                                                        //             <div class={styles.radioBtnCirI}>
+                                                        //             </div>
+                                                        //         </div>
+                                                        //     </div>
+                                                        //     <div className={styles.radioContent}>
+                                                        //         <div className="stardust-radio__label">{rad.name}</div>
+                                                        //     </div>
+                                                        // </div>
+
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value={rad.value} />
+                                                            <label class="form-check-label" for="inlineRadio1">{rad.name}</label>
                                                         </div>
+
                                                     )
                                                     )}
                                                 </div>
@@ -164,48 +172,31 @@ const User = () => {
                                             <label >ngày sinh</label>
                                         </div>
                                         <div className={styles.input1}>
-                                            <div className={styles.select}>
-                                                <div className={styles.selection}>
-                                                    <FloatingLabel controlId="floatingSelectGrid" label="Ngày" className={styles.selectDiv}>
-                                                        <Form.Select aria-label="Floating label select example">
-                                                            {day.map((v, id) =>
-                                                                <option value={id}>{v}</option>
-                                                            )}
-                                                        </Form.Select>
-                                                    </FloatingLabel>
-                                                </div>
-                                                <div className={styles.selection}>
-                                                    <FloatingLabel controlId="floatingSelectGrid" label="Tháng" className={styles.selectDiv}>
-                                                        <Form.Select aria-label="Floating label select example">
-                                                            {month.map((v, id) =>
-                                                                <option value={id}>{v}</option>
-                                                            )}
-                                                        </Form.Select>
-                                                    </FloatingLabel>
-                                                </div>
-                                                <div className={styles.selection}>
-                                                    <FloatingLabel controlId="floatingSelectGrid" label="Năm" className={styles.selectDiv}>
-                                                        <Form.Select aria-label="Floating label select example" htmlSize={1}>
-                                                            {year.map((v, id) =>
-                                                                <option value={id}>{v}</option>
-                                                            )}
-                                                        </Form.Select>
-                                                    </FloatingLabel>
+                                            <div className={styles.input2}>
+                                                <div className={styles.input3}>
+                                                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} className={styles.datePicker}/>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className={styles.subBtnDiv}>
-                                    <button className={styles.subBtn}>Lưu</button>
+                                    <div style={{
+                                        width: '15rem',
+                                        display: 'flex',
+                                        justifyContent: 'inherit',
+                                        alignContent: 'center'
+                                    }}>
+                                        <button className={styles.subBtn}>Lưu</button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
 
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 
