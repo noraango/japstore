@@ -1,11 +1,11 @@
 import React from "react";
 import ProductDetail from "./ProductItem";
 
-export default function ProductOverview(listProduct) {
+export default function ProductOverview({ listProducts }) {
   return (
     <>
-      {listProduct.map((product) => (
-        <ProductDetail key={product.id} product={product} />
+      {listProducts.map((product) => (
+        <ProductDetail key={product.id} productItem={product} />
       ))}
     </>
   );
