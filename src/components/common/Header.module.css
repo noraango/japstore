@@ -97,8 +97,8 @@
   width: fit-content;
   height: fit-content;
 }
-.logo {
-  height: 75px;
+.cateContainer {
+  height: 40px;
 }
 .navBarM {
   display: none;
@@ -175,10 +175,12 @@
   padding-left: 10px;
 }
 .cart1 p {
+  width: fit-content;
+  height: fit-content;
   font-size: 17px;
   font-weight: 600;
   color: #ffffff;
-  transform: translateY(1px);
+  transform: translateY(8px);
 }
 .cart2 {
   position: absolute;
@@ -327,7 +329,7 @@
   .bot {
     width: 100%;
   }
-  .logo {
+  .cateContainer {
     visibility: hidden;
     display: none;
   }

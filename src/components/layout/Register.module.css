@@ -2,6 +2,7 @@
   width: 400px;
   height: fit-content;
   display: grid;
+  background-color: #ffffff;
   grid-gap: 20px;
   grid-template-columns: 1fr;
   border: none;
@@ -55,4 +56,7 @@
   box-sizing: border-box;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+.hide {
+  display: none;
 }

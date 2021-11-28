@@ -17,3 +17,17 @@ export function numberOnly(e) {
     e.preventDefault();
   }
 }
+export function isFileImage(file) {
+  if (Array.isArray(file)) {
+    file.forEach((element) => {
+      if (!isFileImage(element)) {
+        return false;
+      }
+    });
+    return true;
+  } else {
+    // console.log("yaya");
+    // console.log(file["type"].split("/")[0] === "image");
+    return file && file["type"].split("/")[0] === "image";
+  }
+}

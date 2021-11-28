@@ -27,8 +27,14 @@ export default function ListProduct(props) {
     fetchProducts();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
+    setCurrentPage(1);
     retrieveProducts();
-  }, [pageSize, currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pageSize]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    retrieveProducts();
+  }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
+
   function onChangeCurrentPage(value) {
     setCurrentPage(value);
     // console.log(value);
