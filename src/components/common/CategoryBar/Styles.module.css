@@ -1,6 +1,6 @@
 .container {
   position: relative;
-  width: fit-content;
+  width: max-content;
   height: fit-content;
   z-index: 2;
 }

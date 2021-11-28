@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import CategoryBar from "./CategoryBar/CategoryBar";
 import { useState } from "react";
-export default function Header(props) {
+export default function Header() {
   const [searchText, setSearchText] = useState("");
   const history = useHistory();
   var path = process.env.PUBLIC_URL + "/images";
@@ -31,7 +31,7 @@ export default function Header(props) {
     window.location.reload();
   }
   function redirectStaff() {
-    history.push("/staff");
+    history.push("/staff/product");
   }
   function redirectOrder() {
     history.push("/order");
@@ -77,14 +77,14 @@ export default function Header(props) {
             )}
             {user != null ? (
               <button className={`${styles.btnProfile}`}>
-                {user != null ? user.Username : ""}
+                {user.fullName}
               </button>
             ) : (
               ""
             )}
             <div className={`${styles.profileContainer}`}>
               {user != null ? (
-                user.RoleNames.indexOf("admin") !== -1 ? (
+                user.role == "Admin" ? (
                   <button onClick={redirectStaff}>Quản lí</button>
                 ) : (
                   ""
@@ -100,7 +100,7 @@ export default function Header(props) {
         </div>
       </div>
       <div className={`${styles.mid}`}>
-        <div className={`${styles.logoContainer}`}>
+        {/* <div className={`${styles.logoContainer}`}>
           <a href="/japstore">
             <img
               className={`${styles.logo}`}
@@ -108,6 +108,9 @@ export default function Header(props) {
               alt="text"
             />
           </a>
+        </div> */}
+        <div className={styles.cateContainer}>
+          <CategoryBar />
         </div>
         <div className={`${styles.searchBox} ${app.colMid}`}>
           <input
@@ -138,9 +141,6 @@ export default function Header(props) {
           <h1>Hotline:</h1>
           <h1>0357.467.491</h1>
         </button>
-      </div>
-      <div className={`${styles.bot}`}>
-        <CategoryBar />
       </div>
     </div>
   );

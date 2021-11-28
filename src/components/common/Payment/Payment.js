@@ -1,14 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import cartService from "../../../services/cartService";
 import "./Payment.css";
 
 export default function Payment(props) {
+  const [items, setItems] = useState([]);
   const history = useHistory();
+  useEffect(() => {
+    fetchCartItems();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   function redirectCart() {
-    history.push("/cart");
+    console.log("clicked");
+    // history.push("/cart");
   }
   function redirectHome() {
     history.push("/");
+  }
+  function fetchCartItems() {
+    let user = JSON.parse(localStorage.getItem("user"));
+    cartService
+      .getCart(user.id)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
   return (
     <div className={`container`}>
@@ -87,24 +104,19 @@ export default function Payment(props) {
                   <span>Tổng cộng:</span> <span>10000000đ</span>
                 </div>
                 <div className="summary-buttom">
-                  <a href="ds">
-                    <button
-                      type="submit"
-                      className="btn button-back"
-                      onclick={redirectCart}
-                    >
-                      <span>Quay về giỏ hàng</span>
-                    </button>
-                  </a>
-                  <a href="ds">
-                    <button
-                      type="submit"
-                      className="btn  button-next"
-                      onclick={redirectHome}
-                    >
-                      <span>Đặt hàng</span>
-                    </button>
-                  </a>
+                  <button
+                    className="btn button-back"
+                    onclick={() => redirectCart()}
+                  >
+                    <span>Quay về giỏ hàng</span>
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn  button-next"
+                    onclick={redirectHome}
+                  >
+                    <span>Đặt hàng</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -235,16 +247,16 @@ export default function Payment(props) {
                   <span>Tổng cộng:</span> <span>10000000đ</span>
                 </div>
                 <div className="summary-buttom ">
-                  <a href="ds">
-                    <button type="submit" className="btn  button-back">
-                      <span>Quay về giỏ hàng</span>
-                    </button>
-                  </a>
-                  <a href="ds">
-                    <button type="submit" className="btn  button-next">
-                      <span>Đặt hàng</span>
-                    </button>
-                  </a>
+                  <button
+                    type="submit"
+                    className="btn  button-back"
+                    onclick={redirectCart}
+                  >
+                    <span>Quay về giỏ hàng</span>
+                  </button>
+                  <button type="submit" className="btn  button-next">
+                    <span>Đặt hàng</span>
+                  </button>
                 </div>
               </div>
             </div>

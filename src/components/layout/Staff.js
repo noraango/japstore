@@ -12,7 +12,7 @@ export default function Staff(prop) {
   if (user === null) {
     history.push("/");
     return <div></div>;
-  } else if (user.RoleNames.indexOf("admin") === -1) {
+  } else if (user.role != "Admin") {
     history.push("/");
     return <div></div>;
   }
@@ -27,7 +27,7 @@ export default function Staff(prop) {
                   <img src={`${pathz}/user-icon.png`} alt="user" />
                 </div>
                 <h1>
-                  @{user.Username}({user.RoleNames[0]})
+                  @{user.fullName}({user.role})
                 </h1>
               </div>
               <button

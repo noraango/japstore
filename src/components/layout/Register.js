@@ -1,40 +1,65 @@
 import {
   faEnvelope,
   faLock,
-  faPhoneAlt,
   faUnlock,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
-import Styles from "./Register.module.css";
+import React, { useState } from "react";
+import { useHistory } from "react-router";
+import styles from "./Register.module.css";
 
 export default function Register() {
+  let user = JSON.parse(localStorage.getItem("user"));
+  let history = useHistory();
+  if (user != null) {
+    history.push("/");
+  }
+  const [email, setEmail] = useState("");
+  const [msg, setMsg] = useState("Đây là thông báo");
+  const [msgStyle, setMsgStyle] = useState(`${styles.hide}`);
+  function validateEmail(email) {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+  function submit() {}
   return (
     <div>
-      <div className={`${Styles.container}`}>
+      <div className={`${styles.container}`}>
         <h1>Đăng ký</h1>
-        <div className={`${Styles.divInput}`}>
-          <FontAwesomeIcon className={Styles.iconInput} icon={faEnvelope} />
-          <input placeholder="Email"></input>
+        <p className={`${styles.errorMsg} ${msgStyle}`}>*{msg}</p>
+        <div className={`${styles.divInput}`}>
+          <FontAwesomeIcon className={styles.iconInput} icon={faEnvelope} />
+          <input
+            placeholder="Email"
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setMsgStyle(`${styles.hide}`);
+            }}
+          ></input>
         </div>
-        <div className={`${Styles.divInput}`}>
-          <FontAwesomeIcon className={Styles.iconInput} icon={faLock} />
+        <div className={`${styles.divInput}`}>
+          <FontAwesomeIcon className={styles.iconInput} icon={faLock} />
           <input placeholder="Mật khẩu"></input>
         </div>
-        <div className={`${Styles.divInput}`}>
-          <FontAwesomeIcon className={Styles.iconInput} icon={faUnlock} />
+        <div className={`${styles.divInput}`}>
+          <FontAwesomeIcon className={styles.iconInput} icon={faUnlock} />
           <input placeholder="Xác nhận mật khẩu"></input>
         </div>
-        <div className={`${Styles.divInput}`}>
-          <FontAwesomeIcon className={Styles.iconInput} icon={faUser} />
-          <input placeholder="Họ và tên"></input>
+        <div className={`${styles.divInput}`}>
+          <FontAwesomeIcon className={styles.iconInput} icon={faUser} />
+          <input placeholder="Tên"></input>
         </div>
-        <div className={`${Styles.divInput}`}>
-          <FontAwesomeIcon className={Styles.iconInput} icon={faPhoneAlt} />
-          <input placeholder="Số điện thoại"></input>
+        <div className={`${styles.divInput}`}>
+          <FontAwesomeIcon className={styles.iconInput} icon={faUser} />
+          <input placeholder="Tên đệm"></input>
         </div>
-        <button className={Styles.buttonRegister}>Đăng ký</button>
+        <div className={`${styles.divInput}`}>
+          <FontAwesomeIcon className={styles.iconInput} icon={faUser} />
+          <input placeholder="Họ"></input>
+        </div>
+        <button className={styles.buttonRegister}>Đăng ký</button>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ export default function MessageBox(props) {
       <div className={styles.msgBox1}>
         <div className={styles.msgBox2}>
           <div className={styles.msgBox3}>
-            <p>Thông báo</p>
+            <p>{props.content}</p>
             <button className={`label`} onClick={props.onClick}>
               OK
             </button>

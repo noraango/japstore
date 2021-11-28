@@ -30,7 +30,6 @@ export default function CreateProduct(prop) {
     retreivePacking();
     retreiveOrigin();
   }, []);
-
   function onChangeImage(e) {
     if (e.target.files && e.target.files[0]) {
       setImageFile(e.target.files[0]);
@@ -285,7 +284,7 @@ export default function CreateProduct(prop) {
           </button>
         </div>
       </div>
-      {!submit ? <MessageBox onClick={onReturn} /> : ""}
+      {!submit ? <MessageBox content={`Thêm đơn hàng thành công`} onClick={onReturn} /> : ""}
     </div>
   );
 }

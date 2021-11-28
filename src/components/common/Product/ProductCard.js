@@ -34,7 +34,7 @@ export default function ProductCard(props) {
   function onClickAddCart() {
     let user = JSON.parse(localStorage.getItem("user"));
     cartService
-      .addCart(props.data.id, user.UserId, quantity)
+      .addCart(props.data.id, user.id, quantity)
       .then((res) => {
         console.log(res.data);
       })
