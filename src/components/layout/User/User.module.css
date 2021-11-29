@@ -19,6 +19,7 @@
     flex-direction: column;
     position: relative;
     min-height: 100%;
+    border: solid 1px #bc8c4e;
 }
 .cardInfo{
     padding: 0 1.875rem 0.625rem;
@@ -95,6 +96,9 @@
     padding: 10px;
     transition: border-color .1s ease;
 }
+.datePicker{
+    border: none;
+}
 .inputMain{
     flex: 1;
     font-size: 14px;
@@ -124,7 +128,7 @@
   
 .radioBtnGrp{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-start;
 }
 .radio{
     padding: 0;
@@ -180,28 +184,19 @@
     padding-left: calc(20% + 1.25rem);
 }
 .subBtn{
-    color: #fff;
-    background: #b8894e;
     height: 40px;
-    padding: 0 20px;
-    min-width: 70px;
-    max-width: 220px;
-    display: inline-flex;
-    align-items: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 1;
-    flex-direction: column;
-    font-size: 14px;
-    box-sizing: border-box;
-    box-shadow: 0 1px 1px 0 rgb(0 0 0 / 9%);
-    border-radius: 2px;
-    border: 0;
-    align-items: center;
-    justify-content: center;
-    text-transform: capitalize;
-    outline: 0;
-    cursor: pointe
+    width: -webkit-fill-available;
+    background: #bc8c4e;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 525;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    margin: 10px;
+    cursor: pointer
 }
 .imgDiv{
     width: 17.5rem;

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import styles from "./User.module.css";
-import { Form, FloatingLabel, Modal, Button } from "react-bootstrap";
+import React, { useState } from 'react'
+import styles from './User.module.css'
+import DatePicker from "react-datepicker";
 import { path } from "../../../controller/constants";
+import "react-datepicker/dist/react-datepicker.css";
 const User = () => {
   const [user, setUser] = useState({});
   useEffect(() => {
