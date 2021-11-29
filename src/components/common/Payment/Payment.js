@@ -1,38 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import cartService from "../../../services/cartService";
+import locationService from "../../../services/locationService";
 import "./Payment.css";
 import ProductOverview from "./ProductOverview";
 
 export default function Payment(props) {
   const [items, setItems] = useState([]);
+  const [provinces, setProvinces] = useState([]);
   const history = useHistory();
   useEffect(() => {
     fetchCartItems();
+    fetchProvince();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  function redirectCart() {
-    console.log("clicked");
-    // history.push("/cart");
-  }
-  function redirectHome() {
-    history.push("/");
-  }
   function fetchCartItems() {
-    // let user = JSON.parse(localStorage.getItem("user"));
-    // cartService
-    //   .getCart(user.id)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
+    let user = JSON.parse(localStorage.getItem("user"));
+    cartService
+      .getCart(user.id)
+      .then((res) => {
+        setItems(res.data);
+        console.log(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
-
-  const [product, setProduct] = useState([
-    { id: 1, name: "hello", quantity: 3, price: 20000 },
-    { id: 2, name: "hello2", quantity: 3, price: 20000 },
-  ]);
+  function fetchProvince() {
+    locationService
+      .getProvinces()
+      .then((res) => {
+        setProvinces(res.data);
+        console.log(res.data);
+      })
+      .catch(() => {});
+  }
   const [infor, setInfor] = useState({
     email: "",
     name: "",
@@ -49,33 +50,7 @@ export default function Payment(props) {
     district: "Huyện không được để trống",
     location: "Địa chỉ không được để trống",
   });
-  const [city, setCity] = useState([
-    {
-      id: 1,
-      provinceId: "01TTT",
-      name: "Thành phố Hà Nội",
-    },
-    {
-      id: 2,
-      provinceId: "02TTT",
-      name: "Tỉnh Hà Giang",
-    },
-  ]);
-
-  const [district, setDistrict] = useState([
-    {
-      id: 1,
-      wardId: "00001",
-      name: "Phường Phúc Xá",
-      districtId: "001HH",
-    },
-    {
-      id: 2,
-      wardId: "00004",
-      name: "Phường Trúc Bạch",
-      districtId: "001HH",
-    },
-  ]);
+  const [district, setDistrict] = useState([]);
 
   const [isSubmit, setIsSubmit] = useState(false);
   const [isHasCity, setIsHasCity] = useState(true);
@@ -88,7 +63,9 @@ export default function Payment(props) {
     }
     //load data city
   }
-  function onBack() {}
+  function onBack() {
+    history.push("/cart");
+  }
 
   function onChangeEmail(event) {
     setInfor({ ...infor, email: event.target.value });
@@ -125,7 +102,19 @@ export default function Payment(props) {
   }
   function onChangeCity(event) {
     setInfor({ ...infor, city: event.target.value });
+    fetchDistrict(event.target.value);
     checkCity();
+  }
+  function fetchDistrict(provinceId) {
+    locationService
+      .getDistricts(provinceId)
+      .then((res) => {
+        console.log(res.data);
+        setDistrict(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
   function checkCity() {
     if (infor.city === "") {
@@ -156,10 +145,8 @@ export default function Payment(props) {
       return false;
     }
   }
-
   function onSubmit() {
     setIsSubmit(true);
-    alert("hello");
   }
   return (
     <div className={`container`}>
@@ -173,7 +160,7 @@ export default function Payment(props) {
                 </h4>
               </div>
               <div id="view-back">
-                <ProductOverview listProducts={product} />
+                <ProductOverview listProducts={items} />
               </div>
               <div className="coupons">
                 <form id="coupons-form">
@@ -298,7 +285,7 @@ export default function Payment(props) {
                         onChange={onChangeCity}
                       >
                         <option value="">Chọn Tỉnh</option>
-                        {city.map((location) => (
+                        {provinces.map((location) => (
                           <option value={location.provinceId}>
                             {location.name}
                           </option>
