@@ -180,8 +180,9 @@
    width: 125px;
 }
 .subBtnDiv{
-    margin-bottom: 3.75rem;
-    padding-left: calc(20% + 1.25rem);
+    padding:0;
+    display: flex;
+     justify-content: flex-end;
 }
 .subBtn{
     height: 40px;
@@ -197,6 +198,9 @@
     cursor: pointer;
     margin: 10px;
     cursor: pointer
+}
+.subBtn :hover{
+    color: #222;
 }
 .imgDiv{
     width: 17.5rem;

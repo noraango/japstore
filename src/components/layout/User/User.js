@@ -1,17 +1,366 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './User.module.css'
 import DatePicker from "react-datepicker";
 import { path } from "../../../controller/constants";
+import { Button, Modal } from 'react-bootstrap'
 import "react-datepicker/dist/react-datepicker.css";
+
+const btn = (content, style) => {
+  return (
+    <div className={styles.subBtnDiv} style={style}>
+      <div style={{
+        width: '15rem',
+        display: 'flex',
+        justifyContent: 'inherit',
+        alignContent: 'center'
+      }}>
+        <button className={styles.subBtn}>{content}</button>
+      </div>
+    </div>
+  )
+}
+
+const sellerInfo = (user) => {
+  return (
+    <>
+      <div style={{
+        borderTop: '0.0625rem solid #efefef',
+        padding: '1.125rem 0.875rem'
+      }}>
+        <h1 className={styles.h1}>Thông tin chi tiết</h1>
+      </div>
+      <div className={styles.formInfo}>
+        <form className={styles.formInfoMain}>
+          <div className={styles.label1}>
+            <div className={styles.label2}>
+              <div className={styles.label3}>
+                <label>Số CCCD</label>
+              </div>
+              <div className={styles.input1}>
+                <div className={styles.input2}>
+                  <div className={styles.input3}>
+                    <input
+                      className={styles.inputMain}
+                      type="text"
+                      id="fname"
+                      name="fname"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.label1}>
+            <div className={styles.label2}>
+              <div className={styles.label3}>
+                <label>Địa chỉ cửa hàng</label>
+              </div>
+              <div className={styles.input1}>
+                <div className={styles.input2}>
+                  <div className={styles.input3}>
+                    <input
+                      className={styles.inputMain}
+                      type="text"
+                      id="fname"
+                      name="fname"
+                      value={user.email}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {btn('Lưu')}
+        </form>
+      </div>
+    </>
+  )
+}
+
+const shipperInfo = (user) => {
+  return (
+    <>
+      <div style={{
+        borderTop: '0.0625rem solid #efefef',
+        padding: '1.125rem 0.875rem'
+      }}>
+        <h1 className={styles.h1}>Thông tin chi tiết</h1>
+      </div>
+      <div className={styles.formInfo}>
+        <form className={styles.formInfoMain}>
+          <div className={styles.label1}>
+            <div className={styles.label2}>
+              <div className={styles.label3}>
+                <label>Số CCCD</label>
+              </div>
+              <div className={styles.input1}>
+                <div className={styles.input2}>
+                  <div className={styles.input3}>
+                    <input
+                      className={styles.inputMain}
+                      type="text"
+                      id="fname"
+                      name="fname"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.label1}>
+            <div className={styles.label2}>
+              <div className={styles.label3}>
+                <label>Địa phận hoạt động</label>
+              </div>
+              <div className={styles.input1}>
+                <div className={styles.input2}>
+                  <div className={styles.input3}>
+                    <input
+                      className={styles.inputMain}
+                      type="text"
+                      id="fname"
+                      name="fname"
+                      value={user.email}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {btn('Lưu')}
+        </form>
+      </div>
+    </>
+  )
+}
+
+const ShipperRegister = (props) => {
+  const [data, setData] = useState(2);
+  const [id, setID] = useState('');
+  const [display, setDisplay] = useState('none');
+
+  const hanldeCheckID = (id) => {
+    console.log('CCCD: ' + id)
+    fetch('https://localhost:6969/DataRaw/checkCMT?CMTCode=' + id)
+      .then(res => {
+        if (res.ok) {
+          return res.json()
+        }
+        throw res
+      })
+      .then(data => {
+        setData(data)
+      })
+      .catch(err => {
+        console.error('Fetching error amount of dopes:' + err)
+      })
+    if (data === 1) {
+      setData(1);
+      setDisplay('block')
+    }
+    if (data === 2) {
+      setData(2);
+      setDisplay('block')
+    }
+    else {
+      setData(0);
+      setDisplay('block')
+    };
+  }
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Thông Tin Đăng Ký
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <form>
+          <div className={styles.label1}>
+            <div className={styles.label2}>
+              <div className={styles.label3}>
+                <label>Số CMT:</label>
+              </div>
+              <div className={styles.input1}>
+                <div className={styles.input2}>
+                  <label for="fname">
+                    Bạn phải tiêm đủ 2 mũi vắc xin để đăng ký
+                  </label>
+                  <div className={styles.input3}>
+                    <input
+                      className={`form-control ${styles.inputMain}}`}
+                      type="text"
+                      id="fname"
+                      name="fname"
+                      required
+                      onChange={(e) => { setID(e.target.value) }}
+                    />
+                    <Button onClick={() => hanldeCheckID(id)}>Kiểm tra</Button>
+                  </div>
+                </div>
+
+                <p style={{ color: 'red', display: { display } }}>Đã tiêm {data} mũi</p>
+
+              </div>
+            </div>
+          </div>
+          <div className={styles.label1}>
+            <div className={styles.label2}>
+              <div className={styles.label3}>
+                <label>Khu Vực Hoạt Động:</label>
+              </div>
+              <div className={styles.input1}>
+                <div className="row">
+                  <div className="col col-md-6">
+                    <label for="city">Tỉnh,Thành phố</label>
+                    <select
+                      className={`form-control 
+                  }`}
+                      name="city"
+                    >
+                      <option value="">Chọn Tỉnh</option>
+                    </select>
+                  </div>
+                  <div className="col col-md-6">
+                    <label for="city">Quận,huyện</label>
+                    <select
+                      className={`form-control 
+                  }`}
+                      name="city"
+                    >
+                      <option value="">Chọn Quận</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Đăng Ký</Button>
+        <Button onClick={props.onHide}>Đóng</Button>
+      </Modal.Footer>
+    </Modal >
+  );
+}
+
+const SellerRegister = (props) => {
+  const [data, setData] = useState();
+  const [id, setID] = useState('');
+
+  const hanldeCheckID = (id) => {
+    console.log('CCCD: ' + id)
+    fetch('https://localhost:6969/DataRaw/checkCMT?CMTCode=' + id)
+      .then(res => {
+        if (res.ok) {
+          return res.json()
+        }
+        throw res
+      })
+      .then(data => {
+        setData(data)
+      })
+      .catch(err => {
+        console.error('Fetching error amount of dopes:' + err)
+      })
+  }
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Thông Tin Đăng Ký
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <form>
+          <div className={styles.label1}>
+            <div className={styles.label2}>
+              <div className={styles.label3}>
+                <label>Số CMT:</label>
+              </div>
+              <div className={styles.input1}>
+                <div className={styles.input2}>
+                  <div className={styles.input3}>
+                    <input
+                      className={`form-control ${styles.inputMain}}`}
+                      type="text"
+                      id="fname"
+                      name="fname"
+                      required
+                      onChange={(e) => { setID(e.target.value) }}
+                    />
+                    <Button onClick={() => hanldeCheckID(id)}>Kiểm tra</Button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div className={styles.label1}>
+            <div className={styles.label2}>
+              <div className={styles.label3}>
+                <label>Địa chỉ cửa hàng:</label>
+              </div>
+              <div className={styles.input1}>
+                <div className="row">
+                  <div className="col col-md-6">
+                    <label for="city">Tỉnh,Thành phố</label>
+                    <select
+                      className={`form-control 
+                  }`}
+                      name="city"
+                    >
+                      <option value="">Chọn Tỉnh</option>
+                    </select>
+                  </div>
+                  <div className="col col-md-6">
+                    <label for="city">Quận,huyện</label>
+                    <select
+                      className={`form-control 
+                  }`}
+                      name="city"
+                    >
+                      <option value="">Chọn Quận</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Đăng Ký</Button>
+        <Button onClick={props.onHide}>Đóng</Button>
+      </Modal.Footer>
+    </Modal >
+  );
+}
+
 const User = () => {
   const [user, setUser] = useState({});
+  const str = () => {
+    let string = user.email.subtr(0, 2) + '****************' + '@gmail.com';
+    return string;
+  }
   useEffect(() => {
     localStorage.setItem(
       "user",
       JSON.stringify({
         id: 1,
         avatar: "avatar.jpg",
-        role: "Admin",
+        role: "",
         firstName: "Anh",
         middleName: "Thế",
         lastName: "Ngô",
@@ -55,7 +404,50 @@ const User = () => {
       setImageURL(URL.createObjectURL(e.target.files[0]));
     }
   };
-  const [modalShow, setModalShow] = React.useState(false);
+  const [startDate, setStartDate] = useState(new Date());
+  const [modalShipperShow, setModalShipperShow] = useState(false);
+  const [modalSellerShow, setModalSellerShow] = useState(false);
+
+  const displayExtraInfo = (user) => {
+    let displayComponent
+    switch (user.role) {
+      case 'Admin':
+        displayComponent =
+          (<p>Admin</p>)
+        break;
+      case 'Shipper':
+        displayComponent =
+          (shipperInfo(user))
+        break;
+      case 'Seller':
+        displayComponent =
+          (sellerInfo(user))
+        break;
+      default:
+        return (
+          <>
+            <div>
+              <Button className={styles.subBtn} style={{ width: 'fit-content' }} variant="primary" onClick={() => setModalShipperShow(true)}>
+                Đăng ký trở thành Shipper
+              </Button>
+              <Button className={styles.subBtn} style={{ width: 'fit-content' }} variant="primary" onClick={() => setModalSellerShow(true)}>
+                Đăng ký trở thành Seller
+              </Button>
+            </div>
+            <ShipperRegister
+              show={modalShipperShow}
+              onHide={() => setModalShipperShow(false)}
+            />
+            <SellerRegister
+              show={modalSellerShow}
+              onHide={() => setModalSellerShow(false)}
+            />
+          </>
+        )
+    }
+    return displayComponent;
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.card}>
@@ -87,295 +479,126 @@ const User = () => {
                   </div>
                   <div className={styles.scrpitDiv}>Định dạng:.JPEG, .PNG</div>
                 </div>
-                <div>
-                  <Button variant="primary" onClick={() => setModalShow(true)}>
-                    Đăng Kí Làm Chủ Shipper
-                  </Button>
-                  <button>Đăng Kí Làm Chủ Shipper</button>
-                </div>
-                <ShipperRegister
-                  show={modalShow}
-                  onHide={() => setModalShow(false)}
-                />
               </div>
+
             </div>
             <div className={styles.formInfo}>
               <form className={styles.formInfoMain}>
-                <div className={styles.label1}>
-                  <div className={styles.label2}>
-                    <div className={styles.label3}>
-                      <label>Tên đăng nhập</label>
+                <div>
+                  <div className={styles.label1}>
+                    <div className={styles.label2}>
+                      <div className={styles.label3}>
+                        <label>Tên đăng nhập</label>
+                      </div>
+                      <div className={styles.input1}>
+                        <div className={styles.input2}>
+                          <div className={styles.input3}>
+                            <input
+                              className={styles.inputMain}
+                              type="text"
+                              id="fname"
+                              name="fname"
+                              value={user.email}
+                            />
+                            <br />
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className={styles.input1}>
-                      <div className={styles.input2}>
-                        <div className={styles.input3}>
-                          <input
-                            className={styles.inputMain}
-                            type="text"
-                            id="fname"
-                            name="fname"
-                            value={user.email}
-                          />
-                          <br />
+                  </div>
+
+                  <div className={styles.label1}>
+                    <div className={styles.label2}>
+                      <div className={styles.label3}>
+                        <label>Tên</label>
+                      </div>
+                      <div className={styles.input1}>
+                        <div className={styles.input2}>
+                          <div className={styles.input3}>
+                            <input
+                              className={styles.inputMain}
+                              type="text"
+                              id="fname"
+                              name="fname"
+                              value={user.lastName}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.label1}>
+                    <div className={styles.label2}>
+                      <div className={styles.label3}>
+                        <label>Email</label>
+                      </div>
+                      <div className={styles.input1}>
+                        <div className={styles.email1}>
+                          <div className={styles.email2}>
+                            {user.email}
+                            <button class={styles.emailBtn}>Thay đổi</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.label1}>
+                    <div className={styles.label2}>
+                      <div className={styles.label3}>
+                        <label>Số điện thoại</label>
+                      </div>
+                      <div className={styles.input1}>
+                        <div className={styles.input2}>
+                          <div className={styles.input3}>
+                            <input
+                              className={styles.inputMain}
+                              type="text"
+                              id="fname"
+                              name="fname"
+                              value={user.phone}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.label1}>
+                    <div className={styles.label2}>
+                      <div className={styles.label3}>
+                        <label >ngày sinh</label>
+                      </div>
+                      <div className={styles.input1}>
+                        <div className={styles.input2}>
+                          <div className={styles.input3}>
+                            <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} className={styles.datePicker} />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className={styles.label1}>
-                  <div className={styles.label2}>
-                    <div className={styles.label3}>
-                      <label>Tên</label>
-                    </div>
-                    <div className={styles.input1}>
-                      <div className={styles.input2}>
-                        <div className={styles.input3}>
-                          <input
-                            className={styles.inputMain}
-                            type="text"
-                            id="fname"
-                            name="fname"
-                            value={user.lastName}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {btn('Lưu')}
 
-                <div className={styles.label1}>
-                  <div className={styles.label2}>
-                    <div className={styles.label3}>
-                      <label>Email</label>
-                    </div>
-                    <div className={styles.input1}>
-                      <div className={styles.email1}>
-                        <div className={styles.email2}>
-                          wh*************@gmail.com
-                          <button class={styles.emailBtn}>Thay đổi</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.label1}>
-                  <div className={styles.label2}>
-                    <div className={styles.label3}>
-                      <label>Số điện thoại</label>
-                    </div>
-                    <div className={styles.input1}>
-                      <div className={styles.input2}>
-                        <div className={styles.input3}>
-                          <input
-                            className={styles.inputMain}
-                            type="text"
-                            id="fname"
-                            name="fname"
-                            value={user.phone}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/* <div className={styles.label1}>
-                  <div className={styles.label2}>
-                    <div className={styles.label3}>
-                      <label>Tên shop</label>
-                    </div>
-                    <div className={styles.input1}>
-                      <div className={styles.input2}>
-                        <div className={styles.input3}>
-                          <input
-                            className={styles.inputMain}
-                            type="text"
-                            id="fname"
-                            name="fname"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
-                {/* <div className={styles.label1}>
-                  <div className={styles.label2}>
-                    <div className={styles.label3}>
-                      <label>giới tính</label>
-                    </div>
-                    <div className={styles.input1}>
-                      <div>
-                        <div className={styles.radioBtnGrp}>
-                          {radiosGender.map((rad, id) => (
-                            <div
-                              className={styles.radio}
-                              tabindex="0"
-                              role="radio"
-                              aria-checked="false"
-                            >
-                              <div className={styles.radioBtn}>
-                                <div className={styles.radioBtnCirO}>
-                                  <div class={styles.radioBtnCirI}></div>
-                                </div>
-                              </div>
-                              <div className={styles.radioContent}>
-                                <div className="stardust-radio__label">
-                                  {rad.name}
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
-                <div className={styles.label1}>
-                  <div className={styles.label2}>
-                    <div className={styles.label3}>
-                      <label>ngày sinh</label>
-                    </div>
-                    <div className={styles.input1}>
-                      <div className={styles.select}>
-                        <div className={styles.selection}>
-                          <FloatingLabel
-                            controlId="floatingSelectGrid"
-                            label="Ngày"
-                            className={styles.selectDiv}
-                          >
-                            <Form.Select aria-label="Floating label select example">
-                              {day.map((v, id) => (
-                                <option value={id}>{v}</option>
-                              ))}
-                            </Form.Select>
-                          </FloatingLabel>
-                        </div>
-                        <div className={styles.selection}>
-                          <FloatingLabel
-                            controlId="floatingSelectGrid"
-                            label="Tháng"
-                            className={styles.selectDiv}
-                          >
-                            <Form.Select aria-label="Floating label select example">
-                              {month.map((v, id) => (
-                                <option value={id}>{v}</option>
-                              ))}
-                            </Form.Select>
-                          </FloatingLabel>
-                        </div>
-                        <div className={styles.selection}>
-                          <FloatingLabel
-                            controlId="floatingSelectGrid"
-                            label="Năm"
-                            className={styles.selectDiv}
-                          >
-                            <Form.Select
-                              aria-label="Floating label select example"
-                              htmlSize={1}
-                            >
-                              {year.map((v, id) => (
-                                <option value={id}>{v}</option>
-                              ))}
-                            </Form.Select>
-                          </FloatingLabel>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {user.role !== "Admin"}
-                {<p>hello</p>}
-                <div className={styles.subBtnDiv}>
-                  <button className={styles.subBtn}>Lưu</button>
-                </div>
               </form>
             </div>
           </div>
         </div>
+
+        <div className={styles.cardInfo}>
+          {displayExtraInfo(user)}
+          {/* {displayExtraInfo('Seller')} */}
+
+        </div>
+
       </div>
     </div>
   );
 };
 
-function ShipperRegister(props) {
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Thông Tin Đăng Ký
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <form>
-          <div className={styles.label1}>
-            <div className={styles.label2}>
-              <div className={styles.label3}>
-                <label>Số CMT:</label>
-              </div>
-              <div className={styles.input1}>
-                <div className={styles.input2}>
-                  <label for="fname">
-                    Bạn phải tiêm đủ 2 mũi vắc xin để đăng ký
-                  </label>
-                  <div className={styles.input3}>
-                    <input
-                      className={`form-control ${styles.inputMain}
-                  }`}
-                      type="text"
-                      id="fname"
-                      name="fname"
-                    />
-                    <Button>Kiểm tra</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.label1}>
-            <div className={styles.label2}>
-              <div className={styles.label3}>
-                <label>Khu Vực Hoạt Động:</label>
-              </div>
-              <div className={styles.input1}>
-                <div className="row">
-                  <div className="col col-md-6">
-                    <label for="city">Tỉnh,Thành phố</label>
-                    <select
-                      className={`form-control 
-                  }`}
-                      name="city"
-                    >
-                      <option value="">Chọn Tỉnh</option>
-                    </select>
-                  </div>
-                  <div className="col col-md-6">
-                    <label for="city">Quận,huyện</label>
-                    <select
-                      className={`form-control 
-                  }`}
-                      name="city"
-                    >
-                      <option value="">Chọn Quận</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Đăng Ký</Button>
-        <Button onClick={props.onHide}>Close</Button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
+
 
 export default User;
