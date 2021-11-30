@@ -139,6 +139,35 @@ const ShipperRegister = (props) => {
   const [id, setID] = useState('');
   const [display, setDisplay] = useState('none');
 
+  const provinceRaw = [
+    {
+      id: 1,
+      provinceId: "01TTT",
+      name: "Thành phố Hà Nội",
+    },
+    {
+      id: 2,
+      provinceId: "02TTT",
+      name: "Thành Phố Hồ Chí Minh",
+    },
+  ]
+  const [province, setProvince] = useState(provinceRaw);
+
+  const districtRaw = [
+    {
+      id: 1,
+      wardId: "00001",
+      name: "Phường Phúc Xá",
+      districtId: "001HP",
+    },
+    {
+      id: 2,
+      wardId: "00004",
+      name: "Phường Trúc Bạch",
+      districtId: "001HH",
+    },
+  ]
+  const [district, setDistrict] = useState(districtRaw);
   const hanldeCheckID = (id) => {
     console.log('CCCD: ' + id)
     fetch('https://localhost:6969/DataRaw/checkCMT?CMTCode=' + id)
@@ -167,6 +196,50 @@ const ShipperRegister = (props) => {
       setDisplay('block')
     };
   }
+
+  const [CMTCode, setCMTCode] = useState()
+  const [UserId, setUserId] = useState()
+  const [provinceId, setProvinceId] = useState()
+  const [districtId, setDistrictId] = useState()
+
+
+  const handleChangeP = (e) => {
+    setProvinceId(e.target.value);
+    console.log('provinceId: ' + provinceId)
+  }
+  const handleChangeD = (e) => {
+    setDistrictId(e.target.value);
+    console.log('districtId: ' + districtId)
+  }
+
+  const handleRequest = (user) => {
+    setUserId(user.id);
+    console.log('request:' + CMTCode)
+    console.log('request:' + UserId)
+    console.log('request:' + provinceId)
+    console.log('request:' + districtId)
+    let request = {
+      CMTCode: CMTCode,
+      UserId: UserId,
+      provinceId: provinceId,
+      districtId: districtId
+    }
+    let res = fetch('https://localhost:6969/User/ShipperResgister?CMTCode=' + CMTCode +
+      '&UserId=' + UserId +
+      '&provideId=' + provinceId +
+      '&districtId=' + districtId, {
+      method: 'POST',
+      body: JSON.stringify(request)
+    })
+    res= res.json();
+    if(res.status==='true'){
+      alert('Gửi đăng ký thành công')
+    }
+    else {
+      alert('Gửi đăng ký thất bại')
+    }
+  }
+
   return (
     <Modal
       {...props}
@@ -184,7 +257,7 @@ const ShipperRegister = (props) => {
           <div className={styles.label1}>
             <div className={styles.label2}>
               <div className={styles.label3}>
-                <label>Số CMT:</label>
+                <label>Số CCCD</label>
               </div>
               <div className={styles.input1}>
                 <div className={styles.input2}>
@@ -198,7 +271,7 @@ const ShipperRegister = (props) => {
                       id="fname"
                       name="fname"
                       required
-                      onChange={(e) => { setID(e.target.value) }}
+                      onChange={(e) => { setID(e.target.value); setCMTCode(e.target.value) }}
                     />
                     <Button onClick={() => hanldeCheckID(id)}>Kiểm tra</Button>
                   </div>
@@ -212,28 +285,42 @@ const ShipperRegister = (props) => {
           <div className={styles.label1}>
             <div className={styles.label2}>
               <div className={styles.label3}>
-                <label>Khu Vực Hoạt Động:</label>
+                <label>Khu Vực Hoạt Động</label>
               </div>
               <div className={styles.input1}>
                 <div className="row">
                   <div className="col col-md-6">
                     <label for="city">Tỉnh,Thành phố</label>
                     <select
-                      className={`form-control 
-                  }`}
+                      className={`form-control }`}
                       name="city"
+                      onChange={(e) => handleChangeP(e)}
                     >
                       <option value="">Chọn Tỉnh</option>
+                      {province.length > 0 ?
+                        (province.map((p, key) =>
+                          <option key={p.id} value={p.provinceId}>{p.name}</option>
+                        )
+                        )
+                        : null
+                      }
                     </select>
                   </div>
                   <div className="col col-md-6">
                     <label for="city">Quận,huyện</label>
                     <select
-                      className={`form-control 
-                  }`}
+                      className={`form-control }`}
                       name="city"
+                      onChange={e => handleChangeD(e)}
                     >
                       <option value="">Chọn Quận</option>
+                      {district.length > 0 ?
+                        (district.map((d, key) =>
+                          <option key={d.id} value={d.districtId}>{d.name}</option>
+                        )
+                        )
+                        : null
+                      }
                     </select>
                   </div>
                 </div>
@@ -243,7 +330,7 @@ const ShipperRegister = (props) => {
         </form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide}>Đăng Ký</Button>
+        <Button onClick={() => { handleRequest(props.user) }}>Đăng Ký</Button>
         <Button onClick={props.onHide}>Đóng</Button>
       </Modal.Footer>
     </Modal >
@@ -270,6 +357,12 @@ const SellerRegister = (props) => {
         console.error('Fetching error amount of dopes:' + err)
       })
   }
+  let Request = {
+
+  }
+  const handleRequest = () => {
+
+  }
   return (
     <Modal
       {...props}
@@ -287,7 +380,7 @@ const SellerRegister = (props) => {
           <div className={styles.label1}>
             <div className={styles.label2}>
               <div className={styles.label3}>
-                <label>Số CMT:</label>
+                <label>Số CCCD</label>
               </div>
               <div className={styles.input1}>
                 <div className={styles.input2}>
@@ -310,7 +403,7 @@ const SellerRegister = (props) => {
           <div className={styles.label1}>
             <div className={styles.label2}>
               <div className={styles.label3}>
-                <label>Địa chỉ cửa hàng:</label>
+                <label>Địa chỉ cửa hàng</label>
               </div>
               <div className={styles.input1}>
                 <div className="row">
@@ -350,10 +443,6 @@ const SellerRegister = (props) => {
 
 const User = () => {
   const [user, setUser] = useState({});
-  const str = () => {
-    let string = user.email.subtr(0, 2) + '****************' + '@gmail.com';
-    return string;
-  }
   useEffect(() => {
     localStorage.setItem(
       "user",
@@ -389,14 +478,6 @@ const User = () => {
     }
     return arr;
   };
-  const yearCur = new Date().getFullYear();
-  let day = [],
-    month = [],
-    year = [];
-  pushDate(1, 31, day);
-  pushDate(1, 12, month);
-  pushDate(1910, yearCur, year);
-  const pathz = process.env.PUBLIC_URL + "/images" + "/user-icon.png";
 
   const onChangeImage = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -437,10 +518,12 @@ const User = () => {
             <ShipperRegister
               show={modalShipperShow}
               onHide={() => setModalShipperShow(false)}
+              user={user}
             />
             <SellerRegister
               show={modalSellerShow}
               onHide={() => setModalSellerShow(false)}
+              user={user}
             />
           </>
         )
