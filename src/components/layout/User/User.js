@@ -197,10 +197,10 @@ const ShipperRegister = (props) => {
     };
   }
 
-  const [CMTCode, setCMTCode] = useState()
-  const [UserId, setUserId] = useState()
-  const [provinceId, setProvinceId] = useState()
-  const [districtId, setDistrictId] = useState()
+  const [CMTCode, setCMTCode] = useState('')
+  const [UserId, setUserId] = useState('')
+  const [provinceId, setProvinceId] = useState('')
+  const [districtId, setDistrictId] = useState('')
 
 
   const handleChangeP = (e) => {
@@ -215,29 +215,48 @@ const ShipperRegister = (props) => {
   const handleRequest = (user) => {
     setUserId(user.id);
     console.log('request:' + CMTCode)
-    console.log('request:' + UserId)
+    console.log('request:' + user.id)
     console.log('request:' + provinceId)
     console.log('request:' + districtId)
     let request = {
       CMTCode: CMTCode,
-      UserId: UserId,
+      UserId: user.id,
       provinceId: provinceId,
       districtId: districtId
     }
-    let res = fetch('https://localhost:6969/User/ShipperResgister?CMTCode=' + CMTCode +
+    console.log(request)
+    fetch('https://localhost:6969/User/ShipperResgister?CMTCode=' + CMTCode +
       '&UserId=' + UserId +
       '&provideId=' + provinceId +
       '&districtId=' + districtId, {
       method: 'POST',
-      body: JSON.stringify(request)
+      body: JSON.stringify(request),
+      headers: {
+        "Content-Type": 'application/json',
+        "Accept": '*/*'
+    }
+    }).then(res => {
+      if (res.ok) {
+        return res.json()
+      }
+      throw res
     })
-    res= res.json();
-    if(res.status==='true'){
-      alert('Gửi đăng ký thành công')
-    }
-    else {
-      alert('Gửi đăng ký thất bại')
-    }
+    .then(data => {
+      console.log('Status:'+data.status)
+      if(data.status==true) alert('Đăng ký thành công!');
+      else alert('Đăng ký không thành công!');
+    })
+    .catch(err => {
+      console.error('Fetching error amount of dopes:' + err)
+    })
+    
+    // res= res.json();
+    // if(res.status==='true'){
+    //   alert('Gửi đăng ký thành công')
+    // }
+    // else {
+    //   alert('Gửi đăng ký thất bại')
+    // }
   }
 
   return (
