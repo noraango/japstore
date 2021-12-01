@@ -15,6 +15,10 @@ import Payment from "./components/common/Payment/Payment";
 import UserRole from "./components/staff/UserRole/UserRole";
 import "bootstrap/dist/css/bootstrap.min.css";
 import User from "./components/layout/User/User";
+
+import GetOrder from "./components/staff/Shipper/GetOrder/GetOrder";
+import Shipping from "./components/staff/Shipper/ShipOrder/Ship";
+import ShipHistory from "./components/staff/Shipper/ViewHistory/ShippingHistory";
 export default function App() {
   return (
     <div className={`${styles.container}`}>
@@ -33,6 +37,9 @@ export default function App() {
           <Route path="/payment" component={Payment} />
           <Route path="/role" component={UserRole} />
           <Route path="/user" component={User} />
+          <Route path="/getOrder" component={GetOrder} />
+          <Route path="/Shipping" component={Shipping} />
+          <Route path="/ShippingHistory" component={ShipHistory} />
         </div>
         <Footer></Footer>
       </BrowserRouter>
