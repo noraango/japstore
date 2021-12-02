@@ -35,6 +35,17 @@
   grid-gap: 10px;
   grid-auto-flow: column;
 }
+.navList img {
+  height: 40px;
+  margin-right: 5px;
+}
+.navList img:hover {
+  pointer-events: none;
+}
+.navList a {
+  text-decoration: none;
+  color: #ffffff;
+}
 .navItem {
   width: fit-content;
   color: #ffffff;
@@ -96,6 +107,9 @@
 .logoContainer {
   width: fit-content;
   height: fit-content;
+}
+.logo .img {
+  height: 40px;
 }
 .cateContainer {
   height: 40px;

@@ -1,16 +1,14 @@
 import React from "react";
 import styles from "./Footer.module.css";
 
-
 const Footer = () => {
-  
   var path = process.env.PUBLIC_URL + "/images";
   return (
     <div className={`${styles.footer}`}>
       <div className={`${styles.containerMid}`}>
         <div className={`${styles.mid}`}>
           <div className={`${styles.colLeft}`}>
-            <a href="/japstore">
+            <a href="/">
               <img src={path + "/logo-2.png"} alt="text" />
             </a>
           </div>

@@ -181,7 +181,7 @@ const ShipperRegister = (props) => {
     },
     {
       id: 2,
-      provinceId: "02TTT",
+      provinceId: "79TTT",
       name: "Thành Phố Hồ Chí Minh",
     },
   ]
@@ -192,13 +192,13 @@ const ShipperRegister = (props) => {
       id: 1,
       wardId: "00001",
       name: "Phường Phúc Xá",
-      districtId: "001HP",
+      districtId: "001HH",
     },
     {
       id: 2,
       wardId: "00004",
       name: "Phường Trúc Bạch",
-      districtId: "001HH",
+      districtId: "002HH",
     },
   ]
   const [district, setDistrict] = useState(districtRaw);

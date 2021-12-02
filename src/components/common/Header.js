@@ -9,7 +9,7 @@ import { useState } from "react";
 export default function Header() {
   const [searchText, setSearchText] = useState("");
   const history = useHistory();
-  var path = process.env.PUBLIC_URL + "/images";
+  let path = process.env.PUBLIC_URL + "/images";
   let user = JSON.parse(localStorage.getItem("user"));
   function onChangeSearchText(e) {
     setSearchText(e.target.value);
@@ -20,7 +20,6 @@ export default function Header() {
       onSubmitSearch();
     }
   }
-
   function onSubmitSearch(e) {
     history.push("/search/" + searchText);
     window.location.reload();
@@ -42,12 +41,25 @@ export default function Header() {
   function redirectUser() {
     history.push("/user");
   }
+  function toHome() {
+    history.push("/");
+  }
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.topContainer}`}>
         <div className={`${styles.top}`}>
           <div className={`${styles.navList} ${app.colLeft}`}>
-            <Link className={`${styles.navItem}`} to="/contact">
+            {/* <a className={styles.logo} href="/">
+              <img src={path + "/logo.png"} alt="text" />
+              <span>Jap Store</span>
+            </a> */}
+            <button className={`${styles.btnProfile}`} onClick={toHome}>
+              <img src={path + "/logo.png"} alt="text" />
+              <span>Jap Store</span>
+            </button>
+          </div>
+          <div className={`${styles.navList} ${app.colRight}`}>
+            {/* <Link className={`${styles.navItem}`} to="/contact">
               CHĂM SÓC KHÁCH HÀNG
             </Link>
             <div className={`${styles.line}`} />
@@ -57,9 +69,7 @@ export default function Header() {
             <div className={`${styles.line}`} />
             <Link className={`${styles.navItem}`} to="/introduce">
               GIỚI THIỆU
-            </Link>
-          </div>
-          <div className={`${styles.navList} ${app.colRight}`}>
+            </Link> */}
             {user === null ? (
               <Link className={`${styles.navItem}`} to="/login">
                 ĐĂNG NHẬP
@@ -84,7 +94,7 @@ export default function Header() {
             )}
             <div className={`${styles.profileContainer}`}>
               {user != null ? (
-                user.role == "Admin" ? (
+                user.role === "Admin" ? (
                   <button onClick={redirectStaff}>Quản lí</button>
                 ) : (
                   ""
