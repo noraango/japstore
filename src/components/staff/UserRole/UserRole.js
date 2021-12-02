@@ -4,12 +4,42 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { Collapse } from "react-bootstrap";
 import RoleRecord from "./RoleRecord";
+import UserRecord from "./UserRecord";
 
 export default function UserRole() {
   const [tabIndex, setTabIndex] = useState(0, []);
-  const [open, setOpen] = useState(false);
   const [requestList, setRequestList] = useState([]);
-  const [userAccount, setUserAccount] = useState([]);
+  const [userList, setUserList] = useState([]);
+  //filter active or unactive
+  const [statusID, setStatusID] = useState([]);
+
+  const status = [
+    {
+      key: 'Admin',
+      id: 1
+    },
+    {
+      key: 'Seller',
+      id: 2
+    },
+    {
+      key: 'Shipper',
+      id: 5
+    }
+  ]
+  const statusActive=[{
+    key:'Tất cả',
+    value:0
+  },
+  {
+    key:'Đang hoạt động',
+    value:1,
+  },
+  {
+    key:'Ngừng hoạt động',
+    value:-1
+  }
+]
   useEffect(() => {
     fetch("https://localhost:6969/User/RoleRequest?page=1&size=10")
       .then((res) => {
@@ -18,28 +48,25 @@ export default function UserRole() {
         }
         throw res;
       })
-      .then((data) => setRequestList(data)) // sửa thành phàn 'data'->'data.data 'sau khi sửa API
+      .then((data) => setRequestList(data.data)) // sửa thành phàn 'data'->'data.data 'sau khi sửa API
+      .catch(err => {
+        console.error('Fetching err request list: ' + err)
+      })
+
+    fetch("https://localhost:6969/User/UserRequest?page=1&size=10&roleId=1")
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw res;
+      })
+      .then((data) => {
+        setUserList(data);
+      })
       .catch((err) => {
-        console.error("Fetching error requestion list:" + err);
+        console.error("Fetching error user account list:" + err);
       });
 
-    try {
-      fetch("https://localhost:6969/User/UserRequest?page=1&size=10&roleId=1")
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw res;
-        })
-        .then((data) => {
-          setUserAccount(data);
-        })
-        .catch((err) => {
-          console.log("Fetching error useraccount list:" + err);
-        });
-    } catch (err) {
-      console.log("Fetching error useraccount list" + err);
-    }
   }, []);
 
   return (
@@ -47,11 +74,7 @@ export default function UserRole() {
       <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
         <TabList>
           <Tab>Yêu Cầu Đăng Ký</Tab>
-          <Tab
-            onClick={() => {
-              console.log(111);
-            }}
-          >
+          <Tab>
             Danh Sách Người Dùng
           </Tab>
         </TabList>
@@ -68,7 +91,7 @@ export default function UserRole() {
                 </tr>
               </thead>
               <tbody>
-                <RoleRecord listRequest={requestList} />
+                {requestList.length > 0 ? <RoleRecord listRequest={requestList} relist={setRequestList} /> : <div>Không thể hiển thị thông tin</div>}
               </tbody>
             </table>
           </div>
@@ -76,20 +99,19 @@ export default function UserRole() {
         <TabPanel>
           <div className="filter-bar row">
             <div className="form-group col-3">
-              <label for="name">Tên Người Dùng</label>
-              <input
-                type="text"
-                className="form-control"
-                id="name"
-                placeholder="Tên"
-              />
+              <label for="role">Tình trạng</label>
+              <select className="form-control" id="role">
+                {statusActive.map((item,id)=>
+                  <option key={id}>{item.key}</option>
+                )}
+              </select>
             </div>
             <div className="form-group col-3">
               <label for="role">Loại tài khoản</label>
               <select className="form-control" id="role">
-                <option>Admin</option>
-                <option>Seller</option>
-                <option>User</option>
+                {status.map((o,key)=>
+                  <option key={o.id}>{o.key}</option>
+                )}
               </select>
             </div>
           </div>
@@ -106,46 +128,7 @@ export default function UserRole() {
                 </tr>
               </thead>
               <tbody>
-                {userAccount.length > 0 ? (
-                  userAccount.map((record, id) => (
-                    <>
-                      <tr
-                        onClick={() => setOpen(!open)}
-                        aria-controls="example-collapse-text"
-                        aria-expanded={open}
-                        key={id}
-                      >
-                        <td>{record.userId}</td>
-                        <td>{record.email}</td>
-                        <td>
-                          {record.lastName +
-                            " " +
-                            record.middleName +
-                            " " +
-                            record.firstName}
-                        </td>
-                        <td>{record.email}</td>
-                        <td>{record.phone}</td>
-                        <td>
-                          {record.userRoleId === 1
-                            ? "Admin"
-                            : record.userRoleId === 2
-                            ? "Shipper"
-                            : "Seller"}
-                        </td>
-                      </tr>
-                      <Collapse in={open}>
-                        <tr id="example-collapse-text">
-                          <td colSpan="6">
-                            <div>Địa Chỉ: {record.wardId+'-'+record.districtId+'-'+record.provinceId+', '+record.address}</div>
-                          </td>
-                        </tr>
-                      </Collapse>
-                    </>
-                  ))
-                ) : (
-                  <div>Không thể hiển thị thông tin</div>
-                )}
+                {userList.length > 0 ? <UserRecord listUser={userList}  relist={setUserList} /> : <div>Không thể hiển thị thông tin</div>}
               </tbody>
             </table>
           </div>

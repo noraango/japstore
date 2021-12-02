@@ -194,7 +194,7 @@ const OrderDetail = (order) => {
               className={styles.button}
               style={{
                 width: "fit-content",
-                color: "black",
+                color: "#ffffff",
                 backgroundColor: "#bc8c4e",
                 textDecoration: "none",
                 marginLeft: "20px",
@@ -206,7 +206,7 @@ const OrderDetail = (order) => {
               className={styles.button}
               style={{
                 width: "fit-content",
-                color: "black",
+                color: "#ffffff",
                 backgroundColor: "red",
                 textDecoration: "none",
                 marginLeft: "20px",
@@ -221,6 +221,7 @@ const OrderDetail = (order) => {
     </div>
   );
 };
+
 export default function Ship() {
   const [key, setKey] = useState(1);
 
