@@ -48,12 +48,12 @@ export default function UserRole() {
         }
         throw res;
       })
-      .then((data) => setRequestList(data.data)) // sửa thành phàn 'data'->'data.data 'sau khi sửa API
+      .then((data) => setRequestList(data.data))
       .catch(err => {
         console.error('Fetching err request list: ' + err)
       })
 
-    fetch("https://localhost:6969/User/UserRequest?page=1&size=10&roleId=1")
+    fetch("https://localhost:6969/User/UserRequest?page=1&size=10&roleId=0&status=99")
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -61,7 +61,7 @@ export default function UserRole() {
         throw res;
       })
       .then((data) => {
-        setUserList(data);
+        setUserList(data.data);
       })
       .catch((err) => {
         console.error("Fetching error user account list:" + err);
