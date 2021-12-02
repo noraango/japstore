@@ -5,8 +5,10 @@ export default function RecorDetail(props) {
   const statusAccept=1;
   const statusRefuse=-1;
 
-  const handleAcceptRes=(requestId)=>{
-    try{
+  const handleAcceptRes=async (requestId)=>{
+    console.log('clicked')
+    console.log(requestId)
+    // try{
       fetch('https://localhost:6969/User/UpdateRequest?status='+statusAccept+'&requestId='+requestId)
       .then(res=>{
         if(res.ok){
@@ -15,16 +17,17 @@ export default function RecorDetail(props) {
         throw res
       })
       .then(data=>{
+
         if(data.status==='true') alert('Chấp nhận yêu cầu thành công!')
       })
       .catch(err=>{
         console.log('Post accept requestion err: '+err)
       })
-      }
-      catch(err){
-        alert('Chấp nhận yêu cầu thất bại!')
-        console.log('Handle Accept:' +err)
-      }
+      // }
+      // catch(err){
+      //   alert('Chấp nhận yêu cầu thất bại!')
+      //   console.log('Handle Accept:' +err)
+      // }
   }
   const handleRefuseRes=(requestId)=>{
     try{
@@ -47,6 +50,9 @@ export default function RecorDetail(props) {
       console.log('Handle Refuse:' +err)
     }
   }
+  const click=()=>{
+    console.log('clicked')
+  }
   return (
     <>
       <tr
@@ -54,9 +60,9 @@ export default function RecorDetail(props) {
         aria-controls="example-collapse-text"
         aria-expanded={open}
       >
-        <td>{props.key}</td>
+        <td>{props.record.request.id}</td>
         <td>{props.record.infor.email}</td>
-        <td>{props.record.infor.lastName+props.record.middleName+props.record.firstName}</td>
+        <td>{props.record.infor.lastName+' '+props.record.infor.middleName+' '+props.record.infor.firstName}</td>
         <td>{props.record.infor.phone}</td>
         {/* Shipper role code ='U5', another is seller role*/}
         <td>{props.record.request.role==='U5'? 'Đăng ký làm shipper' : 'Quản lý gian hàng'}</td>
@@ -70,9 +76,9 @@ export default function RecorDetail(props) {
           <td colSpan="2">
             <div>Khu Vực hoạt động: {props.record.district}-{props.record.province}</div>
           </td>
-          <td colSpan="2">
+          <td className='button' colSpan="2">
             <div>
-              <Button onclick={handleAcceptRes(props.record.request.id)}>Chấp nhận</Button>
+              <Button onclick={click}>Chấp nhận</Button>
               <Button onclik={handleRefuseRes(props.record.request.id)}>Hủy bỏ</Button>
             </div>
           </td>
