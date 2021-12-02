@@ -37,7 +37,6 @@ export default function RecorDetail(props) {
       .catch(err => {
         console.log('Post accept requestion err: ' + err)
       })
-
   }
   const handleRefuseRes = (requestId) => {
     console.log('refuse clicked')
