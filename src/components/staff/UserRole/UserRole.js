@@ -8,7 +8,39 @@ import RoleRecord from "./RoleRecord";
 export default function UserRole() {
   const [tabIndex, setTabIndex] = useState(0, []);
   const [open, setOpen] = useState(false);
-  const [infor, setInfor] = useState([1, 2, 3]);
+  const [requestList, setRequestList] = useState([]);
+  const [userAccount, setUserAccount] = useState([]);
+  useEffect(() => {
+    fetch('https://localhost:6969/User/RoleRequest?page=1&size=10')
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw res
+      })
+      .then(data => setRequestList(data.data))
+      .catch(err => {
+        console.error('Fetching error requestion list:' + err)
+      })
+  }, []);
+
+  try {
+    fetch('https://localhost:6969/User/UserRequest?page=1&size=10&roleId=1')
+      .then(res => {
+        if (res.ok) {
+          return res.json
+        }
+        throw res
+      })
+      .then(data => {
+        setUserAccount(data)
+      }).catch(err => {
+        console.log('Fetching error useraccount list:' + err)
+      })
+  }
+  catch(err){
+    console.log('Fetching error useraccount list' +err)
+  }
   return (
     <div className="backgound-white">
       <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
@@ -35,7 +67,7 @@ export default function UserRole() {
                 </tr>
               </thead>
               <tbody>
-                <RoleRecord listRequest={infor} />
+                <RoleRecord listRequest={requestList} />
               </tbody>
             </table>
           </div>
@@ -73,6 +105,7 @@ export default function UserRole() {
                 </tr>
               </thead>
               <tbody>
+                { }
                 <tr
                   onClick={() => setOpen(!open)}
                   aria-controls="example-collapse-text"

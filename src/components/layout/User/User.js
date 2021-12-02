@@ -20,6 +20,40 @@ const btn = (content, style) => {
   )
 }
 
+const validateInput = (type, checkingText) => {
+
+  /* reg exp để kiểm tra xem chuỗi có chỉ bao gồm 12 chữ số hay không */
+  if (type == 'CCCD') {
+    const regexp = /^\d{12}$/;
+    const checkingResult = regexp.exec(checkingText);
+    if (checkingResult !== null) {
+      return {
+        isInputValid: true,
+        errorMessage: ''
+      };
+    } else {
+      return {
+        isInputValid: false,
+        errorMessage: 'CCCD phải đủ 12 chữ số.'
+      };
+    }
+  }
+  // if( type === '')
+}
+
+const FormError = (props) => {
+  /* nếu isHidden = true, return null ngay từ đầu */
+  if (props.isHidden) { return null; }
+
+  return (<div style={{ color: 'red' }}>{props.errorMessage}</div>)
+}
+const FormNoti=(props)=>{
+   /* nếu isHidden = true, return null ngay từ đầu */
+   if (!props.isHidden) { return null; }
+   else{
+    return(<div style={{ color: props.color }}>Đã tiêm {props.data} mũi</div>)
+   } 
+}
 const sellerInfo = (user) => {
   return (
     <>
@@ -135,9 +169,9 @@ const shipperInfo = (user) => {
 }
 
 const ShipperRegister = (props) => {
-  const [data, setData] = useState(2);
+  const [data, setData] = useState(1);
   const [id, setID] = useState('');
-  const [display, setDisplay] = useState('none');
+  const [display, setDisplay] = useState(false);
 
   const provinceRaw = [
     {
@@ -168,6 +202,8 @@ const ShipperRegister = (props) => {
     },
   ]
   const [district, setDistrict] = useState(districtRaw);
+  const[color, setColor]= useState('black');
+  
   const hanldeCheckID = (id) => {
     console.log('CCCD: ' + id)
     fetch('https://localhost:6969/DataRaw/checkCMT?CMTCode=' + id)
@@ -183,18 +219,26 @@ const ShipperRegister = (props) => {
       .catch(err => {
         console.error('Fetching error amount of dopes:' + err)
       })
+      
     if (data === 1) {
       setData(1);
-      setDisplay('block')
+      setDisplay(true)
+      setColor('darkgoldenrod')
     }
-    if (data === 2) {
+    else if (data === 2) {
       setData(2);
-      setDisplay('block')
+      setDisplay(true)
+      setColor('green')
     }
-    else {
+    else if(data === 0) {
       setData(0);
-      setDisplay('block')
-    };
+      setDisplay(true)
+      setColor('red')
+    }
+    else{
+      setData(-1);
+      setDisplay(false)
+    }
   }
 
   const [CMTCode, setCMTCode] = useState('')
@@ -218,6 +262,7 @@ const ShipperRegister = (props) => {
     console.log('request:' + user.id)
     console.log('request:' + provinceId)
     console.log('request:' + districtId)
+
     let request = {
       CMTCode: CMTCode,
       UserId: user.id,
@@ -234,31 +279,43 @@ const ShipperRegister = (props) => {
       headers: {
         "Content-Type": 'application/json',
         "Accept": '*/*'
-    }
+      }
     }).then(res => {
       if (res.ok) {
         return res.json()
       }
       throw res
     })
-    .then(data => {
-      console.log('Status:'+data.status)
-      if(data.status==true) alert('Đăng ký thành công!');
-      else alert('Đăng ký không thành công!');
-    })
-    .catch(err => {
-      console.error('Fetching error amount of dopes:' + err)
-    })
-    
-    // res= res.json();
-    // if(res.status==='true'){
-    //   alert('Gửi đăng ký thành công')
-    // }
-    // else {
-    //   alert('Gửi đăng ký thất bại')
-    // }
+      .then(data => {
+        console.log('Status:' + data.status)
+        if (data.status == true) alert('Đăng ký thành công!');
+        else alert('Đăng ký không thành công!');
+      })
+      .catch(err => {
+        console.error('Fetching error of senting register requestion:' + err)
+      })
   }
-
+  const [isValid, setIsValid] = useState({
+    CCCD: {
+      value: '',
+      isInputValid: true,
+      errorMessage: ''
+    }
+  })
+  const handleInput = event => {
+    const { name, value } = event.target;
+    const newState = { ...isValid[name] }
+    newState.value = value;
+    setIsValid({ [name]: newState });
+  }
+  const handleInputValidation = event => {
+    const { name } = event.target;
+    const { isInputValid, errorMessage } = validateInput(name, isValid[name].value);
+    const newState = { ...isValid[name] }
+    newState.isInputValid = isInputValid
+    newState.errorMessage = errorMessage
+    setIsValid({ [name]: newState })
+  }
   return (
     <Modal
       {...props}
@@ -288,15 +345,23 @@ const ShipperRegister = (props) => {
                       className={`form-control ${styles.inputMain}}`}
                       type="text"
                       id="fname"
-                      name="fname"
+                      name="CCCD"
                       required
-                      onChange={(e) => { setID(e.target.value); setCMTCode(e.target.value) }}
+                      onChange={(e) => { setID(e.target.value); setCMTCode(e.target.value); handleInput(e) }}
+                      onBlur={(e) => handleInputValidation(e)}
                     />
-                    <Button onClick={() => hanldeCheckID(id)}>Kiểm tra</Button>
+                    <Button className={styles.subBtn} onClick={() => hanldeCheckID(id)}>Kiểm tra</Button>
                   </div>
                 </div>
-
-                <p style={{ color: 'red', display: { display } }}>Đã tiêm {data} mũi</p>
+                <FormError
+                  isHidden={isValid['CCCD'].isInputValid}
+                  errorMessage={isValid['CCCD'].errorMessage} />
+                <FormNoti
+                  isHidden={display}
+                  data={data}
+                  color={color}
+                />
+                {/* <p style={{ color: 'red', display: { display } }}>Đã tiêm {data} mũi</p> */}
 
               </div>
             </div>
@@ -357,7 +422,7 @@ const ShipperRegister = (props) => {
 }
 
 const SellerRegister = (props) => {
-  const [data, setData] = useState();
+  const [data, setData] = useState(1);
   const [id, setID] = useState('');
 
   const hanldeCheckID = (id) => {
@@ -373,7 +438,7 @@ const SellerRegister = (props) => {
         setData(data)
       })
       .catch(err => {
-        console.error('Fetching error amount of dopes:' + err)
+        console.error('Fetching error amount of dose:' + err)
       })
   }
   let Request = {
@@ -468,7 +533,7 @@ const User = () => {
       JSON.stringify({
         id: 1,
         avatar: "avatar.jpg",
-        role: "",
+        role: "Seller",
         firstName: "Anh",
         middleName: "Thế",
         lastName: "Ngô",
