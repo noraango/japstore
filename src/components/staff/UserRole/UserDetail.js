@@ -8,7 +8,7 @@ const UserDetail = (props) => {
     const statusRefuse = -1;
 
     const relist = () => {
-        fetch("https://localhost:6969/User/UserRequest?page=1&size=10&roleId=1")
+        fetch("https://localhost:6969/User/UserRequest?page=1&size=10&roleId=0&status=99")
             .then((res) => {
                 if (res.ok) {
                     return res.json();
@@ -16,7 +16,7 @@ const UserDetail = (props) => {
                 throw res;
             })
             .then((data) => {
-                props.relist(data);//sua data->data sau khi api done
+                props.relist(data.data);//sua data->data sau khi api done
             })
             .catch((err) => {
                 console.error("Fetching error user account list:" + err);
@@ -62,15 +62,15 @@ const UserDetail = (props) => {
             })
     }
     return (
-        <div>
+        <>
             <tr
                 onClick={() => setOpen(!open)}
                 aria-controls="example-collapse-text"
                 aria-expanded={open}
                 key={props.key}
             >
-                <td>{props.props.record.userId}</td>
-                <td>{props.props.record.email}</td>
+                <td>{props.record.userId}</td>
+                <td>{props.record.email}</td>
                 <td>
                     {props.record.lastName +
                         " " +
@@ -95,13 +95,13 @@ const UserDetail = (props) => {
                     </td>
                     <td className='button' colSpan="2">
                         <div>
-                            <Button onClick={handleActiveAccount(props.record.request.id)}>Ngừng hoạt động</Button>
-                            <Button onClik={handleDisactiveAccount(props.record.request.id)}>Mở hoạt động</Button>
+                            <Button onClick={()=>handleActiveAccount(props.record.userId)}>Mở hoạt động</Button>
+                            <Button onClick={()=>handleDisactiveAccount(props.record.userId)}>Ngừng hoạt động</Button>
                         </div>
                     </td>
                 </tr>
             </Collapse>
-        </div>
+        </>
     )
 }
 
