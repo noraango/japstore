@@ -91,7 +91,7 @@ export default function UserRole() {
                 </tr>
               </thead>
               <tbody>
-                {requestList.length > 0 ? <RoleRecord listRequest={requestList} relist={setRequestList} /> : <div>Không thể hiển thị thông tin</div>}
+                {requestList.length > 0 ? <RoleRecord listRequest={requestList} relist={setRequestList} /> : <div>Không có data để hiển thị</div>}
               </tbody>
             </table>
           </div>
@@ -128,7 +128,7 @@ export default function UserRole() {
                 </tr>
               </thead>
               <tbody>
-                {userList.length > 0 ? <UserRecord listUser={userList}  relist={setUserList} /> : <div>Không thể hiển thị thông tin</div>}
+                {userList.length > 0 ? <UserRecord listUser={userList}  relist={setUserList} /> : <div>Không có data để hiển thị</div>}
               </tbody>
             </table>
           </div>
