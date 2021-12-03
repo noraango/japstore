@@ -14,7 +14,7 @@ export default function RecorDetail(props) {
         throw res;
       })
       .then((data) => {
-        props.relist(data);//sua data->data sau khi api done
+        props.relist(data.data);
       })
       .catch((err) => {
         console.error("Fetching error user account list:" + err);
@@ -32,7 +32,10 @@ export default function RecorDetail(props) {
       })
       .then(data => {
 
-        if (data.status === 'true') alert('Chấp nhận yêu cầu thành công!')
+        if (data.status === true) {
+          alert('Chấp nhận yêu cầu thành công!')
+          relist()
+        }
       })
       .catch(err => {
         console.log('Post accept requestion err: ' + err)
@@ -48,7 +51,10 @@ export default function RecorDetail(props) {
         throw res
       })
       .then(data => {
-        if (data.status === 'true') alert('Hủy yêu cầu thành công!')
+        if (data.status === true) {
+          alert('Hủy yêu cầu thành công!')
+          relist()
+        }
       })
       .catch(err => {
         console.log('Post refuse requestion err: ' + err)
@@ -79,8 +85,8 @@ export default function RecorDetail(props) {
           </td>
           <td className='button' colSpan="2">
             <div>
-              <Button onClick={handleAcceptRes(props.record.request.id)}>Chấp nhận</Button>
-              <Button onClik={handleRefuseRes(props.record.request.id)}>Hủy bỏ</Button>
+              <Button onClick={()=>handleAcceptRes(props.record.request.id)}>Chấp nhận</Button>
+              <Button onClick={()=>handleRefuseRes(props.record.request.id)}>Hủy bỏ</Button>
             </div>
           </td>
         </tr>

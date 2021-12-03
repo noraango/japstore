@@ -90,7 +90,7 @@ const UserDetail = (props) => {
             </tr>
             <Collapse in={open}>
                 <tr id="example-collapse-text">
-                    <td colSpan="6">
+                    <td colSpan="4">
                         <div>Địa Chỉ: {props.record.wardId + '-' + props.record.districtId + '-' + props.record.provinceId + ', ' + props.record.address}</div>
                     </td>
                     <td className='button' colSpan="2">
