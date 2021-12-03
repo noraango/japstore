@@ -203,6 +203,10 @@ export default function GetOrder() {
       userName: "vịt con",
     },
   ];
+  useEffect(() => {
+    console.log(localStorage.getItem('user').id);
+    fetch('https://localhost:6969/Order/GetOrder?userId='+localStorage.getItem('user').id+'&filterType=1&page=1&size=10')  
+  }, [])
   const [orders, setOrders] = useState([ordersRaw]);
   const handlePageClick = (event) => {
     console.log(`User requested page number ${event.selected}`);
