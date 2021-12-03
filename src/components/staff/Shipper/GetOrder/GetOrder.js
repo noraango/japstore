@@ -1,57 +1,30 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../../../layout/Order/Order.module.css";
 import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatVND } from "../../../../controller/constants";
 import ReactPaginate from "react-paginate";
-const OrderDetail = (order) => {
+const OrderDetail = (order, userID) => {
   const [show, setShow] = useState(false);
 
   function getOrder() {
     if (window.confirm("Nhận đơn hàng?")) {
-      //   fetch(
-      //     "https://localhost:6969/User/ShipperResgister?CMTCode=" +
-      //       CMTCode +
-      //       "&UserId=" +
-      //       UserId +
-      //       "&provideId=" +
-      //       provinceId +
-      //       "&districtId=" +
-      //       districtId,
-      //     {
-      //       method: "POST",
-      //       body: JSON.stringify(request),
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //         Accept: "*/*",
-      //       },
-      //     }
-      //   )
-      //     .then((res) => {
-      //       if (res.ok) {
-      //         return res.json();
-      //       }
-      //       throw res;
-      //     })
-      //     .then((data) => {
-      //       console.log("Status:" + data.status);
-      //       if (data.status == true) alert("Đăng ký thành công!");
-      //       else alert("Đăng ký không thành công!");
-      //     })
-      //     .catch((err) => {
-      //       console.error("Fetching error amount of dopes:" + err);
-      //     });
-      alert("Nhận đơn thành công");
+      fetch("https://localhost:6969/Order/ReceiveOrder?userId="+userID+"&orderid="+order.id)
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          throw res;
+        })
+        .then((data) => {
+          if (data == 1) alert("Nhận đơn hàng thành công!");
+          else alert("Nhận đơn hàng thất bại!");
+        })
+        .catch((err) => {
+          console.error("Post receive api wrong:" + err);
+        });
     }
-
-    // res= res.json();
-    // if(res.status==='true'){
-    //   alert('Gửi đăng ký thành công')
-    // }
-    // else {
-    //   alert('Gửi đăng ký thất bại')
-    // }
   }
   return (
     <div className={styles.container} style={{ margin: "0" }}>
@@ -203,11 +176,24 @@ export default function GetOrder() {
       userName: "vịt con",
     },
   ];
-  useEffect(() => {
-    console.log(localStorage.getItem('user').id);
-    fetch('https://localhost:6969/Order/GetOrder?userId='+localStorage.getItem('user').id+'&filterType=1&page=1&size=10')  
+
+  const [orders, setOrders] = useState([]);
+
+  //local storage
+  const userStr = localStorage.getItem('user');
+  const userObject = JSON.parse(userStr);
+
+  useEffect(() => {  
+    fetch('https://localhost:6969/Order/GetOrder?userId=' + userObject.id + '&filterType=1&page=1&size=10')
+      .then(res => {
+        if (res.ok) return res.json()
+        throw res
+      })
+      .then(data => setOrders(data.data))
+      .catch(err => {
+        console.error('Fetching order error: ' + err);
+      })
   }, [])
-  const [orders, setOrders] = useState([ordersRaw]);
   const handlePageClick = (event) => {
     console.log(`User requested page number ${event.selected}`);
   };
@@ -222,9 +208,14 @@ export default function GetOrder() {
         </div>
       </div>
 
-      {ordersRaw.map((o, key) => {
-        return OrderDetail(o);
-      })}
+      {
+        orders.length > 0 ?
+          (orders.map((o, key) => {
+            return OrderDetail(o, userObject.id);
+          }))
+          :
+          <div>Không có data để hiển thị</div>
+      }
       <nav aria-label="Page navigation example">
         <ReactPaginate
           nextLabel="next >"

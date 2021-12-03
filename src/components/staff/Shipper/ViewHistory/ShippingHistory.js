@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import styles from "../../../layout/Order/Order.module.css";
 import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -221,10 +221,21 @@ export default function ShippingHistory() {
     },
   ];
   const [orders, setOrders] = useState([ordersRaw]);
-
+  const user= JSON.parse(localStorage.getItem('user'))
+  useEffect(()=>{
+    fetch('https://localhost:6969/Order/GetHistory?userId='+user.id+'&page=1&size=10')
+    .then(res=>{
+      if(res.ok) return res.json()
+      throw res
+    })
+    .then(data=> setOrders(data.data))
+    .catch(err=>{
+      console.log('Fetching order in shipping history error: '+err)
+    })
+  },[])
   return (
     <div>
-      {ordersRaw.map((o, key) => {
+      {orders.map((o, key) => {
         return OrderDetail(o);
       })}
 
