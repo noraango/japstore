@@ -1,11 +1,10 @@
 import React from "react";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import styles from "../../../layout/Order/Order.module.css";
 import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatVND } from "../../../../controller/constants";
 
-const OrderDetail = (order) => {
+const OrderDetail = (props) => {
   const [show, setShow] = useState(false);
   const [cancel, setCancel] = useState(false);
   function getOrder() {
@@ -44,14 +43,6 @@ const OrderDetail = (order) => {
       //     });
       alert("Nhận đơn thành công");
     }
-
-    // res= res.json();
-    // if(res.status==='true'){
-    //   alert('Gửi đăng ký thành công')
-    // }
-    // else {
-    //   alert('Gửi đăng ký thất bại')
-    // }
   }
   return (
     <div className={styles.container} style={{ margin: "0" }}>
@@ -64,14 +55,22 @@ const OrderDetail = (order) => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Mã Đơn Hàng : JapStore - {order.id}
+            Mã Đơn Hàng : JapStore - {props.data.order.id}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Tên Khách Hàng: {order.userName}</p>
-          <p>Số lượng sản phẩm: {order.product.length}</p>
           <p>
-            {order.product.map((pro) => {
+            Tên Khách Hàng:{" "}
+            {props.data.user.lastName +
+              " " +
+              props.data.user.middleName +
+              " " +
+              props.data.user.firstName}{" "}
+          </p>
+          <p>Số lượng sản phẩm: {props.data.order.quantity}</p>
+          <p>
+            san pham - so luong
+            {/* {order.product.map((pro) => {
               return (
                 <div>
                   <p>
@@ -79,9 +78,9 @@ const OrderDetail = (order) => {
                   </p>
                 </div>
               );
-            })}
+            })} */}
           </p>
-          <p>Giá Đơn Hàng: {order.orderPrice}</p>
+          <p>Giá Đơn Hàng: {props.data.order.price}</p>
         </Modal.Body>
       </Modal>
       <Container className={styles.card}>
@@ -119,7 +118,7 @@ const OrderDetail = (order) => {
                 style={{ justifyContent: "end" }}
               >
                 <span className={styles.sts} style={{ color: "white" }}>
-                  {"Mã Đơn Hàng: JapStore - " + order.id}
+                  {"Mã Đơn Hàng: JapStore - " + props.data.order.id}
                 </span>
               </Col>
             </Row>
@@ -129,17 +128,17 @@ const OrderDetail = (order) => {
         <Row style={{ borderTop: "2px solid red" }}>
           <Col>
             <p style={{ margin: "12px 30px" }}>
-              Địa chỉ giao hàng: {order.district} - {order.province}
+              Địa chỉ giao hàng: {props.data.order.address}
             </p>
             <p style={{ margin: "12px 30px" }}>
-              Tên Khách Hàng: {order.userName}
+              Tên Khách Hàng: {props.data.user.firstName}
             </p>
           </Col>
           <Col>
             <span className={styles.vl}>
               <small style={{ margin: "0 50px" }}>Giá Trị Đơn Hàng</small>
               <h5 style={{ color: "crimson" }}>
-                {formatVND(order.orderPrice)}
+                {formatVND(props.data.order.price)}
               </h5>
             </span>
             <p style={{ marginRight: "40px ", textAlign: "right" }}>
@@ -149,7 +148,10 @@ const OrderDetail = (order) => {
         </Row>
         <Row>
           <Col>
-            <p style={{ margin: "12px 30px" }}>Ngày giao hàng: 1-1-1111</p>
+            <p style={{ margin: "12px 30px" }}>
+              Ngày giao hàng: {props.data.order.earliestDeliveryDate}-
+              {props.data.order.latestDeliveryDate}
+            </p>
           </Col>
           <Col className={styles.vl}>
             <button
@@ -220,24 +222,34 @@ export default function ShippingHistory() {
       userName: "vịt con",
     },
   ];
-  const [orders, setOrders] = useState([ordersRaw]);
-  const user= JSON.parse(localStorage.getItem('user'))
-  useEffect(()=>{
-    fetch('https://localhost:6969/Order/GetHistory?userId='+user.id+'&page=1&size=10')
-    .then(res=>{
-      if(res.ok) return res.json()
-      throw res
-    })
-    .then(data=> setOrders(data.data))
-    .catch(err=>{
-      console.log('Fetching order in shipping history error: '+err)
-    })
-  },[])
+  const [orders, setOrders] = useState([]);
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    fetch(
+      "https://localhost:6969/Order/GetHistory?userId=" +
+        user.id +
+        "&page=1&size=10"
+    )
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw res;
+      })
+      .then((data) => setOrders(data.data))
+      .catch((err) => {
+        console.error("Fetching list orders history error: " + err);
+      });
+  }, []);
   return (
     <div>
-      {orders.map((o, key) => {
-        return OrderDetail(o);
-      })}
+      {orders.length > 0 ? (
+        orders.map((o, key) => {
+          // return (<div>{o.order.id}</div>)
+          return <OrderDetail data={o} />;
+        })
+      ) : (
+        <div>Không có dữ liệu để hiển thị</div>
+      )}
 
       <Pagination>{items}</Pagination>
     </div>
