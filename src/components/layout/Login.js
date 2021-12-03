@@ -5,7 +5,10 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import authService from "../../services/auth.Service";
 import styles from "./Login.module.css";
-export default function Login() {
+import { setLoginSuccess } from "../../action";
+import {connect} from 'react-redux'
+
+const Login=(props)=> {
   let user = JSON.parse(localStorage.getItem("user"));
   let history = useHistory();
   if (user != null) {
@@ -36,6 +39,7 @@ export default function Login() {
       setMsgStyle(`${styles.show}`);
       return;
     }
+    props.setLoginSuccess({name:'1234'})
     authService
       .login(email, password)
       .then((res) => {
@@ -43,6 +47,7 @@ export default function Login() {
           console.log("success");
           setMsgStyle(`${styles.hide}`);
           localStorage.setItem("user", JSON.stringify(res.data.user));
+          
           window.location.reload();
         } else {
           setMsg("Thông tin đăng nhập không chính xác");
@@ -107,3 +112,14 @@ export default function Login() {
     </div>
   );
 }
+const mapStateToProps= state =>{
+  return{
+    authenticate: state.authenticate
+  }
+}
+const mapDispatchToProps= dispatch =>{
+  return{
+    setLoginSuccess: (user)=>dispatch(setLoginSuccess(true, user))
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps) (Login);

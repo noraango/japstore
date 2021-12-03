@@ -4,7 +4,8 @@ import Landing from "../common/Landing/Landing";
 import app from "../../App.module.css";
 import productService from "../../services/product.service";
 import styles from "./Home.module.css";
-export default function Home() {
+import { connect } from "react-redux";
+function Home(props) {
   const categories = [
     {
       id: "1",
@@ -36,6 +37,8 @@ export default function Home() {
   }
   return (
     <div className={`${app.commonContainer}`}>
+      {console.log(props.authenticate.isLoginSuccess)}
+      {console.log(props.authenticate.user)}
       <Banner />
       <div className={styles.productList}>
         <h1>{categories[0].categoryName}</h1>
@@ -52,3 +55,9 @@ export default function Home() {
     </div>
   );
 }
+const mapStateToProps=(state)=>{
+  return{
+    authenticate: state.authenticate
+  }
+}
+export default connect(mapStateToProps)(Home)
