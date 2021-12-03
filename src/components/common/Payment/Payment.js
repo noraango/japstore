@@ -13,10 +13,10 @@ export default function Payment(props) {
     fetchCartItems();
     fetchProvince();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  let user = JSON.parse(localStorage.getItem("user"));
   function fetchCartItems() {
-    let user = JSON.parse(localStorage.getItem("user"));
     cartService
-      .getCart(user.id)
+      .getCart(user)
       .then((res) => {
         setItems(res.data);
         console.log(res.data);
@@ -66,7 +66,6 @@ export default function Payment(props) {
   function onBack() {
     history.push("/cart");
   }
-
   function onChangeEmail(event) {
     setInfor({ ...infor, email: event.target.value });
     checkEmail();
@@ -266,7 +265,7 @@ export default function Payment(props) {
                         name="phone"
                         onChange={onChangePhone}
                         value={infor.phoneNumber}
-                        placeholder="số điện thoại"
+                        placeholder="Số điện thoại"
                       />
                       <div className="invalid-feedback">
                         {error.phoneNumber}

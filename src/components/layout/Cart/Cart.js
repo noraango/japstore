@@ -6,8 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import imageService from "../../../services/imageService";
 import { useHistory } from "react-router";
+import authService from "../../../services/auth.Service";
 export default function Cart() {
-  let user = JSON.parse(localStorage.getItem("user"));
+  let user = authService.getUser();
   const minQuantity = 1,
     maxQuantity = 99;
   const [cartitems, setCartitems] = useState([]);
@@ -30,23 +31,29 @@ export default function Cart() {
     updateQuantity(productId, quantity);
   }
   function retrieveCartItems() {
-    cartService
-      .getCart(user.id)
-      .then((res) => {
-        setCartitems(res.data);
-        let sum = 0;
-        res.data.forEach((e) => {
-          sum += e.price * e.quantity;
+    if (user) {
+      cartService
+        .getCart(user.id)
+        .then((res) => {
+          setCartitems(res.data);
+          let sum = 0;
+          res.data.forEach((e) => {
+            sum += e.price * e.quantity;
+          });
+          console.log(res.data);
+          setTotalPrice(sum);
+        })
+        .catch((e) => {
+          console.log(e);
         });
-        setTotalPrice(sum);
-        // console.log(res.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    } else {
+      let cart = cartService.getLocalCart();
+      console.log(cart);
+      setCartitems(cart);
+    }
   }
   function updateQuantity(productId, quantity) {
-    console.log(productId);
+    // console.log(productId);
     cartService
       .updateCartItem(productId, user.id, quantity)
       .then((res) => {
