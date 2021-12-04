@@ -40,29 +40,39 @@ export default function Cart() {
           res.data.forEach((e) => {
             sum += e.price * e.quantity;
           });
-          console.log(res.data);
           setTotalPrice(sum);
+          // console.log(res.data);
         })
         .catch((e) => {
           console.log(e);
         });
     } else {
       let cart = cartService.getLocalCart();
-      console.log(cart);
+      // console.log(cart);
       setCartitems(cart);
+      let sum = 0;
+      cart.forEach((e) => {
+        sum += e.price * e.quantity;
+      });
+      setTotalPrice(sum);
     }
   }
   function updateQuantity(productId, quantity) {
     // console.log(productId);
-    cartService
-      .updateCartItem(productId, user.id, quantity)
-      .then((res) => {
-        // console.log(res.data);
-        retrieveCartItems();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (user) {
+      cartService
+        .updateCartItem(productId, user.id, quantity)
+        .then((res) => {
+          // console.log(res.data);
+          retrieveCartItems();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      cartService.updateLocalCartItem(productId, quantity);
+      retrieveCartItems();
+    }
   }
   function onClickDeleteCartItem(cartItem) {
     let user = JSON.parse(localStorage.getItem("user"));

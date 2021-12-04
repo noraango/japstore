@@ -8,6 +8,17 @@ class CartService {
       "/cart/update/" + productId + "/" + userId + "/" + quantity
     );
   }
+  updateLocalCartItem(productId, quantity) {
+    let cart = this.getLocalCart();
+    let newCart = [];
+    cart.forEach((element) => {
+      if (element.id === productId) {
+        element.quantity = quantity;
+      }
+      newCart.push(element);
+    });
+    localStorage.setItem("cart", JSON.stringify(newCart));
+  }
   addCart(productId, userId, quantity) {
     return http.post("/cart/add/" + productId + "/" + userId + "/" + quantity);
   }
