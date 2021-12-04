@@ -1,4 +1,5 @@
 import React from "react";
+import { formatVND } from "../../../controller/constants";
 import imageService from "../../../services/imageService";
 
 export default function ProductItem({ productItem }) {
@@ -15,7 +16,7 @@ export default function ProductItem({ productItem }) {
       </div>
       <div className="col-4 cart-body">
         <p>Số lượng : {productItem.quantity}</p>
-        <p>{productItem.price}</p>
+        <p>{formatVND(productItem.price)}đ</p>
       </div>
     </div>
   );

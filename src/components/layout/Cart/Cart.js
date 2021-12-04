@@ -76,14 +76,19 @@ export default function Cart() {
   }
   function onClickDeleteCartItem(cartItem) {
     let user = JSON.parse(localStorage.getItem("user"));
-    cartService
-      .deleteCartItem(cartItem.id, user.id)
-      .then((res) => {
-        retrieveCartItems();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (user) {
+      cartService
+        .deleteCartItem(cartItem.id, user.id)
+        .then((res) => {
+          retrieveCartItems();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      cartService.deleteLocalCartItem(cartItem.id);
+      retrieveCartItems();
+    }
   }
   function redirectPayment() {
     history.push("/payment");

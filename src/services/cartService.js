@@ -25,6 +25,16 @@ class CartService {
   deleteCartItem(productId, userId) {
     return http.delete("/cart/delete/" + productId + "/" + userId);
   }
+  deleteLocalCartItem(productId) {
+    let cart = this.getLocalCart();
+    let newCart = [];
+    cart.forEach((element) => {
+      if (element.id != productId) {
+        newCart.push(element);
+      }
+    });
+    localStorage.setItem("cart", JSON.stringify(newCart));
+  }
   getLocalCart() {
     let cart = localStorage.getItem("cart");
     if (cart) {

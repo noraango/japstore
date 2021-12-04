@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import { formatVND } from "../../../controller/constants";
 import cartService from "../../../services/cartService";
 import locationService from "../../../services/locationService";
+import orderService from "../../../services/orderService";
 import "./Payment.css";
 import ProductOverview from "./ProductOverview";
 
@@ -15,22 +17,37 @@ export default function Payment(props) {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   let user = JSON.parse(localStorage.getItem("user"));
   function fetchCartItems() {
-    cartService
-      .getCart(user)
-      .then((res) => {
-        setItems(res.data);
-        console.log(res.data);
-      })
-      .catch((e) => {
-        console.log(e);
+    if (user) {
+      cartService
+        .getCart(user)
+        .then((res) => {
+          setItems(res.data);
+          let sum = 0;
+          res.data.forEach((e) => {
+            sum += e.price * e.quantity;
+          });
+          setTotal(sum);
+          // console.log(res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      let cart = cartService.getLocalCart();
+      setItems(cart);
+      let sum = 0;
+      cart.forEach((e) => {
+        sum += e.price * e.quantity;
       });
+      setTotal(sum);
+    }
   }
   function fetchProvince() {
     locationService
       .getProvinces()
       .then((res) => {
         setProvinces(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       })
       .catch(() => {});
   }
@@ -51,7 +68,8 @@ export default function Payment(props) {
     location: "Địa chỉ không được để trống",
   });
   const [district, setDistrict] = useState([]);
-
+  const [total, setTotal] = useState(0);
+  const [shippingFee, setShippingFee] = useState(15000);
   const [isSubmit, setIsSubmit] = useState(false);
   const [isHasCity, setIsHasCity] = useState(true);
   /*
@@ -146,6 +164,14 @@ export default function Payment(props) {
   }
   function onSubmit() {
     setIsSubmit(true);
+    orderService
+      .createOrder(user,infor)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
   return (
     <div className={`container`}>
@@ -171,11 +197,7 @@ export default function Payment(props) {
                     placeholder="Nhập mã giảm giá"
                   />
                 </form>
-                <button
-                  type="submit"
-                  className="btn btn-check-coupons"
-                  onClick="fnSubmit()"
-                >
+                <button type="submit" className="btn btn-check-coupons">
                   Kiểm Tra
                 </button>
                 <form id="toSubmit" method="POST"></form>
@@ -183,15 +205,17 @@ export default function Payment(props) {
 
               <div className="summary-second-section">
                 <div className="summary-text">
-                  <span>Tạm tính:</span> <span>10000000đ</span>
+                  <span>Tạm tính:</span> <span>{formatVND(total)}đ</span>
                 </div>
                 <div className="summary-text">
-                  <span>Chi phí vận chuyển:</span> <span>10000000đ</span>
+                  <span>Chi phí vận chuyển:</span>{" "}
+                  <span>{formatVND(shippingFee)}đ</span>
                 </div>
               </div>
               <div className="summary-section lg-show">
                 <div className="summary-text">
-                  <span>Tổng cộng:</span> <span>10000000đ</span>
+                  <span>Tổng cộng:</span>{" "}
+                  <span>{formatVND(total + shippingFee)}đ</span>
                 </div>
                 <div className="summary-buttom">
                   {/* <button
@@ -207,12 +231,12 @@ export default function Payment(props) {
                   >
                     <span>Đặt hàng</span>
                   </button> */}
-                  <a href onClick={onBack}>
+                  <a onClick={onBack}>
                     <button type="submit" className="btn button-back">
                       <span>Quay về giỏ hàng</span>
                     </button>
                   </a>
-                  <a href onClick={onSubmit}>
+                  <a onClick={onSubmit}>
                     <button type="submit" className="btn  button-next">
                       <span>Đặt hàng</span>
                     </button>
@@ -227,7 +251,7 @@ export default function Payment(props) {
                 <h4>Thông tin mua hàng</h4>
                 <form id="input">
                   <div className="form-group">
-                    <label for="email">Email address</label>
+                    <label>Email address</label>
                     <input
                       type="email"
                       className={`form-control  ${
@@ -242,7 +266,7 @@ export default function Payment(props) {
                   </div>
                   <div className="row ">
                     <div className="form-group col col-md-6 col-12  double-col">
-                      <label for="name">Họ tên</label>
+                      <label>Họ tên</label>
                       <input
                         type="email"
                         className={`form-control  ${
@@ -256,7 +280,7 @@ export default function Payment(props) {
                       <div className="invalid-feedback">{error.name}</div>
                     </div>
                     <div className="form-group  col col-md-6  col-12 pr-none">
-                      <label for="phone">Số điện thoại</label>
+                      <label>Số điện thoại</label>
                       <input
                         type="email"
                         className={`form-control  ${
@@ -274,7 +298,7 @@ export default function Payment(props) {
                   </div>
                   <div className="row ">
                     <div className="form-group col col-md-6  col-12  double-col">
-                      <label for="city">Tỉnh,Thành phố</label>
+                      <label>Tỉnh,Thành phố</label>
                       <select
                         className={`form-control  ${
                           isSubmit && checkCity() ? "is-invalid" : ""
@@ -296,17 +320,18 @@ export default function Payment(props) {
                       className="form-group col col-md-6  col-12 pr-none"
                       id="other-take-hide"
                     >
-                      <label for="county">Quận,huyện</label>
+                      <label>Quận,huyện</label>
                       <select
                         className={`form-control  ${
                           isSubmit && checkDistrict() ? "is-invalid" : ""
                         }`}
                         name="county"
                         disabled={checkCity}
+                        onChange={onChangeDistrict}
                       >
                         <option value="">Chọn Quận</option>
                         {district.map((location) => (
-                          <option value={location.wardId}>
+                          <option value={location.districtId}>
                             {location.name}
                           </option>
                         ))}
@@ -316,7 +341,7 @@ export default function Payment(props) {
                   </div>
 
                   <div className="form-group">
-                    <label for="address">Địa Chỉ</label>
+                    <label>Địa Chỉ</label>
                     <input
                       type="email"
                       className={`form-control  ${
@@ -330,7 +355,7 @@ export default function Payment(props) {
                     <div className="invalid-feedback">{error.location}</div>
                   </div>
                   <div className="form-group">
-                    <label for="note">Ghi Chú</label>
+                    <label>Ghi Chú</label>
                     <textarea
                       className={`form-control `}
                       name="note"
@@ -349,10 +374,7 @@ export default function Payment(props) {
                             className="custom-control-input"
                             id="customCheck1"
                           />
-                          <label
-                            className="custom-control-label"
-                            for="customCheck1"
-                          >
+                          <label className="custom-control-label">
                             <span>Giao hàng trong giờ hành chính</span>
                           </label>
                         </div>
