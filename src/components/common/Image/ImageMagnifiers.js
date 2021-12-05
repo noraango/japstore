@@ -7,13 +7,10 @@ export default function ImageMagnifiers({ linkImage }) {
     setImages(createImages());
   }, []);
   function createImages() {
-    console.log(linkImage);
-
     const list = linkImage.map((link) => ({
       original: process.env.PUBLIC_URL + link,
       thumbnail: process.env.PUBLIC_URL + link,
     }));
-    console.log(list);
     return list;
   }
 

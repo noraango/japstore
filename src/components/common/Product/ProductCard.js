@@ -55,7 +55,7 @@ export default function ProductCard(props) {
     }
   }
   function redirectProduct() {
-    history.push("/product/1");
+    history.push("/product/" + props.data.id);
   }
   return (
     <div className={styles.productCard}>

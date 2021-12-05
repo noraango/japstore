@@ -63,7 +63,7 @@ export default function Detail(props) {
    */
 
   useEffect(() => {
-    //fetchProduct();
+    fetchProduct();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   function fetchProduct() {
     productService
@@ -71,7 +71,6 @@ export default function Detail(props) {
       .then((res) => {
         setProduct(res.data);
         console.log(res.data);
-        console.log(product);
       })
       .catch((e) => {
         console.log(e);

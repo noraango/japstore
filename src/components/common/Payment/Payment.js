@@ -4,6 +4,7 @@ import { formatVND } from "../../../controller/constants";
 import cartService from "../../../services/cartService";
 import locationService from "../../../services/locationService";
 import orderService from "../../../services/orderService";
+import MessageBox from "../MessageBox/MessageBox";
 import "./Payment.css";
 import ProductOverview from "./ProductOverview";
 
@@ -14,12 +15,26 @@ export default function Payment(props) {
   useEffect(() => {
     fetchCartItems();
     fetchProvince();
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setProvince(user.provinceId);
+      fetchDistrict(user.provinceId);
+      setInfor({
+        email: user.email,
+        name: user.fullName,
+        phoneNumber: user.phone,
+        location: user.address,
+        city: user.provinceId,
+        district: user.districtId,
+      });
+      setDistrictId(user.districtId);
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   let user = JSON.parse(localStorage.getItem("user"));
   function fetchCartItems() {
     if (user) {
       cartService
-        .getCart(user)
+        .getCart(user.id)
         .then((res) => {
           setItems(res.data);
           let sum = 0;
@@ -59,28 +74,20 @@ export default function Payment(props) {
     district: "",
     location: "",
   });
-  const [error, setError] = useState({
+  const [province, setProvince] = useState("initialState");
+  const error = {
     email: "Email không được để trống",
     name: "Tên không được để trống",
     phoneNumber: "Số điện thoại không được để trống",
     city: "Thành phố không được để trống",
     district: "Huyện không được để trống",
     location: "Địa chỉ không được để trống",
-  });
+  };
   const [district, setDistrict] = useState([]);
+  const [districtId, setDistrictId] = useState("");
   const [total, setTotal] = useState(0);
-  const [shippingFee, setShippingFee] = useState(15000);
+  const shippingFee = 15000;
   const [isSubmit, setIsSubmit] = useState(false);
-  const [isHasCity, setIsHasCity] = useState(true);
-  /*
-    Funtion
-  */
-  function onCityChange(event) {
-    if (event.target.value !== "") {
-      setIsHasCity(false);
-    }
-    //load data city
-  }
   function onBack() {
     history.push("/cart");
   }
@@ -119,6 +126,7 @@ export default function Payment(props) {
   }
   function onChangeCity(event) {
     setInfor({ ...infor, city: event.target.value });
+    setProvince(event.target.value);
     fetchDistrict(event.target.value);
     checkCity();
   }
@@ -126,7 +134,7 @@ export default function Payment(props) {
     locationService
       .getDistricts(provinceId)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setDistrict(res.data);
       })
       .catch((e) => {
@@ -142,6 +150,7 @@ export default function Payment(props) {
   }
   function onChangeDistrict(event) {
     setInfor({ ...infor, district: event.target.value });
+    setDistrictId(event.target.value);
     checkDistrict();
   }
   function checkDistrict() {
@@ -162,19 +171,30 @@ export default function Payment(props) {
       return false;
     }
   }
+  const [msg, setMsg] = useState("");
   function onSubmit() {
+    let user = JSON.parse(localStorage.getItem("user"));
     setIsSubmit(true);
     orderService
-      .createOrder(user,infor)
+      .createOrder(user, infor)
       .then((res) => {
         console.log(res);
+        if (res.data === 1) {
+          setMsg("Tạo đơn hàng thành công");
+        } else {
+          setMsg("Tạo đơn hàng thất bại");
+        }
       })
       .catch((e) => {
         console.log(e);
       });
   }
+  function redirectHome() {
+    history.push("/");
+  }
   return (
     <div className={`container`}>
+      {msg === "" ? "" : <MessageBox onClick={redirectHome}   />}
       <div id="check-out">
         <div className="row m-center">
           <div className=" order-lg-last offset-md-1  col-lg-5 container pt-4 summary">
@@ -304,10 +324,10 @@ export default function Payment(props) {
                           isSubmit && checkCity() ? "is-invalid" : ""
                         }`}
                         name="city"
-                        value={infor.city}
+                        value={province}
                         onChange={onChangeCity}
                       >
-                        <option value="">Chọn Tỉnh</option>
+                        <option>Chọn Tỉnh</option>
                         {provinces.map((location) => (
                           <option value={location.provinceId}>
                             {location.name}
@@ -327,6 +347,7 @@ export default function Payment(props) {
                         }`}
                         name="county"
                         disabled={checkCity}
+                        value={districtId}
                         onChange={onChangeDistrict}
                       >
                         <option value="">Chọn Quận</option>
