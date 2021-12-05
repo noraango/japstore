@@ -34,7 +34,7 @@ export default function RecorDetail(props) {
 
         if (data.status === true) {
           alert('Chấp nhận yêu cầu thành công!')
-          relist()
+          relist();
         }
       })
       .catch(err => {
@@ -53,7 +53,7 @@ export default function RecorDetail(props) {
       .then(data => {
         if (data.status === true) {
           alert('Hủy yêu cầu thành công!')
-          relist()
+          relist();
         }
       })
       .catch(err => {
@@ -86,7 +86,7 @@ export default function RecorDetail(props) {
           <td className='button' colSpan="2">
             <div>
               <Button onClick={()=>handleAcceptRes(props.record.request.id)}>Chấp nhận</Button>
-              <Button onClick={()=>handleRefuseRes(props.record.request.id)}>Hủy bỏ</Button>
+              <Button onClik={()=>handleRefuseRes(props.record.request.id)}>Hủy bỏ</Button>
             </div>
           </td>
         </tr>

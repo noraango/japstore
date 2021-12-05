@@ -48,7 +48,7 @@ export default function UserRole() {
         }
         throw res;
       })
-      .then((data) => setRequestList(data.data)) // sửa thành phàn 'data'->'data.data 'sau khi sửa API
+      .then((data) => setRequestList(data.data))
       .catch(err => {
         console.error('Fetching err request list: ' + err)
       })

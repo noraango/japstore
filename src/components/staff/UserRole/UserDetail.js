@@ -16,7 +16,7 @@ const UserDetail = (props) => {
                 throw res;
             })
             .then((data) => {
-                props.relist(data.data);//sua data->data sau khi api done
+                props.relist(data.data);
             })
             .catch((err) => {
                 console.error("Fetching error user account list:" + err);
@@ -96,7 +96,7 @@ const UserDetail = (props) => {
                     <td className='button' colSpan="2">
                         <div>
                             <Button onClick={()=>handleActiveAccount(props.record.userId)}>Mở hoạt động</Button>
-                            <Button onClick={()=>handleDisactiveAccount(props.record.userId)}>Ngừng hoạt động</Button>
+                            <Button onClik={()=>handleDisactiveAccount(props.record.userId)}>Ngừng hoạt động</Button>
                         </div>
                     </td>
                 </tr>
