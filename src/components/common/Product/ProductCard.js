@@ -33,14 +33,26 @@ export default function ProductCard(props) {
   }
   function onClickAddCart() {
     let user = JSON.parse(localStorage.getItem("user"));
-    cartService
-      .addCart(props.data.id, user.id, quantity)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (user) {
+      cartService
+        .addCart(props.data.id, user.id, quantity)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      console.log(props.data);
+      var item = {
+        id: props.data.id,
+        name: props.data.name,
+        displayImageName: props.data.displayImageName,
+        quantity: quantity,
+        price: props.data.price,
+      };
+      cartService.addItemToLocalCart(item);
+    }
   }
   function redirectProduct() {
     history.push("/product/1");

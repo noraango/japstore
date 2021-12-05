@@ -1,11 +1,11 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../../../layout/Order/Order.module.css";
 import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatVND } from "../../../../controller/constants";
 
-const OrderDetail = (order) => {
+const OrderDetail = ({order}) => {
   const [show, setShow] = useState(false);
   const [cancel, setCancel] = useState(false);
   function getOrder() {
@@ -273,11 +273,28 @@ export default function Ship() {
     },
   ];
   const [orders, setOrders] = useState([ordersRaw]);
-
+  //local storage user
+  const userStr = localStorage.getItem("user");
+  const userObject = JSON.parse(userStr);
+  useEffect(() => {
+    fetch(
+      "https://localhost:6969/Order/GetOrder?userId=" +
+        userObject.id +
+        "&filterType=2&page=1&size=10"
+    )
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw res;
+      })
+      .then((data) => setOrders(data.data))
+      .catch((err) => {
+        console.error("Fetching order error: " + err);
+      });
+  }, [])
   return (
     <div>
       {ordersRaw.map((o, key) => {
-        return OrderDetail(o);
+        return <OrderDetail order={o}/>;
       })}
 
       <Pagination>{items}</Pagination>

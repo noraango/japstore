@@ -6,5 +6,11 @@ class AuthService {
     );
   }
   register(data) {}
+  getUser() {
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      return user;
+    }
+  }
 }
 export default new AuthService();

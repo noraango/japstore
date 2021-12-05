@@ -28,7 +28,6 @@ const productDetail = (product) => {
           </Col>
         </div>
       </Col>
-
       <Col>
       </Col>
       <Col style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
@@ -81,7 +80,6 @@ const OrderDetail = (order) => {
               </Col>
             </Row>
           </Col>
-
           <Col xs sm md lg='6'>
             <Row>
               <Col></Col>
@@ -90,7 +88,6 @@ const OrderDetail = (order) => {
                   {order.status}
                 </span>
               </Col>
-
               <Col className={styles.col} style={{ borderLeft: '3px solid red' }}>
                 <span className={styles.sts} style={{ color: 'crimson', textTransform: 'uppercase' }}>
                   {order.status}

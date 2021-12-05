@@ -1,58 +1,67 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../../../layout/Order/Order.module.css";
 import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatVND } from "../../../../controller/constants";
 import ReactPaginate from "react-paginate";
-const OrderDetail = (order) => {
+const OrderDetail = (props) => {
   const [show, setShow] = useState(false);
-
+  const relist = () => {
+    fetch(
+      "https://localhost:6969/Order/GetOrder?userId=" +
+        props.userId +
+        "&filterType=2&page=1&size=10"
+    )
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw res;
+      })
+      .then((data) => props.relist(data.data))
+      .catch((err) => {
+        console.error("Fetching order error: " + err);
+      });
+  };
   function getOrder() {
     if (window.confirm("Nhận đơn hàng?")) {
-      //   fetch(
-      //     "https://localhost:6969/User/ShipperResgister?CMTCode=" +
-      //       CMTCode +
-      //       "&UserId=" +
-      //       UserId +
-      //       "&provideId=" +
-      //       provinceId +
-      //       "&districtId=" +
-      //       districtId,
-      //     {
-      //       method: "POST",
-      //       body: JSON.stringify(request),
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //         Accept: "*/*",
-      //       },
-      //     }
-      //   )
-      //     .then((res) => {
-      //       if (res.ok) {
-      //         return res.json();
-      //       }
-      //       throw res;
-      //     })
-      //     .then((data) => {
-      //       console.log("Status:" + data.status);
-      //       if (data.status == true) alert("Đăng ký thành công!");
-      //       else alert("Đăng ký không thành công!");
-      //     })
-      //     .catch((err) => {
-      //       console.error("Fetching error amount of dopes:" + err);
-      //     });
-      alert("Nhận đơn thành công");
+      fetch(
+        "https://localhost:6969/Order/ReceiveOrder?userId=" +
+          props.userId +
+          "&orderid=" +
+          props.data.order.id
+      )
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          throw res;
+        })
+        .then((data) => {
+          if (data == 1) {
+            alert("Nhận đơn hàng thành công!");
+            relist();
+            setShow(false);
+          } else alert("Nhận đơn hàng thất bại!");
+        })
+        .catch((err) => {
+          console.error("Post receive api wrong:" + err);
+        });
     }
-
-    // res= res.json();
-    // if(res.status==='true'){
-    //   alert('Gửi đăng ký thành công')
-    // }
-    // else {
-    //   alert('Gửi đăng ký thất bại')
-    // }
   }
+  const [orderD, setOrderD] = useState([]);
+  const listDetailOrder = async (idOrder) => {
+    setShow(true);
+    fetch("https://localhost:6969/Order/ViewOrder?orderId=" + idOrder)
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw res;
+      })
+      .then((data) => setOrderD(data.listPro))
+      .catch((err) => {
+        console.error("Fetching order detail error: " + err);
+      });
+    console.log(orderD);
+  };
   return (
     <div className={styles.container} style={{ margin: "0" }}>
       <Modal
@@ -64,27 +73,37 @@ const OrderDetail = (order) => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Mã Đơn Hàng : JapStore - {order.id}
+            Mã Đơn Hàng : JapStore - {props.data.order.id}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Tên Khách Hàng: {order.userName}</p>
-          <p>Số lượng sản phẩm: {order.product.length}</p>
           <p>
-            {order.product.map((pro) => {
+            Tên Khách Hàng:{" "}
+            {props.data.user.lastName +
+              " " +
+              props.data.user.middleName +
+              " " +
+              props.data.user.firstName}{" "}
+          </p>
+          <p>
+            Số lượng sản phẩm:
+            {orderD.length}
+          </p>
+          <div>
+            {orderD.map((pro) => {
               return (
                 <div>
                   <p>
-                    {pro.name} - số lượng : {pro.quanity}
+                    {pro.name} - số lượng : {pro.quantity}
                   </p>
                 </div>
               );
             })}
-          </p>
-          <p>Giá Đơn Hàng: {order.orderPrice}</p>
+          </div>
+          <p>Giá Đơn Hàng: {orderD.price}</p>
         </Modal.Body>
         <Modal.Footer>
-          <button onClick={getOrder}>Nhận Đơn Hàng</button>
+          <button onClick={() => getOrder()}>Nhận Đơn Hàng</button>
         </Modal.Footer>
       </Modal>
       <Container className={styles.card}>
@@ -100,7 +119,7 @@ const OrderDetail = (order) => {
                     textDecoration: "none",
                     marginLeft: "20px",
                   }}
-                  onClick={() => setShow(true)}
+                  onClick={() => listDetailOrder(props.data.order.id)}
                 >
                   Xem Chi tiết
                 </button>
@@ -122,7 +141,7 @@ const OrderDetail = (order) => {
                 style={{ justifyContent: "end" }}
               >
                 <span className={styles.sts} style={{ color: "white" }}>
-                  {"Mã Đơn Hàng: JapStore - " + order.id}
+                  {"Mã Đơn Hàng: JapStore - " + props.data.order.id}
                 </span>
               </Col>
             </Row>
@@ -132,17 +151,17 @@ const OrderDetail = (order) => {
         <Row style={{ borderTop: "2px solid red" }}>
           <Col>
             <p style={{ margin: "12px 30px" }}>
-              Địa chỉ giao hàng: {order.district} - {order.province}
+              Địa chỉ giao hàng: {props.data.order.address}
             </p>
             <p style={{ margin: "12px 30px" }}>
-              Tên Khách Hàng: {order.userName}
+              Tên Khách Hàng: {props.data.user.firstName}
             </p>
           </Col>
           <Col>
             <span className={styles.vl}>
               <small style={{ margin: "0 50px" }}>Giá Trị Đơn Hàng</small>
               <h5 style={{ color: "crimson" }}>
-                {formatVND(order.orderPrice)}
+                {formatVND(props.data.order.price)}
               </h5>
             </span>
             <p style={{ marginRight: "40px ", textAlign: "right" }}>
@@ -203,7 +222,28 @@ export default function GetOrder() {
       userName: "vịt con",
     },
   ];
-  const [orders, setOrders] = useState([ordersRaw]);
+
+  const [orders, setOrders] = useState([]);
+
+  //local storage user
+  const userStr = localStorage.getItem("user");
+  const userObject = JSON.parse(userStr);
+
+  useEffect(() => {
+    fetch(
+      "https://localhost:6969/Order/GetOrder?userId=" +
+        userObject.id +
+        "&filterType=2&page=1&size=10"
+    )
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw res;
+      })
+      .then((data) => setOrders(data.data))
+      .catch((err) => {
+        console.error("Fetching order error: " + err);
+      });
+  }, []);
   const handlePageClick = (event) => {
     console.log(`User requested page number ${event.selected}`);
   };
@@ -218,9 +258,15 @@ export default function GetOrder() {
         </div>
       </div>
 
-      {ordersRaw.map((o, key) => {
-        return OrderDetail(o);
-      })}
+      {orders.length > 0 ? (
+        orders.map((o, key) => {
+          return (
+            <OrderDetail data={o} userId={userObject.id} relist={setOrders} />
+          );
+        })
+      ) : (
+        <div>Không có data để hiển thị</div>
+      )}
       <nav aria-label="Page navigation example">
         <ReactPaginate
           nextLabel="next >"

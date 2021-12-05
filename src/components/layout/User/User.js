@@ -47,14 +47,35 @@ const FormError = (props) => {
 
   return (<div style={{ color: 'red' }}>{props.errorMessage}</div>)
 }
-const FormNoti=(props)=>{
-   /* nếu isHidden = true, return null ngay từ đầu */
-   if (!props.isHidden) { return null; }
-   else{
-    return(<div style={{ color: props.color }}>Đã tiêm {props.data} mũi</div>)
-   } 
+const FormNoti = (props) => {
+  /* nếu isHidden = true, return null ngay từ đầu */
+  if (!props.isHidden) { return null; }
+  else {
+    return (<div style={{ color: props.color }}>Đã tiêm {props.data} mũi</div>)
+  }
 }
-const sellerInfo = (user) => {
+
+
+
+const getRoleInfo = (userId, setRoleInfo) => {
+  fetch('https://localhost:6969/User/ViewRole?userId=' + userId)
+    .then(res => {
+      if (res.ok) return res.json();
+      throw res
+    })
+    .then(data => {
+      setRoleInfo({
+        cmTCode: data.cmTCode,
+        city: data.city,
+        district: data.district
+      })
+    }).catch(err => {
+      console.error('Fetch Role Information error:' + err)
+    })
+}
+
+
+const sellerInfo = (user, roleInfo) => {
   return (
     <>
       <div style={{
@@ -78,6 +99,7 @@ const sellerInfo = (user) => {
                       type="text"
                       id="fname"
                       name="fname"
+                      value={roleInfo ? roleInfo.cmTCode : ''}
                     />
                   </div>
                 </div>
@@ -97,7 +119,7 @@ const sellerInfo = (user) => {
                       type="text"
                       id="fname"
                       name="fname"
-                      value={user.email}
+                      value={roleInfo ? roleInfo.district + ', ' + roleInfo.city : ''}
                     />
                   </div>
                 </div>
@@ -111,7 +133,7 @@ const sellerInfo = (user) => {
   )
 }
 
-const shipperInfo = (user) => {
+const shipperInfo = (user, roleInfo) => {
   return (
     <>
       <div style={{
@@ -135,6 +157,7 @@ const shipperInfo = (user) => {
                       type="text"
                       id="fname"
                       name="fname"
+                      value={roleInfo ? roleInfo.cmTCode : ''}
                     />
                   </div>
                 </div>
@@ -154,7 +177,7 @@ const shipperInfo = (user) => {
                       type="text"
                       id="fname"
                       name="fname"
-                      value={user.email}
+                      value={roleInfo ? roleInfo.district + ', ' + roleInfo.city : ''}
                     />
                   </div>
                 </div>
@@ -202,8 +225,8 @@ const ShipperRegister = (props) => {
     },
   ]
   const [district, setDistrict] = useState(districtRaw);
-  const[color, setColor]= useState('black');
-  
+  const [color, setColor] = useState('black');
+
   const hanldeCheckID = (id) => {
     console.log('CCCD: ' + id)
     fetch('https://localhost:6969/DataRaw/checkCMT?CMTCode=' + id)
@@ -219,7 +242,7 @@ const ShipperRegister = (props) => {
       .catch(err => {
         console.error('Fetching error amount of dopes:' + err)
       })
-      
+
     if (data === 1) {
       setData(1);
       setDisplay(true)
@@ -230,12 +253,12 @@ const ShipperRegister = (props) => {
       setDisplay(true)
       setColor('green')
     }
-    else if(data === 0) {
+    else if (data === 0) {
       setData(0);
       setDisplay(true)
       setColor('red')
     }
-    else{
+    else {
       setData(-1);
       setDisplay(false)
     }
@@ -573,7 +596,17 @@ const User = () => {
   const [modalShipperShow, setModalShipperShow] = useState(false);
   const [modalSellerShow, setModalSellerShow] = useState(false);
 
+  const [roleInfo, setRoleInfo] = useState(
+    {
+      cmTCode: '3434',
+      city: '5454',
+      district: '5454'
+    }
+  )
+
   const displayExtraInfo = (user) => {
+    getRoleInfo(user.id, setRoleInfo)
+
     let displayComponent
     switch (user.role) {
       case 'Admin':
@@ -582,11 +615,11 @@ const User = () => {
         break;
       case 'Shipper':
         displayComponent =
-          (shipperInfo(user))
+          (shipperInfo(user, roleInfo))
         break;
       case 'Seller':
         displayComponent =
-          (sellerInfo(user))
+          (sellerInfo(user, roleInfo))
         break;
       default:
         return (
@@ -757,7 +790,6 @@ const User = () => {
 
         <div className={styles.cardInfo}>
           {displayExtraInfo(user)}
-          {/* {displayExtraInfo('Seller')} */}
 
         </div>
 
