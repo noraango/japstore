@@ -3,45 +3,20 @@ import { useState, useEffect } from "react";
 import styles from "../../../layout/Order/Order.module.css";
 import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
 import { formatVND } from "../../../../controller/constants";
-
+import ReactPaginate from "react-paginate";
 const OrderDetail = (props) => {
   const [show, setShow] = useState(false);
   const [cancel, setCancel] = useState(false);
-  function getOrder() {
-    if (window.confirm("Xac nhận hủy đơn hàng?")) {
-      //   fetch(
-      //     "https://localhost:6969/User/ShipperResgister?CMTCode=" +
-      //       CMTCode +
-      //       "&UserId=" +
-      //       UserId +
-      //       "&provideId=" +
-      //       provinceId +
-      //       "&districtId=" +
-      //       districtId,
-      //     {
-      //       method: "POST",
-      //       body: JSON.stringify(request),
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //         Accept: "*/*",
-      //       },
-      //     }
-      //   )
-      //     .then((res) => {
-      //       if (res.ok) {
-      //         return res.json();
-      //       }
-      //       throw res;
-      //     })
-      //     .then((data) => {
-      //       console.log("Status:" + data.status);
-      //       if (data.status == true) alert("Đăng ký thành công!");
-      //       else alert("Đăng ký không thành công!");
-      //     })
-      //     .catch((err) => {
-      //       console.error("Fetching error amount of dopes:" + err);
-      //     });
-      alert("Nhận đơn thành công");
+  function renderSwitch(param) {
+    switch(param) {
+      case 3:
+        return 'Đang giao hàng';
+        case 4:
+        return 'Giao hàng thành công';
+        case 5:
+        return 'Đã hủy bỏ';
+      default:
+        return 'Chưa Rõ';
     }
   }
   return (
@@ -65,7 +40,7 @@ const OrderDetail = (props) => {
               " " +
               props.data.user.middleName +
               " " +
-              props.data.user.firstName}{" "}
+              props.data.user.firstName}
           </p>
           <p>Số lượng sản phẩm: {props.data.order.quantity}</p>
           <p>
@@ -131,7 +106,11 @@ const OrderDetail = (props) => {
               Địa chỉ giao hàng: {props.data.order.address}
             </p>
             <p style={{ margin: "12px 30px" }}>
-              Tên Khách Hàng: {props.data.user.firstName}
+              Tên Khách Hàng: {props.data.user.lastName +
+              " " +
+              props.data.user.middleName +
+              " " +
+              props.data.user.firstName}
             </p>
           </Col>
           <Col>
@@ -164,7 +143,7 @@ const OrderDetail = (props) => {
                 marginLeft: "20px",
               }}
             >
-              Đã Hủy Đơn Hàng
+              {renderSwitch(props.data.order.orderStatusId)}
             </button>
           </Col>
         </Row>
@@ -174,16 +153,6 @@ const OrderDetail = (props) => {
 };
 export default function ShippingHistory() {
   const [key, setKey] = useState(1);
-
-  let active = 2;
-  let items = [];
-  for (let number = 1; number <= 5; number++) {
-    items.push(
-      <Pagination.Item key={number} active={number === active}>
-        {number}
-      </Pagination.Item>
-    );
-  }
   const ordersRaw = [
     {
       id: 1,
@@ -223,6 +192,8 @@ export default function ShippingHistory() {
     },
   ];
   const [orders, setOrders] = useState([]);
+  const [totalPage, setTotalPage] = useState(0);
+  const [totalRows, setTotalRows] = useState(0);
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -235,23 +206,69 @@ export default function ShippingHistory() {
         if (res.ok) return res.json();
         throw res;
       })
-      .then((data) => setOrders(data.data))
+      .then((data) => {setOrders(data.data)
+        setTotalPage(data.totalPage)
+        setTotalRows(data.totalRow)})
       .catch((err) => {
         console.error("Fetching list orders history error: " + err);
       });
   }, []);
+  const handlePageClick = (event) => {
+    let index =  event.selected;
+    fetch(
+      "https://localhost:6969/Order/GetHistory?userId=" +
+      user.id  +
+        "&filterType=2&page="+(index+1)+"&size=10"
+    )
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw res;
+      })
+      .then((data) => {
+        setOrders(data.data)
+        setTotalPage(data.totalPage)
+        setTotalRows(data.totalRow)
+      })
+      .catch((err) => {
+        console.error("Fetching order error: " + err);
+      });
+  };
   return (
     <div>
       {orders.length > 0 ? (
-        orders.map((o, key) => {
-          // return (<div>{o.order.id}</div>)
-          return <OrderDetail data={o} />;
-        })
+        <div>
+          {orders.map((o, key) => {
+            // return (<div>{o.order.id}</div>)
+            return <OrderDetail data={o} />;
+          })}
+          <nav
+            aria-label="Page navigation example"
+            className={styles.navigation}
+          >
+            <ReactPaginate
+              nextLabel="next >"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={3}
+              pageCount={totalPage}
+              previousLabel="< previous"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="active"
+              renderOnZeroPageCount={null}
+            />
+          </nav>
+        </div>
       ) : (
         <div>Không có dữ liệu để hiển thị</div>
       )}
-
-      <Pagination>{items}</Pagination>
     </div>
   );
 }

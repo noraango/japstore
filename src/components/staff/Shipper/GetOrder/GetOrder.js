@@ -8,6 +8,7 @@ import ReactPaginate from "react-paginate";
 const OrderDetail = (props) => {
   const [show, setShow] = useState(false);
   const relist = () => {
+    console.log(props.userId);
     fetch(
       "https://localhost:6969/Order/GetOrder?userId=" +
         props.userId +
@@ -224,7 +225,8 @@ export default function GetOrder() {
   ];
 
   const [orders, setOrders] = useState([]);
-
+  const [totalPage, setTotalPage] = useState(0);
+  const [totalRows, setTotalRows] = useState(0);
   //local storage user
   const userStr = localStorage.getItem("user");
   const userObject = JSON.parse(userStr);
@@ -239,13 +241,34 @@ export default function GetOrder() {
         if (res.ok) return res.json();
         throw res;
       })
-      .then((data) => setOrders(data.data))
+      .then((data) => {
+        setOrders(data.data)
+        setTotalPage(data.totalPage)
+        setTotalRows(data.totalRow)
+      })
       .catch((err) => {
         console.error("Fetching order error: " + err);
       });
   }, []);
   const handlePageClick = (event) => {
-    console.log(`User requested page number ${event.selected}`);
+    let index =  event.selected;
+    fetch(
+      "https://localhost:6969/Order/GetOrder?userId=" +
+        userObject.id +
+        "&filterType=2&page="+(index+1)+"&size=10"
+    )
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw res;
+      })
+      .then((data) => {
+        setOrders(data.data)
+        setTotalPage(data.totalPage)
+        setTotalRows(data.totalRow)
+      })
+      .catch((err) => {
+        console.error("Fetching order error: " + err);
+      });
   };
   return (
     <div>
@@ -259,35 +282,37 @@ export default function GetOrder() {
       </div>
 
       {orders.length > 0 ? (
-        orders.map((o, key) => {
-          return (
-            <OrderDetail data={o} userId={userObject.id} relist={setOrders} />
-          );
-        })
+        <div>
+          {orders.map((o, key) => {
+            return (
+              <OrderDetail data={o} userId={userObject.id} relist={setOrders} />
+            );
+          })}
+          <nav aria-label="Page navigation example" className={styles.navigation}>
+            <ReactPaginate
+              nextLabel="next >"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={3}
+              pageCount={totalPage}
+              previousLabel="< previous"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="active"
+              renderOnZeroPageCount={null}
+            />
+          </nav>
+        </div>
       ) : (
-        <div>Không có data để hiển thị</div>
+        <div className={styles.container}>Không có data để hiển thị</div>
       )}
-      <nav aria-label="Page navigation example">
-        <ReactPaginate
-          nextLabel="next >"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          pageCount={4}
-          previousLabel="< previous"
-          pageClassName="page-item"
-          pageLinkClassName="page-link"
-          previousClassName="page-item"
-          previousLinkClassName="page-link"
-          nextClassName="page-item"
-          nextLinkClassName="page-link"
-          breakLabel="..."
-          breakClassName="page-item"
-          breakLinkClassName="page-link"
-          containerClassName="pagination"
-          activeClassName="active"
-          renderOnZeroPageCount={null}
-        />
-      </nav>
     </div>
   );
 }

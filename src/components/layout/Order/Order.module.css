@@ -206,3 +206,9 @@ td:nth-child(6) {
     margin-bottom: 10px;
   }
 }
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
