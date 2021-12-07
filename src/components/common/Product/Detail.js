@@ -4,6 +4,8 @@ import "./ProductDetail.css";
 import productService from "../../../services/product.service";
 import ImageMagnifiers from "./../Image/ImageMagnifiers";
 import ProductRate from "./ProductRate";
+import { formatVND } from "../../../controller/constants";
+import cartService from "../../../services/cartService";
 
 export default function Detail(props) {
   /**
@@ -88,14 +90,32 @@ export default function Detail(props) {
   function onBuyNowClick() {
     alert("buy now");
   }
-
-  function onAddCartClick() {
-    alert("add cart now");
-  }
   /**
    * View
    */
-
+  function onClickAddCart() {
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      cartService
+        .addCart(product.id, user.id, 1)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    } else {
+      console.log(props.data);
+      var item = {
+        id: product.id,
+        name: product.name,
+        displayImageName: "01.jpg",
+        quantity: 1,
+        price: product.price,
+      };
+      cartService.addItemToLocalCart(item);
+    }
+  }
   return (
     <div className={`container ${styles.container}`}>
       <h3 className={"product-name"}>{product.name}</h3>
@@ -119,7 +139,7 @@ export default function Detail(props) {
               </p>
             </div>
             <div>
-              <h3 className={"price"}>{product.price}</h3>
+              <h3 className={"price"}>{formatVND(product.price)}đ</h3>
               <p className={"description"}>Mô tả: {product.description}</p>
             </div>
             <div className="row">
@@ -159,7 +179,7 @@ export default function Detail(props) {
                   >
                     Mua ngay
                   </button>
-                  <button className="addCart" onClick={onAddCartClick}>
+                  <button className="addCart" onClick={onClickAddCart}>
                     thêm giỏ hàng
                   </button>
                 </div>
