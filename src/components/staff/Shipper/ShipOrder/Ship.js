@@ -5,33 +5,75 @@ import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatVND } from "../../../../controller/constants";
 import ReactPaginate from "react-paginate";
-const OrderDetail = ({ data }) => {
+const OrderDetail = (props) => {
   const [show, setShow] = useState(false);
   const [cancel, setCancel] = useState(false);
-  function finishOrder(){
-    if (window.confirm("Xac nhận hoàn thành đơn hàng?")) {
+  const user = JSON.parse(localStorage.getItem("user"));
+  
+  //Cancle order
+  const [reason, setReason]= useState()
+  const cancleId= 5;
+
+
+  const relist = () => {
+    fetch(
+      "https://localhost:6969/Order/GetShipping?userId=" +
+        user.id +
+        "&page=1&size=10"
+    )
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw res;
+      })
+      .then((data) => {
+        props.relist(data.data);
+        props.totalPage(data.totalPage);
+        props.totalRow(data.totalRow);
+      })
+      .catch((err) => {
+        console.error("Fetching list orders history error: " + err);
+      });
+  };
+
+  function finishOrder() {
+    if (window.confirm("Xác nhận hoàn thành đơn hàng?")) {
       fetch(
         "https://localhost:6969/Order/UpdateOrder?orderId=" +
-          data.order.id +
+          props.data.order.id +
           "&status=4"
       )
         .then((res) => {
           if (res.ok) return res.json();
           throw res;
         })
-        .then((data) => {
+        .then(() => {
           alert("Xác nhận thành công");
+          relist()
         })
         .catch((err) => {
           console.error("Fetching list orders history error: " + err);
         });
     }
-    
   }
-  function getOrder() {
-    if (window.confirm("Xac nhận hủy đơn hàng?")) {
-  
-      alert("Nhận đơn thành công");
+  function handleCancle(idOrder) {
+    if (window.confirm("Xác nhận hủy đơn hàng?")) {
+      fetch(
+        "https://localhost:6969/Order/CancelOrder?cancelType="+cancleId+"&orderId="+idOrder+"&reason="+reason
+      )
+        .then((res) => {
+          if (res.ok) return res.json();
+          throw res;
+        })
+        .then((data) => {
+          if(data===1){
+            alert("Hủy nhận thành công");
+            relist()
+          }
+          else alert("Không thể hủy đơn hàng")
+        })
+        .catch((err) => {
+          console.error("Fetching list orders shipping error: " + err);
+        });
     }
   }
   return (
@@ -45,7 +87,7 @@ const OrderDetail = ({ data }) => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Hủy Giao Đơn Hàng : JapStore - {data.order.id}
+            Hủy Giao Đơn Hàng : JapStore - {props.data.order.id}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -55,6 +97,7 @@ const OrderDetail = ({ data }) => {
               class="form-control"
               id="exampleFormControlTextarea1"
               rows="3"
+              onChange={(e)=>setReason(e.target.value)}
             ></textarea>
           </div>
         </Modal.Body>
@@ -68,7 +111,7 @@ const OrderDetail = ({ data }) => {
               textDecoration: "none",
               marginLeft: "20px",
             }}
-            onClick={getOrder}
+            onClick={()=>handleCancle(props.data.order.id)}
           >
             Hủy Đơn Hàng
           </button>
@@ -83,11 +126,11 @@ const OrderDetail = ({ data }) => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            Mã Đơn Hàng : JapStore - {data.order.id}
+            Mã Đơn Hàng : JapStore - {props.data.order.id}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Tên Khách Hàng: {data.order.userName}</p>
+          <p>Tên Khách Hàng: {props.data.order.userName}</p>
           <p>Số lượng sản phẩm: {}</p>
           <p>
             {/* {order.product.map((pro) => {
@@ -100,11 +143,8 @@ const OrderDetail = ({ data }) => {
               );
             })} */}
           </p>
-          <p>Giá Đơn Hàng: {data.order.orderPrice}</p>
+          <p>Giá Đơn Hàng: {props.data.order.orderPrice}</p>
         </Modal.Body>
-        <Modal.Footer>
-          <button onClick={getOrder}>Nhận Đơn Hàng</button>
-        </Modal.Footer>
       </Modal>
       <Container className={styles.card}>
         <Row className={styles.row}>
@@ -141,7 +181,7 @@ const OrderDetail = ({ data }) => {
                 style={{ justifyContent: "end" }}
               >
                 <span className={styles.sts} style={{ color: "white" }}>
-                  {"Mã Đơn Hàng: JapStore - " + data.order.id}
+                  {"Mã Đơn Hàng: JapStore - " + props.data.order.id}
                 </span>
               </Col>
             </Row>
@@ -150,30 +190,32 @@ const OrderDetail = ({ data }) => {
 
         <Row style={{ borderTop: "2px solid red" }}>
           <Col>
-          <p style={{ margin: "12px 30px" }}>
-              Địa chỉ giao hàng: {data.order.address}
+            <p style={{ margin: "12px 30px" }}>
+              Địa chỉ giao hàng: {props.data.order.address}
             </p>
             <p style={{ margin: "12px 30px" }}>
-              Tên Khách Hàng: {data.user.lastName +
-              " " +
-              data.user.middleName +
-              " " +
-              data.user.firstName}
+              Tên Khách Hàng:{" "}
+              {props.data.user.lastName +
+                " " +
+                props.data.user.middleName +
+                " " +
+                props.data.user.firstName}
             </p>
           </Col>
           <Col>
             <span className={styles.vl}>
               <small style={{ margin: "0 50px" }}>Giá Trị Đơn Hàng</small>
               <h5 style={{ color: "crimson" }}>
-                {formatVND(data.order.orderPrice)}
+                {formatVND(props.data.order.orderPrice)}
               </h5>
             </span>
-            {
-              data.order.weekendDelivery === true ? (<p style={{ marginRight: "40px ", textAlign: "right" }}>
-              Giao Hàng Trong giờ hành chính
-            </p>):("")
-            }
-            
+            {props.data.order.weekendDelivery === true ? (
+              <p style={{ marginRight: "40px ", textAlign: "right" }}>
+                Giao Hàng Trong giờ hành chính
+              </p>
+            ) : (
+              ""
+            )}
           </Col>
         </Row>
         <Row>
@@ -268,7 +310,7 @@ export default function Ship() {
         <div>
           {orders.map((o, key) => {
             // return (<div>{o.order.id}</div>)
-            return <OrderDetail data={o} />;
+            return <OrderDetail data={o} relist={setOrders} totalPage={setTotalPage} totalRow={setTotalRows}/>;
           })}
           <nav
             aria-label="Page navigation example"

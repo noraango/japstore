@@ -71,6 +71,7 @@ const UserDetail = (props) => {
             >
                 <td>{props.record.userId}</td>
                 <td>{props.record.email}</td>
+                <td>{props.record.status === 1? 'Hoạt động' : 'Ngừng hoạt động'}</td>
                 <td>
                     {props.record.lastName +
                         " " +
@@ -90,7 +91,7 @@ const UserDetail = (props) => {
             </tr>
             <Collapse in={open}>
                 <tr id="example-collapse-text">
-                    <td colSpan="4">
+                    <td colSpan="5">
                         <div>Địa Chỉ: {props.record.wardId + '-' + props.record.districtId + '-' + props.record.provinceId + ', ' + props.record.address}</div>
                     </td>
                     <td className='button' colSpan="2">
