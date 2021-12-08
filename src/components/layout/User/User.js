@@ -293,6 +293,7 @@ const ShipperRegister = (props) => {
       districtId: districtId
     }
     console.log(request)
+
     fetch('https://localhost:6969/User/ShipperResgister?CMTCode=' + CMTCode +
       '&UserId=' + UserId +
       '&provideId=' + provinceId +
@@ -402,8 +403,9 @@ const ShipperRegister = (props) => {
                       className={`form-control }`}
                       name="city"
                       onChange={(e) => handleChangeP(e)}
+                      required
                     >
-                      <option value="">Chọn Tỉnh</option>
+                      <option value="" selected disabled>Chọn Tỉnh</option>
                       {province.length > 0 ?
                         (province.map((p, key) =>
                           <option key={p.id} value={p.provinceId}>{p.name}</option>
@@ -419,8 +421,9 @@ const ShipperRegister = (props) => {
                       className={`form-control }`}
                       name="city"
                       onChange={e => handleChangeD(e)}
+                      required
                     >
-                      <option value="">Chọn Quận</option>
+                      <option value="" selected disabled>Chọn Quận</option>
                       {district.length > 0 ?
                         (district.map((d, key) =>
                           <option key={d.id} value={d.districtId}>{d.name}</option>
@@ -463,12 +466,6 @@ const SellerRegister = (props) => {
       .catch(err => {
         console.error('Fetching error amount of dose:' + err)
       })
-  }
-  let Request = {
-
-  }
-  const handleRequest = () => {
-
   }
   return (
     <Modal
