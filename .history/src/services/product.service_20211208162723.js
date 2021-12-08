@@ -52,10 +52,10 @@ class ProductService {
   getDetailImages(productId) {
     return http.get("/product/getImages/" + productId);
   }
-  getComment(productId,page,size) {
-    return http.get("/product/getComment/" + productId+"/"+page+"/"+size);
+  getComment(productId,page) {
+    return http.get("/product/getComment/" + productId+"/"+page);
   }
-  buyProduct(productId,quantity,userId) {
+  getComment(productId,quantity,userId) {
     return http.get("/order/buynow?productId="+productId+"&quantity="+quantity+"&userId="+userId);
   }
 }

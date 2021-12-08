@@ -11,12 +11,12 @@ export default function RateDetail({ rate }) {
     <div className="rate-detail">
       <div className="row">
         <div className="col col-md-2 col-4 rate-img">
-          <img src={imageService.get("user.png")} alt="Không load được ảnh" />
+          <img src={imageService.get("user.jpg")} alt="Không load được ảnh" />
         </div>
         <div className="col col-md-10 col-8">
           <div className="rate-content">
             <h5 className="user-rate">{rate.userName}</h5>
-            <p style={{margin:"0"}}>{formatDate(rate.rateTime)}</p>
+            <p>{formatDate(rate.rateTime)}</p>
 
             <ReactStars
               count={rate.rating}

@@ -9,7 +9,6 @@ import cartService from "../../../services/cartService";
 import { useHistory } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import Landing from "../../common/Landing/Landing";
-import { Redirect } from 'react-router';
 
 export default function Detail(props) {
   /**
@@ -61,21 +60,15 @@ export default function Detail(props) {
   }
 
   function onBuyNowClick() {
-    // let user = JSON.parse(localStorage.getItem("user"));
-    // productService
-    //   .buyProduct(props.match.params.id,number,user.id)
-    //   .then((res) => {
-    //     console.log("buy done")
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
-
-    <Redirect to={{
-      pathname: '/payment',
-      state: { id: '123' }
-  }}
-/>
+    let user = JSON.parse(localStorage.getItem("user"));
+    productService
+      .buyProduct(props.match.params.id,number,user.id)
+      .then((res) => {
+        console.log("buy done")
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
   /**
    * View

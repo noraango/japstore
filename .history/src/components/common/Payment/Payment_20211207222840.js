@@ -13,7 +13,6 @@ export default function Payment(props) {
   const [provinces, setProvinces] = useState([]);
   const history = useHistory();
   useEffect(() => {
-    console.log(props)
     fetchCartItems();
     fetchProvince();
     let user = JSON.parse(localStorage.getItem("user"));

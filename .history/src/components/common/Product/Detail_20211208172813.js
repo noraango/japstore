@@ -9,7 +9,6 @@ import cartService from "../../../services/cartService";
 import { useHistory } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import Landing from "../../common/Landing/Landing";
-import { Redirect } from 'react-router';
 
 export default function Detail(props) {
   /**

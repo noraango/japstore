@@ -9,7 +9,6 @@ import cartService from "../../../services/cartService";
 import { useHistory } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import Landing from "../../common/Landing/Landing";
-import { Redirect } from 'react-router';
 
 export default function Detail(props) {
   /**
@@ -25,7 +24,7 @@ export default function Detail(props) {
 
   useEffect(() => {
     fetchProduct();
-    fetchProductComment(1,4);
+    fetchProductComment(1);
     setData1(getProductList(6));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   function fetchProduct() {
@@ -38,9 +37,9 @@ export default function Detail(props) {
         console.log(e);
       });
   }
-  function fetchProductComment(page,size) {
+  function fetchProductComment(page) {
     productService
-      .getComment(props.match.params.id, page,size)
+      .getComment(props.match.params.id, page)
       .then((res) => {
         setRatingList(res.data);
         console.log(res.data);
@@ -50,7 +49,7 @@ export default function Detail(props) {
       });
   }
   const handlePageClick = (event) => {
-    fetchProductComment(event.selected + 1,4);
+    fetchProductComment(event.selected + 1);
   };
   function incrementValue(e) {
     setNumber(number + 1);
@@ -61,21 +60,14 @@ export default function Detail(props) {
   }
 
   function onBuyNowClick() {
-    // let user = JSON.parse(localStorage.getItem("user"));
-    // productService
-    //   .buyProduct(props.match.params.id,number,user.id)
-    //   .then((res) => {
-    //     console.log("buy done")
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
-
-    <Redirect to={{
-      pathname: '/payment',
-      state: { id: '123' }
-  }}
-/>
+    productService
+      .buyProduct(props.match.params.id)
+      .then((res) => {
+        console.log("buy done")
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
   /**
    * View

@@ -16,7 +16,7 @@ export default function RateDetail({ rate }) {
         <div className="col col-md-10 col-8">
           <div className="rate-content">
             <h5 className="user-rate">{rate.userName}</h5>
-            <p style={{margin:"0"}}>{formatDate(rate.rateTime)}</p>
+            <p style={{margin="0"}}>{formatDate(rate.rateTime)}</p>
 
             <ReactStars
               count={rate.rating}

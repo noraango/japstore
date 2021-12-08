@@ -60,7 +60,7 @@ input::-webkit-inner-spin-button {
   font-size: 16px;
   margin: 0 0 5px;
   resize: vertical;
-  border: 1px solid rgb(139, 139, 139);
+  border: 1px solid rgb(231, 231, 231);
 }
 
 .button-plus {

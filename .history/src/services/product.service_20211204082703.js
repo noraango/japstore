@@ -49,14 +49,5 @@ class ProductService {
   getDetail(productId) {
     return http.get("/product/get/" + productId);
   }
-  getDetailImages(productId) {
-    return http.get("/product/getImages/" + productId);
-  }
-  getComment(productId,page,size) {
-    return http.get("/product/getComment/" + productId+"/"+page+"/"+size);
-  }
-  buyProduct(productId,quantity,userId) {
-    return http.get("/order/buynow?productId="+productId+"&quantity="+quantity+"&userId="+userId);
-  }
 }
 export default new ProductService();

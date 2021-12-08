@@ -52,11 +52,8 @@ class ProductService {
   getDetailImages(productId) {
     return http.get("/product/getImages/" + productId);
   }
-  getComment(productId,page,size) {
-    return http.get("/product/getComment/" + productId+"/"+page+"/"+size);
-  }
-  buyProduct(productId,quantity,userId) {
-    return http.get("/order/buynow?productId="+productId+"&quantity="+quantity+"&userId="+userId);
+  getComment(productId,page) {
+    return http.get("/product/getComment/" + productId+"/"+page);
   }
 }
 export default new ProductService();

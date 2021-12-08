@@ -8,8 +8,6 @@ import { formatVND } from "../../../controller/constants";
 import cartService from "../../../services/cartService";
 import { useHistory } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import Landing from "../../common/Landing/Landing";
-import { Redirect } from 'react-router';
 
 export default function Detail(props) {
   /**
@@ -25,8 +23,7 @@ export default function Detail(props) {
 
   useEffect(() => {
     fetchProduct();
-    fetchProductComment(1,4);
-    setData1(getProductList(6));
+    fetchProductComment(1);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   function fetchProduct() {
     productService
@@ -38,9 +35,9 @@ export default function Detail(props) {
         console.log(e);
       });
   }
-  function fetchProductComment(page,size) {
+  function fetchProductComment(page) {
     productService
-      .getComment(props.match.params.id, page,size)
+      .getComment(props.match.params.id, page)
       .then((res) => {
         setRatingList(res.data);
         console.log(res.data);
@@ -50,10 +47,10 @@ export default function Detail(props) {
       });
   }
   const handlePageClick = (event) => {
-    fetchProductComment(event.selected + 1,4);
+    fetchProductComment(event.selected + 1);
   };
   function incrementValue(e) {
-    setNumber(number + 1);
+     setNumber(number + 1);
   }
 
   function decrementValue(e) {
@@ -61,21 +58,7 @@ export default function Detail(props) {
   }
 
   function onBuyNowClick() {
-    // let user = JSON.parse(localStorage.getItem("user"));
-    // productService
-    //   .buyProduct(props.match.params.id,number,user.id)
-    //   .then((res) => {
-    //     console.log("buy done")
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
-
-    <Redirect to={{
-      pathname: '/payment',
-      state: { id: '123' }
-  }}
-/>
+    alert("buy now");
   }
   /**
    * View
@@ -85,7 +68,7 @@ export default function Detail(props) {
     let user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       cartService
-        .addCart(product.id, user.id, number)
+        .addCart(product.id, user.id, 1)
         .then((res) => {
           history.push("/cart");
         })
@@ -98,31 +81,14 @@ export default function Detail(props) {
         id: product.id,
         name: product.name,
         displayImageName: "01.jpg",
-        quantity: number,
+        quantity: 1,
         price: product.price,
       };
       cartService.addItemToLocalCart(item);
     }
   }
-
-  const [data1, setData1] = useState([]);
-
-  function getProductList(quantity) {
-    productService
-      .getList(quantity)
-      .then((res) => {
-        setData1(res.data);
-        // console.log(res.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
   return (
-    <div
-      className={`container ${styles.container}`}
-     
-    >
+    <div className={`container ${styles.container}`}>
       <h3 className={"product-name"}>{product.name}</h3>
       <div className={`row`}>
         <div
@@ -144,17 +110,16 @@ export default function Detail(props) {
               </p>
             </div>
             <div
-              style={{
-                paddingTop: "15px",
-                borderBlockEnd: "1px solid #e9a3a3",
-              }}
+              style={{ paddingTop: "15px", borderBlockEnd: "1px solid #e9a3a3" }}
             >
               <h3 className={"price"}>{formatVND(product.price)}đ</h3>
             </div>
-            <div style={{ marginTop: "15px" }}>
-              <p className={"description"}>Mô tả: {product.description}</p>
+            <div
+               style={{ marginTop: "15px"}}
+            >
+            <p className={"description"}>Mô tả: {product.description}</p>
             </div>
-            <div className="row">
+            <div className="row"  >
               <h5 className="pb-3">
                 Số lượng: hiện còn {product.quantity} sản phẩm
               </h5>
@@ -185,8 +150,9 @@ export default function Detail(props) {
               <div className="col col-md-8 col-12 pt-2">
                 <div className="buying-button">
                   <button
-                    className="addCart"
+                    className="buyNow"
                     onClick={onBuyNowClick}
+                    disabled={product.quantity < 1}
                   >
                     Mua ngay
                   </button>
@@ -199,14 +165,7 @@ export default function Detail(props) {
           </div>
         </div>
       </div>
-      <div  style={{
-        marginTop: "25px",
-        paddingTop: "25px",
-        borderBlockStart: "1px solid black",
-      }}>
-        <h4>Sản Phẩm Liên Quan</h4>
-        <Landing data={data1} col={6} />
-      </div>
+
       <div className="product-rate">
         <div className="rate">
           <h4>Đánh giá của khách hàng</h4>

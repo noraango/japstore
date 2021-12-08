@@ -76,9 +76,3 @@ input[type="number"] {
   font-size: 36px;
   margin: 5px 0 2000px;
 }
-
-.navigation{
-  display: flex;
-  align-self: center;
-  justify-content: center;
-}

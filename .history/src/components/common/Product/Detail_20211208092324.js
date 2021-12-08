@@ -7,17 +7,58 @@ import ProductRate from "./ProductRate";
 import { formatVND } from "../../../controller/constants";
 import cartService from "../../../services/cartService";
 import { useHistory } from "react-router-dom";
-import ReactPaginate from "react-paginate";
-import Landing from "../../common/Landing/Landing";
-import { Redirect } from 'react-router';
-
 export default function Detail(props) {
   /**
    * Create data
    */
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState({
+    id: null,
+    code: "",
+    name: "nike shoes",
+    price: 230000,
+    size: 14,
+    weight: null,
+    quantity: 0,
+    manufacturer: "",
+    shortDescription: "gdgfd dsda dsad",
+    description:
+      "Welcome to our channel Dev AT. Here you can learn web designing, UI/UX designing, html css tutorials, css animations and css effects, javascript and jquery tutorials and related so on.",
+    brand: "nike",
+    origin: "",
+    packingMethod: "",
+    displayImageName: ["/images/nike.jpg", "/images/nike2.jpg"],
+  });
+
   const [number, setNumber] = useState(1);
-  const [RatingList, setRatingList] = useState([]);
+
+  const [RatingList, setRatingList] = useState([
+    {
+      id: 1,
+      imgLink: "/images/user.png",
+      userName: "Vị dfdsfdsf sdfsdf sdfsdfst",
+      rate: 5,
+      comment:
+        "sản phẩm tốt sản phẩm tố sản phẩm tố sản phẩm tốsản phẩm tốsản phẩm tốsản phẩm tốsản phẩm tốsản phẩm tố",
+    },
+    {
+      id: 2,
+      userName: "Vịt con",
+      imgLink: "/images/user.png",
+      rate: 2,
+      comment: "sản phẩm tốt",
+    },
+  ]);
+
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+    },
+  };
 
   /**
    * Function
@@ -25,33 +66,19 @@ export default function Detail(props) {
 
   useEffect(() => {
     fetchProduct();
-    fetchProductComment(1,4);
-    setData1(getProductList(6));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   function fetchProduct() {
     productService
       .getDetail(props.match.params.id)
       .then((res) => {
         setProduct(res.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-  function fetchProductComment(page,size) {
-    productService
-      .getComment(props.match.params.id, page,size)
-      .then((res) => {
-        setRatingList(res.data);
         console.log(res.data);
       })
       .catch((e) => {
         console.log(e);
       });
   }
-  const handlePageClick = (event) => {
-    fetchProductComment(event.selected + 1,4);
-  };
+
   function incrementValue(e) {
     setNumber(number + 1);
   }
@@ -61,31 +88,17 @@ export default function Detail(props) {
   }
 
   function onBuyNowClick() {
-    // let user = JSON.parse(localStorage.getItem("user"));
-    // productService
-    //   .buyProduct(props.match.params.id,number,user.id)
-    //   .then((res) => {
-    //     console.log("buy done")
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
-
-    <Redirect to={{
-      pathname: '/payment',
-      state: { id: '123' }
-  }}
-/>
+    alert("buy now");
   }
   /**
    * View
    */
-  let history = useHistory();
+   let history = useHistory();
   function onClickAddCart() {
     let user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       cartService
-        .addCart(product.id, user.id, number)
+        .addCart(product.id, user.id, 1)
         .then((res) => {
           history.push("/cart");
         })
@@ -98,43 +111,26 @@ export default function Detail(props) {
         id: product.id,
         name: product.name,
         displayImageName: "01.jpg",
-        quantity: number,
+        quantity: 1,
         price: product.price,
       };
       cartService.addItemToLocalCart(item);
     }
   }
-
-  const [data1, setData1] = useState([]);
-
-  function getProductList(quantity) {
-    productService
-      .getList(quantity)
-      .then((res) => {
-        setData1(res.data);
-        // console.log(res.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
   return (
-    <div
-      className={`container ${styles.container}`}
-     
-    >
+    <div className={`container ${styles.container}`}>
       <h3 className={"product-name"}>{product.name}</h3>
       <div className={`row`}>
         <div
           className={`col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 product-img`}
         >
-          <ImageMagnifiers linkImage={props.match.params.id} />
+          <ImageMagnifiers linkImage={product.displayImageName} />
         </div>
         <div className={`col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6`}>
           <div className={"product-infor"}>
-            <div style={{ borderBlockEnd: "1px solid #e9a3a3" }}>
+            <div>
               <div className="total-rate">
-                Đánh Giá : <span className={" red"}>{product.rating}/5</span>
+                Đánh Giá : <span className={" red"}>5/5</span>
               </div>
               <p className={"brand"}>
                 Thương hiệu: <span className={"name red"}>{product.brand}</span>
@@ -143,15 +139,8 @@ export default function Detail(props) {
                 Tình trạng: <span className={"name green"}>Còn Hàng</span>
               </p>
             </div>
-            <div
-              style={{
-                paddingTop: "15px",
-                borderBlockEnd: "1px solid #e9a3a3",
-              }}
-            >
+            <div>
               <h3 className={"price"}>{formatVND(product.price)}đ</h3>
-            </div>
-            <div style={{ marginTop: "15px" }}>
               <p className={"description"}>Mô tả: {product.description}</p>
             </div>
             <div className="row">
@@ -185,8 +174,9 @@ export default function Detail(props) {
               <div className="col col-md-8 col-12 pt-2">
                 <div className="buying-button">
                   <button
-                    className="addCart"
+                    className="buyNow"
                     onClick={onBuyNowClick}
+                    disabled={product.quantity < 1}
                   >
                     Mua ngay
                   </button>
@@ -199,53 +189,15 @@ export default function Detail(props) {
           </div>
         </div>
       </div>
-      <div  style={{
-        marginTop: "25px",
-        paddingTop: "25px",
-        borderBlockStart: "1px solid black",
-      }}>
-        <h4>Sản Phẩm Liên Quan</h4>
-        <Landing data={data1} col={6} />
-      </div>
+
       <div className="product-rate">
         <div className="rate">
-          <h4>Đánh giá của khách hàng</h4>
+          <h3>Đánh giá của khách hàng</h3>
         </div>
-        {RatingList.data ? (
-          <div>
-            <div className="comment">
-              <ProductRate ratingList={RatingList.data} />
-            </div>
-            <nav
-              aria-label="Page navigation example"
-              className={styles.navigation}
-            >
-              <ReactPaginate
-                nextLabel="next >"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={3}
-                pageCount={RatingList.totalPage}
-                previousLabel="< previous"
-                pageClassName="page-item"
-                pageLinkClassName="page-link"
-                previousClassName="page-item"
-                previousLinkClassName="page-link"
-                nextClassName="page-item"
-                nextLinkClassName="page-link"
-                breakLabel="..."
-                breakClassName="page-item"
-                breakLinkClassName="page-link"
-                containerClassName="pagination"
-                activeClassName="active"
-                renderOnZeroPageCount={null}
-              />
-            </nav>
-          </div>
-        ) : (
-          <div className={styles.container}>
-            Không có đánh giá nào để hiển thị
-          </div>
-        )}
+
+        <div className="comment">
+          <ProductRate ratingList={RatingList} />
+        </div>
       </div>
     </div>
   );

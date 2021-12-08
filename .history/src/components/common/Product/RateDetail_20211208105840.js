@@ -1,23 +1,25 @@
 import React from "react";
 import ReactStars from "react-rating-stars-component";
-import imageService from "../../../services/imageService";
 export default function RateDetail({ rate }) {
-  function formatDate(string) {
-    var options = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(string).toLocaleDateString([], options);
-  }
+  function formatDate(string){
+    var options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(string).toLocaleDateString([],options);
+}
 
   return (
     <div className="rate-detail">
       <div className="row">
         <div className="col col-md-2 col-4 rate-img">
-          <img src={imageService.get("user.png")} alt="Không load được ảnh" />
+          <img
+            src={process.env.PUBLIC_URL + rate.imgLink}
+            alt="Không load được ảnh"
+          />
         </div>
         <div className="col col-md-10 col-8">
           <div className="rate-content">
             <h5 className="user-rate">{rate.userName}</h5>
-            <p style={{margin:"0"}}>{formatDate(rate.rateTime)}</p>
-
+            <h5 className="user-rate">{formatDate(rateTime)}</h5>
+            
             <ReactStars
               count={rate.rating}
               edit={false}
