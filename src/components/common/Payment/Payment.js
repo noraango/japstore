@@ -13,7 +13,7 @@ export default function Payment(props) {
   const [provinces, setProvinces] = useState([]);
   const history = useHistory();
   useEffect(() => {
-    console.log(props)
+    console.log(props);
     fetchCartItems();
     fetchProvince();
     let user = JSON.parse(localStorage.getItem("user"));
@@ -172,6 +172,7 @@ export default function Payment(props) {
       return false;
     }
   }
+  const [createOrderSuccess, setCreateOrderSuccess] = useState(false);
   const [msg, setMsg] = useState("");
   function onSubmit() {
     let user = JSON.parse(localStorage.getItem("user"));
@@ -182,20 +183,22 @@ export default function Payment(props) {
         console.log(res);
         if (res.data === 1) {
           setMsg("Tạo đơn hàng thành công");
+          setCreateOrderSuccess(true);
         } else {
           setMsg("Tạo đơn hàng thất bại");
+          setCreateOrderSuccess(false);
         }
       })
       .catch((e) => {
         console.log(e);
       });
   }
-  function redirectHome() {
-    history.push("/");
+  function redirect() {
+    if (createOrderSuccess) history.push("/order");
   }
   return (
     <div className={`container`}>
-      {msg === "" ? "" : <MessageBox onClick={redirectHome}   />}
+      {msg === "" ? "" : <MessageBox onClick={redirect} content={msg} />}
       <div id="check-out">
         <div className="row m-center">
           <div className=" order-lg-last offset-md-1  col-lg-5 container pt-4 summary">

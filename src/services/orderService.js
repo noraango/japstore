@@ -2,8 +2,11 @@ import http from "../http-common";
 class OrderService {
   getAll() {}
 
-  getOrder(userId) {
-    return http.get("/order/getorderitems/1");
+  getOrders(userId, statusId) {
+    return http.get("/order/getorders/" + userId + "/" + statusId);
+  }
+  getOrderItems(orderId) {
+    return http.get("/order/getorderitems/" + orderId);
   }
 
   createOrder(user, data) {
