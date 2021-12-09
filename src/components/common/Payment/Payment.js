@@ -178,23 +178,22 @@ export default function Payment(props) {
   const [createOrderSuccess, setCreateOrderSuccess] = useState(false);
   const [msg, setMsg] = useState("");
   function onSubmit() {
-      let user = JSON.parse(localStorage.getItem("user"));
-      setIsSubmit(true);
-      orderService
-        .createOrder(user, infor)
-        .then((res) => {
-          console.log(res);
-          if (res.data === 1) {
-            setMsg("Tạo đơn hàng thành công");
-            setCreateOrderSuccess(true);
-          } else {
-            setMsg("Tạo đơn hàng thất bại");
-            setCreateOrderSuccess(false);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+    let user = JSON.parse(localStorage.getItem("user"));
+    orderService
+      .createOrder(user, infor)
+      .then((res) => {
+        console.log(res);
+        if (res.data === 1) {
+          setMsg("Tạo đơn hàng thành công");
+          setCreateOrderSuccess(true);
+        } else {
+          setMsg("Tạo đơn hàng thất bại");
+          setCreateOrderSuccess(false);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
   function redirect() {
     if (createOrderSuccess) history.push("/order");
