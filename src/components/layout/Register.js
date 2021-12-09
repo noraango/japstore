@@ -77,9 +77,8 @@ export default function Register() {
     }
   }
   function submitmm() {
-    
     setIsSubmit(true);
-    if (checkName() && checkPass() && checkRePass() && checkEmail()) {
+    if (checkName() && checkPass() && checkRePass() && checkEmail() && checkPhone()) {
       loading.showLoading();
       authService
         .checkEmail(email)
@@ -145,6 +144,7 @@ export default function Register() {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
+            type="password"
             placeholder="Mật khẩu"
           ></input>{" "}
           <div className="invalid-feedback">Mật Khẩu hợp lệ</div>
@@ -158,6 +158,7 @@ export default function Register() {
             onChange={(e) => {
               setRePassword(e.target.value);
             }}
+            type="password"
             placeholder="Xác nhận mật khẩu"
           ></input>{" "}
           <div className="invalid-feedback">{errorPass}</div>

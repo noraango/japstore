@@ -97,6 +97,7 @@ export default function Payment(props) {
     checkEmail();
   }
   function checkEmail() {
+    console.log(infor.email);
     if (infor.email === "") {
       return true;
     } else {
@@ -119,6 +120,7 @@ export default function Payment(props) {
     checkDistrict();
   }
   function checkPhone() {
+    console.log(infor.phoneNumber);
     if (infor.phoneNumber === "") {
       return true;
     } else {
@@ -143,6 +145,7 @@ export default function Payment(props) {
       });
   }
   function checkCity() {
+    console.log(infor.city);
     if (infor.city === "") {
       return true;
     } else {
@@ -175,26 +178,27 @@ export default function Payment(props) {
   const [createOrderSuccess, setCreateOrderSuccess] = useState(false);
   const [msg, setMsg] = useState("");
   function onSubmit() {
-    let user = JSON.parse(localStorage.getItem("user"));
-    setIsSubmit(true);
-    orderService
-      .createOrder(user, infor)
-      .then((res) => {
-        console.log(res);
-        if (res.data === 1) {
-          setMsg("Tạo đơn hàng thành công");
-          setCreateOrderSuccess(true);
-        } else {
-          setMsg("Tạo đơn hàng thất bại");
-          setCreateOrderSuccess(false);
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+      let user = JSON.parse(localStorage.getItem("user"));
+      setIsSubmit(true);
+      orderService
+        .createOrder(user, infor)
+        .then((res) => {
+          console.log(res);
+          if (res.data === 1) {
+            setMsg("Tạo đơn hàng thành công");
+            setCreateOrderSuccess(true);
+          } else {
+            setMsg("Tạo đơn hàng thất bại");
+            setCreateOrderSuccess(false);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
   }
   function redirect() {
     if (createOrderSuccess) history.push("/order");
+    else setMsg("");
   }
   return (
     <div className={`container`}>
@@ -275,7 +279,9 @@ export default function Payment(props) {
                 <h4>Thông tin mua hàng</h4>
                 <form id="input">
                   <div className="form-group">
-                    <label>Email address</label>
+                    <label>
+                      Email address<span className="error">*</span>
+                    </label>
                     <input
                       type="email"
                       className={`form-control  ${
@@ -290,7 +296,9 @@ export default function Payment(props) {
                   </div>
                   <div className="row ">
                     <div className="form-group col col-md-6 col-12  double-col">
-                      <label>Họ tên</label>
+                      <label>
+                        Họ tên<span className="error">*</span>
+                      </label>
                       <input
                         type="email"
                         className={`form-control  ${
@@ -304,7 +312,9 @@ export default function Payment(props) {
                       <div className="invalid-feedback">{error.name}</div>
                     </div>
                     <div className="form-group  col col-md-6  col-12 pr-none">
-                      <label>Số điện thoại</label>
+                      <label>
+                        Số điện thoại<span className="error">*</span>
+                      </label>
                       <input
                         type="email"
                         className={`form-control  ${
@@ -322,7 +332,9 @@ export default function Payment(props) {
                   </div>
                   <div className="row ">
                     <div className="form-group col col-md-6  col-12  double-col">
-                      <label>Tỉnh,Thành phố</label>
+                      <label>
+                        Tỉnh,Thành phố<span className="error">*</span>
+                      </label>
                       <select
                         className={`form-control  ${
                           isSubmit && checkCity() ? "is-invalid" : ""
@@ -344,7 +356,9 @@ export default function Payment(props) {
                       className="form-group col col-md-6  col-12 pr-none"
                       id="other-take-hide"
                     >
-                      <label>Quận,huyện</label>
+                      <label>
+                        Quận,huyện<span className="error">*</span>
+                      </label>
                       <select
                         className={`form-control  ${
                           isSubmit && checkDistrict() ? "is-invalid" : ""

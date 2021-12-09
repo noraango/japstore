@@ -54,6 +54,8 @@ export default function Login() {
         }
       })
       .catch((e) => {
+        setMsg("Thông tin đăng nhập không chính xác");
+        setMsgStyle(`${styles.show}`);
         console.log(e);
       });
   }

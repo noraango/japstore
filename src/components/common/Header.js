@@ -41,7 +41,7 @@ import { AddCart } from "../../actions";
   }
   function logout() {
     localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    localStorage.removeItem("User");
     window.location.reload();
   }
   function redirectStaff() {
