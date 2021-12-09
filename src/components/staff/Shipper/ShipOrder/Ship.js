@@ -143,7 +143,7 @@ const OrderDetail = (props) => {
               );
             })} */}
           </p>
-          <p>Giá Đơn Hàng: {props.data.order.orderPrice}</p>
+          <p>Giá Đơn Hàng: {props.data.order.price}</p>
         </Modal.Body>
       </Modal>
       <Container className={styles.card}>
@@ -206,7 +206,7 @@ const OrderDetail = (props) => {
             <span className={styles.vl}>
               <small style={{ margin: "0 50px" }}>Giá Trị Đơn Hàng</small>
               <h5 style={{ color: "crimson" }}>
-                {formatVND(props.data.order.orderPrice)}
+                {formatVND(props.data.order.price)}
               </h5>
             </span>
             {props.data.order.weekendDelivery === true ? (
