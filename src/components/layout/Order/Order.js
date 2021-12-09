@@ -11,10 +11,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { formatVND } from "../../../controller/constants";
 import { useHistory } from "react-router";
+import { set } from "local-storage";
+import imageService from "../../../services/imageService";
 
-const productDetail = (product) => {
+const ProductDetail = ({ product }) => {
   const pathz = process.env.PUBLIC_URL + "/images";
-  const priceQuantity = parseInt(product.price) * parseInt(product.quanity);
+  const priceQuantity = parseInt(product.price) * 1; //parseInt(product.quanity) chua co
   const nameProduct = (product) => {
     let name = product.name;
     let nameSub = name.substr(0, 30) + "...";
@@ -25,12 +27,22 @@ const productDetail = (product) => {
     <Row>
       <Col>
         <div className={styles.cardInfo}>
-          <div className={styles.img}>
-            <img src={pathz + product.displayImageName} />
-          </div>
           <Col>
-            <p>{name}</p>
-            <small>X {product.quanity}</small>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <h5>{name}</h5>
+            </div>
+            <div className={styles.imgContainer}>
+              <img src={imageService.get(product.displayImageName)} />
+            </div>
+          </Col>
+          <Col
+            className={styles.col}
+            style={{
+              justifyContent: "flex-start",
+            }}
+          >
+            <small>X 1</small>
+            {/* {product.quantity} */}
           </Col>
         </div>
       </Col>
@@ -50,59 +62,48 @@ const productDetail = (product) => {
   );
 };
 
-const OrderDetail = (order) => {
-  const totalPrice = (order) => {
-    if (order.product.length > 0) {
+const OrderDetail = ({ order }) => {
+  const orderId = order.id;
+  const [orderD, setOrderD] = useState([]);
+  //get data
+  function fetchOrderItems(orderId) {
+    orderService
+      .getOrderItems(orderId)
+      .then((res) => {
+        // console.log(res.data);
+        setOrderD(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  useEffect(() => {
+    fetchOrderItems(orderId);
+  }, []);
+
+  // sum total price
+  const totalPrice = (orderD) => {
+    if (orderD.length > 0) {
       let totalPrice = 0;
-      for (let p of order.product) {
-        totalPrice += p.price * p.quanity;
+      for (let p of orderD) {
+        totalPrice += p.price * 1; //p.quantity đang ko hiển thị
       }
-      return totalPrice + order.ship;
+      return totalPrice;
     } else {
       return 0;
     }
   };
+
   return (
     <div className={styles.container}>
       <Container className={styles.card}>
-        <Row className={styles.row}>
+        <Row
+          className={styles.row}
+          style={{ height: "50px", justifyContent: "end" }}
+        >
           <Col xs sm md lg="6">
             <Row>
-              <Col className={styles.col}>
-                <button
-                  className={styles.button}
-                  style={{
-                    color: "black",
-                    backgroundColor: "#ffffff",
-                    textDecoration: "none",
-                    marginLeft: "20px",
-                  }}
-                >
-                  <FontAwesomeIcon
-                    className={styles.icon}
-                    style={{ color: "black" }}
-                    icon={faUser}
-                  />
-                  {order.shopName}
-                </button>
-              </Col>
-              <Col className={styles.col}>
-                {/* <button className={styles.button} style={{ backgroundColor: 'crimson', color: 'white', marginLeft: '20px' }}>
-                  <FontAwesomeIcon className={styles.icon} icon={faCommentAlt} />
-                  Chat
-                </button> */}
-              </Col>
-              <Col className={styles.col}>
-                {/* <button className={styles.button} style={{ color: 'black', backgroundColor: '#ffffff', marginLeft: '20px' }}>
-                  <FontAwesomeIcon className={styles.icon} style={{ color: 'black' }} icon={faStoreAlt} />
-                  Xem shop
-                </button> */}
-              </Col>
-            </Row>
-          </Col>
-          <Col xs sm md lg="6">
-            <Row>
-              <Col></Col>
               <Col
                 xs
                 sm
@@ -111,17 +112,21 @@ const OrderDetail = (order) => {
                 className={styles.col}
                 style={{ justifyContent: "end" }}
               >
-                <span className={styles.sts} style={{ color: "royalblue" }}>
-                  {order.status}
+                <span className={styles.sts} style={{ color: "#000" }}>
+                  Mã đơn hàng: {order.id}
                 </span>
               </Col>
               <Col
                 className={styles.col}
-                style={{ borderLeft: "3px solid red" }}
+                style={{borderLeft:'3px solid red'}}
               >
                 <span
                   className={styles.sts}
-                  style={{ color: "crimson", textTransform: "uppercase" }}
+                  style={{ 
+                    color: "crimson", 
+                    textTransform: "uppercase",
+                    
+                 }}
                 >
                   {order.status}
                 </span>
@@ -130,8 +135,8 @@ const OrderDetail = (order) => {
           </Col>
         </Row>
 
-        {order.product.map((p, key) => {
-          return productDetail(p);
+        {orderD.map((p, key) => {
+          return <ProductDetail product={p} />;
         })}
 
         <Row style={{ borderTop: "2px solid red" }}>
@@ -139,46 +144,18 @@ const OrderDetail = (order) => {
             <span className={styles.vl}>
               <small style={{ margin: "0 50px" }}>Tổng số tiền</small>
               <h5 style={{ color: "crimson" }}>
-                {formatVND(totalPrice(order))}đ
+                {formatVND(totalPrice(orderD))}đ
               </h5>
             </span>
           </Col>
         </Row>
-
-        {/* <Row className={styles.row1}>
-          <Col xs sm md lg='6'></Col>
-          <Col xs sm md lg='6'>
-            <div>
-              <Row>
-                <Col className={styles.col}>
-                  <button className={styles.button}
-                    style={{ backgroundColor: 'crimson', color: 'white', marginRight: '20px' }}>
-                    Mua lại
-                  </button>
-                </Col>
-                <Col className={styles.col}>
-                  <button className={styles.button}
-                    style={{ backgroundColor: '#b8894e', color: 'white', marginRight: '20px' }}>
-                    Liên hệ người bán
-                  </button>
-                </Col>
-                <Col className={styles.col}>
-                  <button className={styles.button}
-                    style={{ backgroundColor: '#b8894e', color: 'white', marginRight: '20px' }}>
-                    Xem đánh giá người mua
-                  </button>
-                </Col>
-              </Row>
-            </div>
-          </Col>
-        </Row> */}
       </Container>
     </div>
   );
 };
 
 const Order = () => {
-  const [key, setKey] = useState(1);
+  const [key, setKey] = useState(0);
   const ordersRaw = [
     {
       id: 1,
@@ -225,81 +202,79 @@ const Order = () => {
       status: "Đã giao",
     },
   ];
-  const [orders, setOrders] = useState([ordersRaw]);
+  const [orders, setOrders] = useState([]);
+
+  //display tab
   const tabTitle = [
     {
-      key: 1,
+      key: 0,
       name: "Tất cả",
     },
     {
-      key: 2,
+      key: 6,
       name: "Chờ lấy hàng",
     },
     {
-      key: 4,
+      key: 3,
       name: "Đang giao",
     },
     {
-      key: 5,
+      key: 4,
       name: "Đã giao",
     },
     {
-      key: 6,
+      key: 5,
       name: "Đã hủy",
     },
   ];
-  const [statusId, setStatusId] = useState(0);
-  useEffect(() => {
-    console.log("satuschanged");
-  }, [statusId]);
-  let user = JSON.parse(localStorage.getItem("user"));
-  let history = useHistory();
-  if (user === null) {
-    history.push("/");
-    return <div></div>;
-  }
-  const displayTabTitle = (tabTitle) =>
-    tabTitle.map((t) => (
-      <Tab onSelect={fetchOrders} eventKey={t.key} title={t.name}>
-        <p style={{ color: "black" }}>
-          {ordersRaw.map((o, key) => {
-            return OrderDetail(o);
-          })}
-        </p>
+  function displayTabTitle(tabTitle) {
+    return tabTitle.map((t) => (
+      <Tab eventKey={t.key} title={t.name}>
+        {orders.map((o) => (
+          <OrderDetail order={o} />
+        ))}
       </Tab>
     ));
-  function fetchOrders() {
-    let statzusId = 3;
+  }
+  //get data order
+  function fetchOrders(statzusId) {
     orderService
       .getOrders(user.id, statzusId)
       .then((res) => {
         console.log(res.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
-  function fetchOrderItems() {
-    let orderId = 1;
-    orderService
-      .getOrderItems(orderId)
-      .then((res) => {
-        console.log(res.data);
+        setOrders(res.data);
       })
       .catch((e) => {
         console.log(e);
       });
   }
 
+  const [statusId, setStatusId] = useState(0);
+  useEffect(() => {
+    fetchOrders(0);
+  }, []);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const history = useHistory();
+
+  if (user === null) {
+    history.push("/");
+    return <div></div>;
+  }
+
+  const hanldeListOrder = (key) => {
+    setStatusId(key);
+    console.log(key);
+    fetchOrders(key);
+    setKey(key);
+  };
   return (
     <div>
-      <button onClick={fetchOrders}>fetch orders</button>
-      <button onClick={fetchOrderItems}>fetch order items</button>
       <Tabs
         justify
         id="controlled-tab-example"
         activeKey={key}
-        onSelect={(k) => setKey(k)}
+        onSelect={(k) => hanldeListOrder(k)}
         className={styles.tab}
       >
         {displayTabTitle(tabTitle)}

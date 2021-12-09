@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./Styles.module.css";
+import { AddCart } from "../../../actions";
 import { formatVND, numberOnly } from "../../../controller/constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,7 +11,8 @@ import {
 import imageService from "../../../services/imageService";
 import cartService from "../../../services/cartService";
 import { useHistory } from "react-router";
-export default function ProductCard(props) {
+import { connect } from "react-redux";
+const ProductCard=(props) =>{
   const minQuantity = 1,
     maxQuantity = 99;
   const history = useHistory();
@@ -42,6 +44,7 @@ export default function ProductCard(props) {
         .catch((e) => {
           console.log(e);
         });
+        // props.addCart(quantity)
     } else {
       console.log(props.data);
       var item = {
@@ -93,3 +96,14 @@ export default function ProductCard(props) {
     </div>
   );
 }
+const mapDispatchtoProps=dispatch=>{
+  return{
+    addCart: (quantity)=> dispatch(AddCart(quantity))
+  }
+}
+const mapStateToProps= state=>{
+  return{
+    cart: state.carts,
+  }
+}
+export default connect(mapStateToProps, mapDispatchtoProps)(ProductCard)

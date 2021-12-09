@@ -6,11 +6,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import CategoryBar from "./CategoryBar/CategoryBar";
 import { useState } from "react";
-export default function Header() {
+import { connect } from "react-redux";
+import { AddCart } from "../../actions";
+ function Header() {
   const [searchText, setSearchText] = useState("");
+  
   const history = useHistory();
   let path = process.env.PUBLIC_URL + "/images";
   let user = JSON.parse(localStorage.getItem("user"));
+  
+  let cartItems= JSON.parse(localStorage.getItem('cart'));
+  
+  function getAmount(cartItems){
+    let amount=0;
+    for(let c of cartItems){
+      amount+=c.quantity;
+    }
+    return amount
+  }
+  const [amountCart, setAmountCart]=useState(getAmount(cartItems));
+
   function onChangeSearchText(e) {
     setSearchText(e.target.value);
   }
@@ -138,7 +153,7 @@ export default function Header() {
         </div>
         <button onClick={onClickCart} className={`${styles.cartButton}`}>
           <div className={styles.cart1}>
-            <p>0</p>
+            <p>{amountCart}</p>
           </div>
           <div className={styles.cart2}>
             <FontAwesomeIcon
@@ -155,3 +170,4 @@ export default function Header() {
     </div>
   );
 }
+export default connect ()(Header)
