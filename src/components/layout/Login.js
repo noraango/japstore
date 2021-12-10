@@ -9,7 +9,9 @@ import { toast } from "react-toastify";
 
 import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
 import loadingService from "../../services/loading.Service";
-export default function Login() {
+import { connect } from "react-redux";
+import { setUser } from "../../actions";
+function Login(props) {
   let user = JSON.parse(localStorage.getItem("user"));
   let history = useHistory();
   if (user != null) {
@@ -47,7 +49,10 @@ export default function Login() {
           console.log("success");
           setMsgStyle(`${styles.hide}`);
           localStorage.setItem("user", JSON.stringify(res.data.user));
-          window.location.reload();
+          console.log("get user:" + res.data.user);
+
+          props.setUser(JSON.stringify(res.data.user));
+          history.push("/");
         } else {
           setMsg("Thông tin đăng nhập không chính xác");
           setMsgStyle(`${styles.show}`);
@@ -91,7 +96,7 @@ export default function Login() {
             draggable: true,
             progress: undefined,
           });
-          setShow(false)
+          setShow(false);
         } else {
           loadingService.HideLoading();
           toast.error("Có lỗi sảy ra! Vui lòng kiểm tra lại email", {
@@ -109,7 +114,6 @@ export default function Login() {
         loadingService.HideLoading();
         console.log(e);
       });
-    
   }
   const [show, setShow] = useState(false);
   return (
@@ -125,16 +129,16 @@ export default function Login() {
           <div className={`${styles.divInput}`}>
             <h6>Nhập Email đăng ký</h6>
             <input
-            type="email"
-            placeholder="Email"
-            className={`form-control  ${
-              (isSubmit && !checkEmail())? "is-invalid" : ""
-            }`}
-            onChange={(e) => {
-              setForgotEmail(e.target.value);
-            }}
-          ></input>
-          <div className="invalid-feedback">Email không hợp lệ</div>
+              type="email"
+              placeholder="Email"
+              className={`form-control  ${
+                isSubmit && !checkEmail() ? "is-invalid" : ""
+              }`}
+              onChange={(e) => {
+                setForgotEmail(e.target.value);
+              }}
+            ></input>
+            <div className="invalid-feedback">Email không hợp lệ</div>
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -146,17 +150,22 @@ export default function Login() {
               background: " #bc8c4e",
               color: "#ffffff",
             }}
-            onClick={(e)=>{setShow(false)}}
+            onClick={(e) => {
+              setShow(false);
+            }}
           >
             Đóng
           </button>
-          <button style={{
+          <button
+            style={{
               padding: "8px 15px",
               border: "1px solid #bc8c4e",
               borderRadius: "15px",
               background: " #bc8c4e",
               color: "#ffffff",
-            }} onClick={forgot}>
+            }}
+            onClick={forgot}
+          >
             Lấy mật khẩu
           </button>
         </Modal.Footer>
@@ -220,3 +229,9 @@ export default function Login() {
     </div>
   );
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUser: (user) => dispatch(setUser(user)),
+  };
+};
+export default connect(null, mapDispatchToProps)(Login);

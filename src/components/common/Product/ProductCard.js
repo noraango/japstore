@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 import { toast } from 'react-toastify';
 import loading from "../../../services/loading.Service";
 
-export default function ProductCard(props) {
+function ProductCard(props) {
   const minQuantity = 1,
     maxQuantity = 99;
   const history = useHistory();
@@ -38,6 +38,7 @@ export default function ProductCard(props) {
   }
   function onClickAddCart() {
     loading.showLoading();
+    props.addCart(quantity)
     let user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       cartService
@@ -57,7 +58,6 @@ export default function ProductCard(props) {
         .catch((e) => {
           console.log(e);
         });
-        // props.addCart(quantity)
     } else {
       console.log(props.data);
       var item = {
@@ -124,9 +124,4 @@ const mapDispatchtoProps=dispatch=>{
     addCart: (quantity)=> dispatch(AddCart(quantity))
   }
 }
-const mapStateToProps= state=>{
-  return{
-    cart: state.carts,
-  }
-}
-// export default connect(mapStateToProps, mapDispatchtoProps)(ProductCard)
+export default connect(null, mapDispatchtoProps)(ProductCard)

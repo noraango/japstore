@@ -7,7 +7,9 @@ import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import imageService from "../../../services/imageService";
 import { useHistory } from "react-router";
 import authService from "../../../services/auth.Service";
-export default function Cart() {
+import { connect } from "react-redux";
+import { GetNumberCart } from "../../../actions";
+function Cart(props) {
   let user = authService.getUser();
   const minQuantity = 1,
     maxQuantity = 99;
@@ -37,10 +39,14 @@ export default function Cart() {
         .then((res) => {
           setCartitems(res.data);
           let sum = 0;
+          let cartAmount = 0;
           res.data.forEach((e) => {
             sum += e.price * e.quantity;
+            cartAmount += e.quantity;
           });
           setTotalPrice(sum);
+          localStorage.setItem("cartAmount", cartAmount);
+          props.getCartAmount(cartAmount);
           // console.log(res.data);
         })
         .catch((e) => {
@@ -51,10 +57,13 @@ export default function Cart() {
       // console.log(cart);
       setCartitems(cart);
       let sum = 0;
+      let cartAmount = 0;
       cart.forEach((e) => {
         sum += e.price * e.quantity;
       });
       setTotalPrice(sum);
+      localStorage.setItem("cartAmount", cartAmount);
+          props.getCartAmount(cartAmount);
     }
   }
   function updateQuantity(productId, quantity) {
@@ -172,3 +181,9 @@ export default function Cart() {
     </div>
   );
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getCartAmount: (cartAmount) => dispatch(GetNumberCart(cartAmount)),
+  };
+};
+export default connect(null,mapDispatchToProps)(Cart);

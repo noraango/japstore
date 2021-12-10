@@ -5,6 +5,7 @@ import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatVND } from "../../../../controller/constants";
 import ReactPaginate from "react-paginate";
+import { connect } from "react-redux";
 const OrderDetail = (props) => {
   const [show, setShow] = useState(false);
   const relist = () => {
@@ -64,7 +65,7 @@ const OrderDetail = (props) => {
     console.log(orderD);
   };
   return (
-    <div className={styles.container} style={{ margin: "0" }}>
+    <div className={styles.container} style={{ margin: "20px 0 20px 0" }}>
       <Modal
         show={show}
         onHide={() => setShow(false)}
@@ -101,7 +102,7 @@ const OrderDetail = (props) => {
               );
             })}
           </div>
-          <p>Giá Đơn Hàng: {orderD.price}</p>
+          <p>Giá Đơn Hàng: {formatVND(props.data.order.price)}đ</p>
         </Modal.Body>
         <Modal.Footer>
           <button onClick={() => getOrder()}>Nhận Đơn Hàng</button>
@@ -174,7 +175,7 @@ const OrderDetail = (props) => {
     </div>
   );
 };
-export default function GetOrder() {
+function GetOrder(props) {
   const [key, setKey] = useState(1);
   let active = 2;
   let items = [];
@@ -232,6 +233,8 @@ export default function GetOrder() {
   const userObject = JSON.parse(userStr);
 
   useEffect(() => {
+    if(userObject!==null){
+      console.log(userObject.id);
     fetch(
       "https://localhost:6969/Order/GetOrder?userId=" +
         userObject.id +
@@ -249,6 +252,7 @@ export default function GetOrder() {
       .catch((err) => {
         console.error("Fetching order error: " + err);
       });
+    }
   }, []);
   const handlePageClick = (event) => {
     let index =  event.selected;
@@ -316,3 +320,9 @@ export default function GetOrder() {
     </div>
   );
 }
+const mapStateToProps=state=>{
+  return{
+    authentication: state.authentication
+  }
+}
+export default connect(mapStateToProps,null)(GetOrder)

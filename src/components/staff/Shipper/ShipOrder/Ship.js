@@ -9,11 +9,10 @@ const OrderDetail = (props) => {
   const [show, setShow] = useState(false);
   const [cancel, setCancel] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
-  
-  //Cancle order
-  const [reason, setReason]= useState()
-  const cancleId= 5;
 
+  //Cancle order
+  const [reason, setReason] = useState();
+  const cancleId = 5;
 
   const relist = () => {
     fetch(
@@ -48,7 +47,7 @@ const OrderDetail = (props) => {
         })
         .then(() => {
           alert("Xác nhận thành công");
-          relist()
+          relist();
         })
         .catch((err) => {
           console.error("Fetching list orders history error: " + err);
@@ -58,18 +57,22 @@ const OrderDetail = (props) => {
   function handleCancle(idOrder) {
     if (window.confirm("Xác nhận hủy đơn hàng?")) {
       fetch(
-        "https://localhost:6969/Order/CancelOrder?cancelType="+cancleId+"&orderId="+idOrder+"&reason="+reason
+        "https://localhost:6969/Order/CancelOrder?cancelType=" +
+          cancleId +
+          "&orderId=" +
+          idOrder +
+          "&reason=" +
+          reason
       )
         .then((res) => {
           if (res.ok) return res.json();
           throw res;
         })
         .then((data) => {
-          if(data===1){
+          if (data === 1) {
             alert("Hủy nhận thành công");
-            relist()
-          }
-          else alert("Không thể hủy đơn hàng")
+            relist();
+          } else alert("Không thể hủy đơn hàng");
         })
         .catch((err) => {
           console.error("Fetching list orders shipping error: " + err);
@@ -97,7 +100,7 @@ const OrderDetail = (props) => {
               class="form-control"
               id="exampleFormControlTextarea1"
               rows="3"
-              onChange={(e)=>setReason(e.target.value)}
+              onChange={(e) => setReason(e.target.value)}
             ></textarea>
           </div>
         </Modal.Body>
@@ -111,7 +114,7 @@ const OrderDetail = (props) => {
               textDecoration: "none",
               marginLeft: "20px",
             }}
-            onClick={()=>handleCancle(props.data.order.id)}
+            onClick={() => handleCancle(props.data.order.id)}
           >
             Hủy Đơn Hàng
           </button>
@@ -261,23 +264,25 @@ export default function Ship() {
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    fetch(
-      "https://localhost:6969/Order/GetShipping?userId=" +
-        user.id +
-        "&page=1&size=10"
-    )
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw res;
-      })
-      .then((data) => {
-        setOrders(data.data);
-        setTotalPage(data.totalPage);
-        setTotalRows(data.totalRow);
-      })
-      .catch((err) => {
-        console.error("Fetching list orders history error: " + err);
-      });
+    if (user !== null) {
+      fetch(
+        "https://localhost:6969/Order/GetShipping?userId=" +
+          user.id +
+          "&page=1&size=10"
+      )
+        .then((res) => {
+          if (res.ok) return res.json();
+          throw res;
+        })
+        .then((data) => {
+          setOrders(data.data);
+          setTotalPage(data.totalPage);
+          setTotalRows(data.totalRow);
+        })
+        .catch((err) => {
+          console.error("Fetching list orders history error: " + err);
+        });
+    }
   }, []);
 
   const handlePageClick = (event) => {
@@ -310,7 +315,14 @@ export default function Ship() {
         <div>
           {orders.map((o, key) => {
             // return (<div>{o.order.id}</div>)
-            return <OrderDetail data={o} relist={setOrders} totalPage={setTotalPage} totalRow={setTotalRows}/>;
+            return (
+              <OrderDetail
+                data={o}
+                relist={setOrders}
+                totalPage={setTotalPage}
+                totalRow={setTotalRows}
+              />
+            );
           })}
           <nav
             aria-label="Page navigation example"

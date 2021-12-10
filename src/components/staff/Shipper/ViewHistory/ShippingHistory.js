@@ -197,6 +197,7 @@ export default function ShippingHistory() {
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
+    if(user!==null){
     fetch(
       "https://localhost:6969/Order/GetHistory?userId=" +
         user.id +
@@ -212,6 +213,7 @@ export default function ShippingHistory() {
       .catch((err) => {
         console.error("Fetching list orders history error: " + err);
       });
+    }
   }, []);
   const handlePageClick = (event) => {
     let index =  event.selected;

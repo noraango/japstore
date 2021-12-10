@@ -13,10 +13,11 @@ import { formatVND } from "../../../controller/constants";
 import { useHistory } from "react-router";
 import { set } from "local-storage";
 import imageService from "../../../services/imageService";
+import ReactPaginate from "react-paginate";
 
 const ProductDetail = ({ product }) => {
   const pathz = process.env.PUBLIC_URL + "/images";
-  const priceQuantity = parseInt(product.price) * 1; //parseInt(product.quanity) chua co
+  const priceQuantity = product.price * product.quantity;
   const nameProduct = (product) => {
     let name = product.name;
     let nameSub = name.substr(0, 30) + "...";
@@ -28,12 +29,12 @@ const ProductDetail = ({ product }) => {
       <Col>
         <div className={styles.cardInfo}>
           <Col>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <h5>{name}</h5>
-            </div>
             <div className={styles.imgContainer}>
               <img src={imageService.get(product.displayImageName)} />
             </div>
+          </Col>
+          <Col style={{ display: "flex", justifyContent: "center" }}>
+            <p>{name}</p>
           </Col>
           <Col
             className={styles.col}
@@ -41,8 +42,8 @@ const ProductDetail = ({ product }) => {
               justifyContent: "flex-start",
             }}
           >
-            <small>X 1</small>
-            {/* {product.quantity} */}
+            <p>X {product.quantity}</p>
+            
           </Col>
         </div>
       </Col>
@@ -87,7 +88,7 @@ const OrderDetail = ({ order }) => {
     if (orderD.length > 0) {
       let totalPrice = 0;
       for (let p of orderD) {
-        totalPrice += p.price * 1; //p.quantity đang ko hiển thị
+        totalPrice += p.price * p.quantity; //p.quantity đang ko hiển thị
       }
       return totalPrice;
     } else {
@@ -118,15 +119,14 @@ const OrderDetail = ({ order }) => {
               </Col>
               <Col
                 className={styles.col}
-                style={{borderLeft:'3px solid red'}}
+                style={{ borderLeft: "3px solid red" }}
               >
                 <span
                   className={styles.sts}
-                  style={{ 
-                    color: "crimson", 
+                  style={{
+                    color: "crimson",
                     textTransform: "uppercase",
-                    
-                 }}
+                  }}
                 >
                   {order.status}
                 </span>
@@ -155,6 +155,10 @@ const OrderDetail = ({ order }) => {
 };
 
 const Order = () => {
+  const [currentItems, setCurrentItems] = useState(null);
+  const [pageCount, setPageCount] = useState(0);
+  const [itemOffset, setItemOffset] = useState(0);
+    
   const [key, setKey] = useState(0);
   const ordersRaw = [
     {
@@ -233,6 +237,27 @@ const Order = () => {
         {orders.map((o) => (
           <OrderDetail order={o} />
         ))}
+        <nav aria-label="Page navigation example" className={styles.navigation}>
+            <ReactPaginate
+              nextLabel="next >"
+              // onPageChange={}
+              pageRangeDisplayed={3}
+              pageCount={4}
+              previousLabel="< previous"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="active"
+              renderOnZeroPageCount={null}
+            />
+          </nav>
       </Tab>
     ));
   }
@@ -251,6 +276,7 @@ const Order = () => {
 
   const [statusId, setStatusId] = useState(0);
   useEffect(() => {
+    if(user!==null)
     fetchOrders(0);
   }, []);
 
