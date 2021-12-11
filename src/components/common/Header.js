@@ -5,18 +5,13 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import CategoryBar from "./CategoryBar/CategoryBar";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { connect } from "react-redux";
-import { AddCart } from "../../actions";
 function Header(props) {
   const [searchText, setSearchText] = useState("");
-
   const history = useHistory();
   let path = process.env.PUBLIC_URL + "/images";
   let user = JSON.parse(localStorage.getItem("user"));
-  console.log("user la: " + props.authentication.user.id);
-  console.log(user);
-
   function onChangeSearchText(e) {
     setSearchText(e.target.value);
   }
@@ -65,27 +60,12 @@ function Header(props) {
       <div className={`${styles.topContainer}`}>
         <div className={`${styles.top}`}>
           <div className={`${styles.navList} ${app.colLeft}`}>
-            {/* <a className={styles.logo} href="/">
-              <img src={path + "/logo.png"} alt="text" />
-              <span>Jap Store</span>
-            </a> */}
             <button className={`${styles.btnProfile}`} onClick={toHome}>
               <img src={path + "/logo.png"} alt="text" />
               <span>Jap Store</span>
             </button>
           </div>
           <div className={`${styles.navList} ${app.colRight}`}>
-            {/* <Link className={`${styles.navItem}`} to="/contact">
-              CHĂM SÓC KHÁCH HÀNG
-            </Link>
-            <div className={`${styles.line}`} />
-            <Link className={`${styles.navItem}`} to="/support">
-              HỖ TRỢ
-            </Link>
-            <div className={`${styles.line}`} />
-            <Link className={`${styles.navItem}`} to="/introduce">
-              GIỚI THIỆU
-            </Link> */}
             {user === null ? (
               <Link className={`${styles.navItem}`} to="/login">
                 ĐĂNG NHẬP
@@ -109,42 +89,27 @@ function Header(props) {
               ""
             )}
             <div className={`${styles.profileContainer}`}>
-              {/* {user != null ? (
-                user.role === "Admin" ? (
-                  <button onClick={redirectStaff}>Quản lí</button>
-                ) : (
-                  ""
-                )
-              ) : (
-                ""
-              )} */}
               {user != null
-                ? (
-                    user.role === "Admin" ? (
+                ? (user.role === "Admin" ? (
+                    <button onClick={redirectStaff}>Quản lí</button>
+                  ) : null,
+                  user.role === "Shipper" ? (
+                    <>
+                      <button onClick={redirectGetOrder}>Lấy đơn hàng</button>
+                      <button onClick={redirectShipping}>
+                        Đơn hàng đang giao
+                      </button>
+                      <button onClick={redirectShippingH}>
+                        Lịch sử đơn hàng
+                      </button>
+                    </>
+                  ) : null,
+                  user.role === "Seller" ? (
+                    <>
                       <button onClick={redirectStaff}>Quản lí</button>
-                    ) : null,
-
-                    user.role === "Shipper" ? (
-                      <>
-                        <button onClick={redirectGetOrder}>Lấy đơn hàng</button>
-                        <button onClick={redirectShipping}>
-                          Đơn hàng đang giao
-                        </button>
-                        <button onClick={redirectShippingH}>
-                          Lịch sử đơn hàng
-                        </button>
-                      </>
-                    ) : null,
-
-                    user.role === "Seller" ? (
-                      <>
-                        <button onClick={redirectStaff}>Quản lí</button>
-                      </>
-                    ) : null
-                    
-                  )
+                    </>
+                  ) : null)
                 : null}
-
               <button onClick={redirectOrder}>Đơn hàng</button>
               <button onClick={redirectUser}>Thông tin người dùng</button>
               <button onClick={logout}>Đăng xuất</button>
@@ -153,15 +118,6 @@ function Header(props) {
         </div>
       </div>
       <div className={`${styles.mid}`}>
-        {/* <div className={`${styles.logoContainer}`}>
-          <a href="/japstore">
-            <img
-              className={`${styles.logo}`}
-              src={path + "/logo-2.png"}
-              alt="text"
-            />
-          </a>
-        </div> */}
         <div className={styles.cateContainer}>
           <CategoryBar />
         </div>
@@ -201,7 +157,6 @@ function Header(props) {
 const mapStateToProps = (state) => {
   return {
     cart: state.cart,
-    authentication: state.authentication,
   };
 };
 export default connect(mapStateToProps, null)(Header);

@@ -22,7 +22,7 @@ import Shipping from "./components/staff/Shipper/ShipOrder/Ship";
 import ShipHistory from "./components/staff/Shipper/ViewHistory/ShippingHistory";
 import "react-toastify/dist/ReactToastify.css";
 
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 export default function App() {
   return (
     <div>

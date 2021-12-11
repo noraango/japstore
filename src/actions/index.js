@@ -1,5 +1,3 @@
-import { SET_USER } from "../reducer"
-
 export const INCREASE_QUANTITY="INCREASE_QUANTITY"
 export const DECREASE_QUANTITY="DECREASE_QUANTITY"
 export const GET_ALL_PRODUCT="GET_ALL_PRODUCT"
@@ -54,13 +52,5 @@ export function DecreaseQuantity(payload){
     return{
         type: DECREASE_QUANTITY,
         payload
-    }
-}
-
-// SET_USER
-export function setUser(user){
-    return{
-        type: SET_USER,
-        user
     }
 }

@@ -63,7 +63,7 @@ function Cart(props) {
       });
       setTotalPrice(sum);
       localStorage.setItem("cartAmount", cartAmount);
-          props.getCartAmount(cartAmount);
+      props.getCartAmount(cartAmount);
     }
   }
   function updateQuantity(productId, quantity) {
@@ -186,4 +186,4 @@ const mapDispatchToProps = (dispatch) => {
     getCartAmount: (cartAmount) => dispatch(GetNumberCart(cartAmount)),
   };
 };
-export default connect(null,mapDispatchToProps)(Cart);
+export default connect(null, mapDispatchToProps)(Cart);

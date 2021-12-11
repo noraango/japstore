@@ -7,11 +7,9 @@ import authService from "../../services/auth.Service";
 import styles from "./Login.module.css";
 import { toast } from "react-toastify";
 
-import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import loadingService from "../../services/loading.Service";
-import { connect } from "react-redux";
-import { setUser } from "../../actions";
-function Login(props) {
+export default function Login(props) {
   let user = JSON.parse(localStorage.getItem("user"));
   let history = useHistory();
   if (user != null) {
@@ -46,13 +44,9 @@ function Login(props) {
       .login(email, password)
       .then((res) => {
         if (res.data.status) {
-          console.log("success");
           setMsgStyle(`${styles.hide}`);
           localStorage.setItem("user", JSON.stringify(res.data.user));
-          console.log("get user:" + res.data.user);
-
-          props.setUser(JSON.stringify(res.data.user));
-          history.push("/");
+          window.location.reload();
         } else {
           setMsg("Thông tin đăng nhập không chính xác");
           setMsgStyle(`${styles.show}`);
@@ -229,9 +223,3 @@ function Login(props) {
     </div>
   );
 }
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setUser: (user) => dispatch(setUser(user)),
-  };
-};
-export default connect(null, mapDispatchToProps)(Login);

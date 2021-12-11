@@ -2,14 +2,12 @@ import React from "react";
 import { useState, useEffect } from "react";
 import styles from "../../../layout/Order/Order.module.css";
 import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatVND } from "../../../../controller/constants";
 import ReactPaginate from "react-paginate";
 import { connect } from "react-redux";
 const OrderDetail = (props) => {
   const [show, setShow] = useState(false);
   const relist = () => {
-    console.log(props.userId);
     fetch(
       "https://localhost:6969/Order/GetOrder?userId=" +
         props.userId +
@@ -62,7 +60,6 @@ const OrderDetail = (props) => {
       .catch((err) => {
         console.error("Fetching order detail error: " + err);
       });
-    console.log(orderD);
   };
   return (
     <div className={styles.container} style={{ margin: "20px 0 20px 0" }}>
@@ -233,42 +230,44 @@ function GetOrder(props) {
   const userObject = JSON.parse(userStr);
 
   useEffect(() => {
-    if(userObject!==null){
-      console.log(userObject.id);
-    fetch(
-      "https://localhost:6969/Order/GetOrder?userId=" +
-        userObject.id +
-        "&filterType=2&page=1&size=10"
-    )
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw res;
-      })
-      .then((data) => {
-        setOrders(data.data)
-        setTotalPage(data.totalPage)
-        setTotalRows(data.totalRow)
-      })
-      .catch((err) => {
-        console.error("Fetching order error: " + err);
-      });
+    if (userObject !== null) {
+      fetch(
+        "https://localhost:6969/Order/GetOrder?userId=" +
+          userObject.id +
+          "&filterType=2&page=1&size=10"
+      )
+        .then((res) => {
+          if (res.ok) return res.json();
+          throw res;
+        })
+        .then((data) => {
+          setOrders(data.data);
+          setTotalPage(data.totalPage);
+          setTotalRows(data.totalRow);
+        })
+        .catch((err) => {
+          console.error("Fetching order error: " + err);
+        });
     }
   }, []);
   const handlePageClick = (event) => {
-    let index =  event.selected;
+    let index = event.selected;
     fetch(
       "https://localhost:6969/Order/GetOrder?userId=" +
         userObject.id +
-        "&filterType=2&page="+(index+1)+"&size=10"
+        "&filterType=2&page=" +
+        (index + 1) +
+        "&size=10"
     )
       .then((res) => {
         if (res.ok) return res.json();
         throw res;
       })
       .then((data) => {
-        setOrders(data.data)
-        setTotalPage(data.totalPage)
-        setTotalRows(data.totalRow)
+        console.log(data.data);
+        setOrders(data.data);
+        setTotalPage(data.totalPage);
+        setTotalRows(data.totalRow);
       })
       .catch((err) => {
         console.error("Fetching order error: " + err);
@@ -292,7 +291,10 @@ function GetOrder(props) {
               <OrderDetail data={o} userId={userObject.id} relist={setOrders} />
             );
           })}
-          <nav aria-label="Page navigation example" className={styles.navigation}>
+          <nav
+            aria-label="Page navigation example"
+            className={styles.navigation}
+          >
             <ReactPaginate
               nextLabel="next >"
               onPageChange={handlePageClick}
@@ -320,9 +322,9 @@ function GetOrder(props) {
     </div>
   );
 }
-const mapStateToProps=state=>{
-  return{
-    authentication: state.authentication
-  }
-}
-export default connect(mapStateToProps,null)(GetOrder)
+const mapStateToProps = (state) => {
+  return {
+    authentication: state.authentication,
+  };
+};
+export default connect(mapStateToProps, null)(GetOrder);

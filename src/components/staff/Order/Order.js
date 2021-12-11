@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "../store/List.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-regular-svg-icons";
-import { faTrash, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faSearch, faLaptopHouse } from "@fortawesome/free-solid-svg-icons";
 import OrderDetail from "./OrderDetail";
 import storeService from "../../../services/storeService";
 import ReactPaginate from "react-paginate";
@@ -81,11 +81,11 @@ export default function List(props) {
             }}
           >
             <ReactPaginate
-              nextLabel="next >"
+              nextLabel="Next"
               onPageChange={handlePageClick}
               pageRangeDisplayed={3}
               pageCount={totalPage}
-              previousLabel="< previous"
+              previousLabel="Previous"
               pageClassName="page-item"
               pageLinkClassName="page-link"
               previousClassName="page-item"

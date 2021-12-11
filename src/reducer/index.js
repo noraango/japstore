@@ -24,7 +24,7 @@ const cartReducer = (state = initProductCart, action) => {
         numberCart: action.cartAmount,
       };
     case ADD_CART:
-      number = state.numberCart + 1;
+      number = state.numberCart + action.quantity;
       localStorage.setItem("cartAmount", number);
       return {
         ...state,
@@ -36,27 +36,6 @@ const cartReducer = (state = initProductCart, action) => {
       };
   }
 };
-
-export const SET_USER = "SET_USER";
-//authenication
-const initAuthenication = {
-  user: {},
-};
-const authenticationReducer = (state = initAuthenication, action) => {
-  switch (action.type) {
-    case SET_USER:
-      console.log("user:" + action.user.role);
-      return {
-        user: action.user,
-        ...state,
-      };
-    default:
-      return {
-        ...state,
-      };
-  }
-};
 export default combineReducers({
   cart: cartReducer,
-  authentication: authenticationReducer,
 });
