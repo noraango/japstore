@@ -19,25 +19,31 @@ export default function UserRole() {
   const [totalPage2, setTotalPage2] = useState(0);
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const [stsActive, setStsActive] = useState();
-  const [sts, setSts]= useState()
+  const [stsActive, setStsActive] = useState(99);
+  const [role, setRole] = useState(1);
+  const page = 1;
+  const size = 10;
   const status = [
     {
       key: 1,
-      name:'Admin',
+      name: "Admin",
     },
     {
       key: 2,
-      name: 'Seller',
+      name: "Seller",
     },
     {
-      key: 6,
-      id: 'Customer',
+      key: 3,
+      name: "Staff",
     },
     {
-      key: 7,
-      id: 'Shipper',
-    }
+      key: 4,
+      name: "Customer",
+    },
+    {
+      key: 5,
+      name: "Shipper",
+    },
   ];
   const statusActive = [
     {
@@ -53,9 +59,12 @@ export default function UserRole() {
       key: -1,
     },
   ];
-  
-  useEffect(() => {
-    fetch("https://localhost:6969/User/RoleRequest?page=1&size=10")
+
+  //fetch data
+  const getRoleRes = (page, size) => {
+    fetch(
+      "https://localhost:6969/User/RoleRequest?page=" + page + "&size=" + size
+    )
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -69,9 +78,17 @@ export default function UserRole() {
       .catch((err) => {
         console.error("Fetching err request list: " + err);
       });
-
+  };
+  const getUserRequest = (page, size, roleId, status) => {
     fetch(
-      "https://localhost:6969/User/UserRequest?page=1&size=10&roleId=0&status=99"
+      "https://localhost:6969/User/UserRequest?page=" +
+        page +
+        "&size=" +
+        size +
+        "&roleId=" +
+        roleId +
+        "&status=" +
+        status
     )
       .then((res) => {
         if (res.ok) {
@@ -86,7 +103,16 @@ export default function UserRole() {
       .catch((err) => {
         console.error("Fetching error user account list:" + err);
       });
+  };
+
+  useEffect(() => {
+    getRoleRes(page, size);
+    getUserRequest(page, size, 1, 99);
   }, []);
+  
+  useEffect(()=>{;
+    getUserRequest(page, size, role, stsActive);
+  },[role, stsActive])
 
   const handleSearch = (strSearch) => {
     const listUser = userList;
@@ -95,45 +121,12 @@ export default function UserRole() {
   const handlePageClick = (event, tabNo) => {
     let index = event.selected;
     if (tabNo === 1) {
-      fetch(
-        "https://localhost:6969/User/RoleRequest?page=" +
-          (index + 1) +
-          "&size=10"
-      )
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw res;
-        })
-        .then((data) => {
-          setRequestList(data.data);
-          setTotalPage1(data.totalPage);
-        })
-        .catch((err) => {
-          console.error("Fetching err request list: " + err);
-        });
+      getRoleRes(index + 1, size);
     } else {
-      fetch(
-        "https://localhost:6969/User/UserRequest?page=" +
-          (index + 1) +
-          "&size=10&roleId=0&status=99"
-      )
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw res;
-        })
-        .then((data) => {
-          setUserList(data.data);
-          setTotalPage2(data.totalPage);
-        })
-        .catch((err) => {
-          console.error("Fetching error user account list:" + err);
-        });
+      getUserRequest(index + 1, size, 1, 99); //-----------------------
     }
   };
+
   const refreshPage = () => {
     window.location.reload();
   };
@@ -197,17 +190,33 @@ export default function UserRole() {
           <div className="filter-bar row">
             <div className="form-group col-3">
               <label for="role">Tình trạng</label>
-              <select className="form-control" id="role" >
+              <select
+                className="form-control"
+                id="status"
+                onChange={(e) => {
+                  setStsActive(e.target.value);
+                }}
+              >
                 {statusActive.map((item, id) => (
-                  <option key={id}>{item.key}</option>
+                  <option key={item.key} value={item.key}>
+                    {item.name}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="form-group col-3">
               <label for="role">Loại tài khoản</label>
-              <select className="form-control" id="role" >
-                {status.map((o, key) => (
-                  <option key={o.id}>{o.key}</option>
+              <select
+                className="form-control"
+                id="role"
+                onChange={(e) => {
+                  setRole(e.target.value);
+                }}
+              >
+                {status.map((o) => (
+                  <option key={o.key} value={o.key}>
+                    {o.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -215,7 +224,9 @@ export default function UserRole() {
               <div style={{ display: "flex", margin: "20px 0" }}>
                 <input
                   className="form-control"
-                  onChange={(e) => setStrSearch(e.target.value)}
+                  onChange={(e) => {
+                    setStrSearch(e.target.value);
+                  }}
                 />
                 <Button
                   className="button"

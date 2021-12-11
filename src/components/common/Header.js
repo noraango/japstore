@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 function Header(props) {
   const [searchText, setSearchText] = useState("");
   const history = useHistory();
+  let amoutnCart = JSON.parse(localStorage.getItem('cartAmount'));
   let path = process.env.PUBLIC_URL + "/images";
   let user = JSON.parse(localStorage.getItem("user"));
   console.log(user);
@@ -90,27 +91,25 @@ function Header(props) {
               ""
             )}
             <div className={`${styles.profileContainer}`}>
-              {user != null
-                ? (user.role === "Admin" ? (
+              {user != null ? (
+                user.role === "Admin" ? (
+                  <button onClick={redirectStaff}>Quản lí</button>
+                ) : user.role === "Shipper" ? (
+                  <>
+                    <button onClick={redirectGetOrder}>Lấy đơn hàng</button>
+                    <button onClick={redirectShipping}>
+                      Đơn hàng đang giao
+                    </button>
+                    <button onClick={redirectShippingH}>
+                      Lịch sử đơn hàng
+                    </button>
+                  </>
+                ) : user.role === "Seller" ? (
+                  <>
                     <button onClick={redirectStaff}>Quản lí</button>
-                  ) : null,
-                  user.role === "Shipper" ? (
-                    <>
-                      <button onClick={redirectGetOrder}>Lấy đơn hàng</button>
-                      <button onClick={redirectShipping}>
-                        Đơn hàng đang giao
-                      </button>
-                      <button onClick={redirectShippingH}>
-                        Lịch sử đơn hàng
-                      </button>
-                    </>
-                  ) : null,
-                  user.role === "Seller" ? (
-                    <>
-                      <button onClick={redirectStaff}>Quản lí</button>
-                    </>
-                  ) : null)
-                : null}
+                  </>
+                ) : null
+              ) : null}
               <button onClick={redirectOrder}>Đơn hàng</button>
               <button onClick={redirectUser}>Thông tin người dùng</button>
               <button onClick={logout}>Đăng xuất</button>
@@ -138,7 +137,7 @@ function Header(props) {
         </div>
         <button onClick={onClickCart} className={`${styles.cartButton}`}>
           <div className={styles.cart1}>
-            <p>{props.cart.numberCart}</p>
+            <p>{props.cart.numberCart!==0? props.cart.numberCart : amoutnCart}</p>
           </div>
           <div className={styles.cart2}>
             <FontAwesomeIcon

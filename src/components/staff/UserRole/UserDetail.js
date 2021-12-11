@@ -7,6 +7,30 @@ const UserDetail = (props) => {
     const statusAccept = 1;
     const statusRefuse = -1;
 
+    const displayRole=(userRoleId)=>{
+        let strRole='';
+        switch (userRoleId) {
+            case 1:
+                strRole='Admin'
+                break;
+            case 2:
+                strRole='Seller'
+                break;
+            case 3:
+                strRole='Staff'
+                break;
+            case 4:
+                strRole='Customer'
+                break;
+            case 5:
+                strRole='Shipper'
+                break;
+            default:
+                break;
+        }
+        return strRole;
+    }
+
     const relist = () => {
         fetch("https://localhost:6969/User/UserRequest?page=1&size=10&roleId=0&status=99")
             .then((res) => {
@@ -82,11 +106,7 @@ const UserDetail = (props) => {
                 <td>{props.record.email}</td>
                 <td>{props.record.phone}</td>
                 <td>
-                    {props.record.userRoleId === 1
-                        ? "Admin"
-                        : props.record.userRoleId === 2
-                            ? "Shipper"
-                            : "Seller"}
+                    {displayRole(props.record.userRoleId)}
                 </td>
             </tr>
             <Collapse in={open}>
