@@ -2,16 +2,9 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import styles from "./Order.module.css";
 import { Tabs, Tab, Container, Row, Col } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import orderService from "../../../services/orderService";
-import {
-  faCommentAlt,
-  faStoreAlt,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
 import { formatVND } from "../../../controller/constants";
 import { useHistory } from "react-router";
-import { set } from "local-storage";
 import imageService from "../../../services/imageService";
 import ReactPaginate from "react-paginate";
 
@@ -155,59 +148,14 @@ const OrderDetail = ({ order }) => {
 };
 
 const Order = () => {
-  const [currentItems, setCurrentItems] = useState(null);
+  const [key, setKey] = useState(0);
+  const [statusId, setStatusId] = useState(0);
+
+  const [orders, setOrders] = useState([]);
+  const [currentItems, setCurrentItems] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
-    
-  const [key, setKey] = useState(0);
-  const ordersRaw = [
-    {
-      id: 1,
-      shopName: "Astusy",
-      product: [
-        {
-          id: 1,
-          name: "Qfsdggggfdghjghkhjasdahsbdjikhguiofydhsfiosdfofffff",
-          quanity: 2,
-          price: 50000,
-          displayImageName: "fsfdsf.jpg",
-        },
-        {
-          id: 2,
-          name: "Qfsdggggfdghjghkh",
-          quanity: 4,
-          price: 50000,
-          displayImageName: "fsfdsf.jpg",
-        },
-      ],
-      ship: 15000,
-      status: "Đã giao",
-    },
-    {
-      id: 2,
-      shopName: "fdfdfg",
-      product: [
-        {
-          id: 1,
-          name: "Qfsdggggfdghjghkhjasdahsbdjikhguiofydhsfiosdfoffffffff",
-          quanity: 2,
-          price: 50000,
-          displayImageName: "fsfdsf.jpg",
-        },
-        {
-          id: 2,
-          name: "Qfsdggggfdghjghkh",
-          quanity: 4,
-          price: 50000,
-          displayImageName: "fsfdsf.jpg",
-        },
-      ],
-      ship: 15000,
-      status: "Đã giao",
-    },
-  ];
-  const [orders, setOrders] = useState([]);
-
+  const itemsPerPage=3;
   //display tab
   const tabTitle = [
     {
@@ -240,9 +188,9 @@ const Order = () => {
         <nav aria-label="Page navigation example" className={styles.navigation}>
             <ReactPaginate
               nextLabel="next >"
-              // onPageChange={}
+              onPageChange={handlePageClick}
               pageRangeDisplayed={3}
-              pageCount={4}
+              pageCount={pageCount}
               previousLabel="< previous"
               pageClassName="page-item"
               pageLinkClassName="page-link"
@@ -274,11 +222,17 @@ const Order = () => {
       });
   }
 
-  const [statusId, setStatusId] = useState(0);
+  
   useEffect(() => {
     if(user!==null)
     fetchOrders(0);
   }, []);
+  useEffect(()=>{
+    const endOffset = itemOffset + itemsPerPage;
+    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+    setCurrentItems(orders.slice(itemOffset, endOffset));
+    setPageCount(Math.ceil(items.length / itemsPerPage));
+  },[])
 
   const user = JSON.parse(localStorage.getItem("user"));
   const history = useHistory();
@@ -287,13 +241,22 @@ const Order = () => {
     history.push("/");
     return <div></div>;
   }
-
+  //filter click
   const hanldeListOrder = (key) => {
     setStatusId(key);
     console.log(key);
     fetchOrders(key);
     setKey(key);
   };
+  //paginate
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % orders.length;
+    console.log(
+      `User requested page number ${event.selected}, which is offset ${newOffset}`
+    );
+    setItemOffset(newOffset);
+  };
+
   return (
     <div>
       <Tabs
