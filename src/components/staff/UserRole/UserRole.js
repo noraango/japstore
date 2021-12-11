@@ -23,30 +23,34 @@ export default function UserRole() {
   const [sts, setSts]= useState()
   const status = [
     {
-      key: "Admin",
-      id: 1,
+      key: 1,
+      name:'Admin',
     },
     {
-      key: "Seller",
-      id: 2,
+      key: 2,
+      name: 'Seller',
     },
     {
-      key: "Shipper",
-      id: 5,
+      key: 6,
+      id: 'Customer',
     },
+    {
+      key: 7,
+      id: 'Shipper',
+    }
   ];
   const statusActive = [
     {
-      key: "Tất cả",
-      value: 0,
+      name: "Tất cả",
+      key: 99,
     },
     {
-      key: "Đang hoạt động",
-      value: 1,
+      name: "Đang hoạt động",
+      key: 1,
     },
     {
-      key: "Ngừng hoạt động",
-      value: -1,
+      name: "Ngừng hoạt động",
+      key: -1,
     },
   ];
   

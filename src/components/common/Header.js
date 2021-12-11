@@ -119,22 +119,29 @@ function Header(props) {
                 ""
               )} */}
               {user != null
-                ? 
-                (
-                  user.role === "Admin" ? (
-                    <button onClick={redirectStaff}>Quản lí</button>
-                  ) : null,
-                  user.role === "Shipper" ? (
-                    <>
-                      <button onClick={redirectGetOrder}>Lấy đơn hàng</button>
-                      <button onClick={redirectShipping}>
-                        Đơn hàng đang giao
-                      </button>
-                      <button onClick={redirectShippingH}>
-                        Lịch sử đơn hàng
-                      </button>
-                    </>
-                  ) : null
+                ? (
+                    user.role === "Admin" ? (
+                      <button onClick={redirectStaff}>Quản lí</button>
+                    ) : null,
+
+                    user.role === "Shipper" ? (
+                      <>
+                        <button onClick={redirectGetOrder}>Lấy đơn hàng</button>
+                        <button onClick={redirectShipping}>
+                          Đơn hàng đang giao
+                        </button>
+                        <button onClick={redirectShippingH}>
+                          Lịch sử đơn hàng
+                        </button>
+                      </>
+                    ) : null,
+
+                    user.role === "Seller" ? (
+                      <>
+                        <button onClick={redirectStaff}>Quản lí</button>
+                      </>
+                    ) : null
+                    
                   )
                 : null}
 

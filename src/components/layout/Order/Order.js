@@ -36,7 +36,6 @@ const ProductDetail = ({ product }) => {
             }}
           >
             <p>X {product.quantity}</p>
-            
           </Col>
         </div>
       </Col>
@@ -57,14 +56,13 @@ const ProductDetail = ({ product }) => {
 };
 
 const OrderDetail = ({ order }) => {
-  const orderId = order.id;
+  const [orderId,setOrderId]=useState(order.id);
   const [orderD, setOrderD] = useState([]);
   //get data
   function fetchOrderItems(orderId) {
     orderService
       .getOrderItems(orderId)
       .then((res) => {
-        // console.log(res.data);
         setOrderD(res.data);
       })
       .catch((e) => {
@@ -74,7 +72,8 @@ const OrderDetail = ({ order }) => {
 
   useEffect(() => {
     fetchOrderItems(orderId);
-  }, []);
+    setOrderId(order.id);
+  }, [orderId,orderD]);
 
   // sum total price
   const totalPrice = (orderD) => {
@@ -152,10 +151,7 @@ const Order = () => {
   const [statusId, setStatusId] = useState(0);
 
   const [orders, setOrders] = useState([]);
-  const [currentItems, setCurrentItems] = useState([]);
-  const [pageCount, setPageCount] = useState(0);
-  const [itemOffset, setItemOffset] = useState(0);
-  const itemsPerPage=3;
+
   //display tab
   const tabTitle = [
     {
@@ -179,36 +175,52 @@ const Order = () => {
       name: "Đã hủy",
     },
   ];
-  function displayTabTitle(tabTitle) {
-    return tabTitle.map((t) => (
-      <Tab eventKey={t.key} title={t.name}>
-        {orders.map((o) => (
-          <OrderDetail order={o} />
-        ))}
+  const DisplayTabTitle = ({ orders }) => {
+    const [currentItems, setCurrentItems] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
+    const [itemOffset, setItemOffset] = useState(0);
+    const itemsPerPage = 3;
+    useEffect(() => {
+      const endOffset = itemOffset + itemsPerPage;
+      console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+      setCurrentItems(orders.slice(itemOffset, endOffset));
+      setPageCount(Math.ceil(orders.length / itemsPerPage));
+    }, [itemOffset, itemsPerPage]);
+    //paginate
+    const handlePageClick = (event) => {
+      const newOffset = (event.selected * itemsPerPage) % orders.length;
+      console.log(
+        `User requested page number ${event.selected}, which is offset ${newOffset}`
+      );
+      setItemOffset(newOffset);
+    };
+    return (
+      <>
+        {currentItems && currentItems.map((o) => <OrderDetail order={o} />)}
         <nav aria-label="Page navigation example" className={styles.navigation}>
-            <ReactPaginate
-              nextLabel="next >"
-              onPageChange={handlePageClick}
-              pageRangeDisplayed={3}
-              pageCount={pageCount}
-              previousLabel="< previous"
-              pageClassName="page-item"
-              pageLinkClassName="page-link"
-              previousClassName="page-item"
-              previousLinkClassName="page-link"
-              nextClassName="page-item"
-              nextLinkClassName="page-link"
-              breakLabel="..."
-              breakClassName="page-item"
-              breakLinkClassName="page-link"
-              containerClassName="pagination"
-              activeClassName="active"
-              renderOnZeroPageCount={null}
-            />
-          </nav>
-      </Tab>
-    ));
-  }
+          <ReactPaginate
+            nextLabel="next >"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={3}
+            pageCount={pageCount}
+            previousLabel="< previous"
+            pageClassName="page-item"
+            pageLinkClassName="page-link"
+            previousClassName="page-item"
+            previousLinkClassName="page-link"
+            nextClassName="page-item"
+            nextLinkClassName="page-link"
+            breakLabel="..."
+            breakClassName="page-item"
+            breakLinkClassName="page-link"
+            containerClassName="pagination"
+            activeClassName="active"
+            renderOnZeroPageCount={null}
+          />
+        </nav>
+      </>
+    );
+  };
   //get data order
   function fetchOrders(statzusId) {
     orderService
@@ -222,17 +234,11 @@ const Order = () => {
       });
   }
 
-  
   useEffect(() => {
-    if(user!==null)
-    fetchOrders(0);
+    if (user !== null) {
+      fetchOrders(0);
+    }
   }, []);
-  useEffect(()=>{
-    const endOffset = itemOffset + itemsPerPage;
-    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-    setCurrentItems(orders.slice(itemOffset, endOffset));
-    setPageCount(Math.ceil(items.length / itemsPerPage));
-  },[])
 
   const user = JSON.parse(localStorage.getItem("user"));
   const history = useHistory();
@@ -248,14 +254,6 @@ const Order = () => {
     fetchOrders(key);
     setKey(key);
   };
-  //paginate
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % orders.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
-    setItemOffset(newOffset);
-  };
 
   return (
     <div>
@@ -266,7 +264,11 @@ const Order = () => {
         onSelect={(k) => hanldeListOrder(k)}
         className={styles.tab}
       >
-        {displayTabTitle(tabTitle)}
+        {tabTitle.map((t) => (
+          <Tab eventKey={t.key} title={t.name}>
+            <DisplayTabTitle orders={orders} />
+          </Tab>
+        ))}
       </Tabs>
     </div>
   );
