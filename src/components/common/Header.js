@@ -12,6 +12,7 @@ function Header(props) {
   const history = useHistory();
   let path = process.env.PUBLIC_URL + "/images";
   let user = JSON.parse(localStorage.getItem("user"));
+  console.log(user);
   function onChangeSearchText(e) {
     setSearchText(e.target.value);
   }

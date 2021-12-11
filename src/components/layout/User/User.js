@@ -1,87 +1,91 @@
-import React, { useState, useEffect } from 'react'
-import styles from './User.module.css'
+import React, { useState, useEffect } from "react";
+import styles from "./User.module.css";
 import DatePicker from "react-datepicker";
 import { path } from "../../../controller/constants";
-import { Button, Modal } from 'react-bootstrap'
+import { Button, Modal } from "react-bootstrap";
 import "react-datepicker/dist/react-datepicker.css";
 
 const btn = (content, style) => {
   return (
     <div className={styles.subBtnDiv} style={style}>
-      <div style={{
-        width: '15rem',
-        display: 'flex',
-        justifyContent: 'inherit',
-        alignContent: 'center'
-      }}>
+      <div
+        style={{
+          width: "15rem",
+          display: "flex",
+          justifyContent: "inherit",
+          alignContent: "center",
+        }}
+      >
         <button className={styles.subBtn}>{content}</button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const validateInput = (type, checkingText) => {
-
   /* reg exp để kiểm tra xem chuỗi có chỉ bao gồm 12 chữ số hay không */
-  if (type == 'CCCD') {
+  if (type == "CCCD") {
     const regexp = /^\d{12}$/;
     const checkingResult = regexp.exec(checkingText);
     if (checkingResult !== null) {
       return {
         isInputValid: true,
-        errorMessage: ''
+        errorMessage: "",
       };
     } else {
       return {
         isInputValid: false,
-        errorMessage: 'CCCD phải đủ 12 chữ số.'
+        errorMessage: "CCCD phải đủ 12 chữ số.",
       };
     }
   }
   // if( type === '')
-}
+};
 
 const FormError = (props) => {
   /* nếu isHidden = true, return null ngay từ đầu */
-  if (props.isHidden) { return null; }
+  if (props.isHidden) {
+    return null;
+  }
 
-  return (<div style={{ color: 'red' }}>{props.errorMessage}</div>)
-}
+  return <div style={{ color: "red" }}>{props.errorMessage}</div>;
+};
 const FormNoti = (props) => {
   /* nếu isHidden = true, return null ngay từ đầu */
-  if (!props.isHidden) { return null; }
-  else {
-    return (<div style={{ color: props.color }}>Đã tiêm {props.data} mũi</div>)
+  if (!props.isHidden) {
+    return null;
+  } else {
+    return <div style={{ color: props.color }}>Đã tiêm {props.data} mũi</div>;
   }
-}
-
-
+};
 
 const getRoleInfo = (userId, setRoleInfo) => {
-  fetch('https://localhost:6969/User/ViewRole?userId=' + userId)
-    .then(res => {
+  fetch("https://localhost:6969/User/ViewRole?userId=" + userId)
+    .then((res) => {
       if (res.ok) return res.json();
-      throw res
+      throw res;
     })
-    .then(data => {
+    .then((data) => {
       setRoleInfo({
         cmTCode: data.cmTCode,
         city: data.city,
-        district: data.district
-      })
-    }).catch(err => {
-      console.error('Fetch Role Information error:' + err)
+        district: data.district,
+      });
     })
-}
-
+    .catch((err) => {
+      console.error("Fetch Role Information error:" + err);
+    });
+};
 
 const sellerInfo = (user, roleInfo) => {
   return (
     <>
-      <div style={{
-        borderTop: '0.0625rem solid #efefef',
-        padding: '1.125rem 0.875rem'
-      }}>
+      <div
+        style={{
+          borderTop: "0.0625rem solid #efefef",
+          padding: "1.125rem 0.875rem",
+        }}
+      >
         <h1 className={styles.h1}>Thông tin chi tiết</h1>
       </div>
       <div className={styles.formInfo}>
@@ -99,7 +103,7 @@ const sellerInfo = (user, roleInfo) => {
                       type="text"
                       id="fname"
                       name="fname"
-                      value={roleInfo ? roleInfo.cmTCode : ''}
+                      value={roleInfo ? roleInfo.cmTCode : ""}
                     />
                   </div>
                 </div>
@@ -119,27 +123,31 @@ const sellerInfo = (user, roleInfo) => {
                       type="text"
                       id="fname"
                       name="fname"
-                      value={roleInfo ? roleInfo.district + ', ' + roleInfo.city : ''}
+                      value={
+                        roleInfo ? roleInfo.district + ", " + roleInfo.city : ""
+                      }
                     />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {btn('Lưu')}
+          {btn("Lưu")}
         </form>
       </div>
     </>
-  )
-}
+  );
+};
 
 const shipperInfo = (user, roleInfo) => {
   return (
     <>
-      <div style={{
-        borderTop: '0.0625rem solid #efefef',
-        padding: '1.125rem 0.875rem'
-      }}>
+      <div
+        style={{
+          borderTop: "0.0625rem solid #efefef",
+          padding: "1.125rem 0.875rem",
+        }}
+      >
         <h1 className={styles.h1}>Thông tin chi tiết</h1>
       </div>
       <div className={styles.formInfo}>
@@ -157,7 +165,7 @@ const shipperInfo = (user, roleInfo) => {
                       type="text"
                       id="fname"
                       name="fname"
-                      value={roleInfo ? roleInfo.cmTCode : ''}
+                      value={roleInfo ? roleInfo.cmTCode : ""}
                     />
                   </div>
                 </div>
@@ -177,23 +185,25 @@ const shipperInfo = (user, roleInfo) => {
                       type="text"
                       id="fname"
                       name="fname"
-                      value={roleInfo ? roleInfo.district + ', ' + roleInfo.city : ''}
+                      value={
+                        roleInfo ? roleInfo.district + ", " + roleInfo.city : ""
+                      }
                     />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {btn('Lưu')}
+          {btn("Lưu")}
         </form>
       </div>
     </>
-  )
-}
+  );
+};
 
 const ShipperRegister = (props) => {
   const [data, setData] = useState(1);
-  const [id, setID] = useState('');
+  const [id, setID] = useState("");
   const [display, setDisplay] = useState(false);
 
   const provinceRaw = [
@@ -207,7 +217,7 @@ const ShipperRegister = (props) => {
       provinceId: "79TTT",
       name: "Thành Phố Hồ Chí Minh",
     },
-  ]
+  ];
   const [province, setProvince] = useState(provinceRaw);
 
   const districtRaw = [
@@ -223,123 +233,130 @@ const ShipperRegister = (props) => {
       name: "Phường Trúc Bạch",
       districtId: "002HH",
     },
-  ]
+  ];
   const [district, setDistrict] = useState(districtRaw);
-  const [color, setColor] = useState('black');
+  const [color, setColor] = useState("black");
 
   const hanldeCheckID = (id) => {
-    console.log('CCCD: ' + id)
-    fetch('https://localhost:6969/DataRaw/checkCMT?CMTCode=' + id)
-      .then(res => {
+    console.log("CCCD: " + id);
+    fetch("https://localhost:6969/DataRaw/checkCMT?CMTCode=" + id)
+      .then((res) => {
         if (res.ok) {
-          return res.json()
+          return res.json();
         }
-        throw res
+        throw res;
       })
-      .then(data => {
-        setData(data)
+      .then((data) => {
+        setData(data);
       })
-      .catch(err => {
-        console.error('Fetching error amount of dopes:' + err)
-      })
+      .catch((err) => {
+        console.error("Fetching error amount of dopes:" + err);
+      });
 
     if (data === 1) {
       setData(1);
-      setDisplay(true)
-      setColor('darkgoldenrod')
-    }
-    else if (data === 2) {
+      setDisplay(true);
+      setColor("darkgoldenrod");
+    } else if (data === 2) {
       setData(2);
-      setDisplay(true)
-      setColor('green')
-    }
-    else if (data === 0) {
+      setDisplay(true);
+      setColor("green");
+    } else if (data === 0) {
       setData(0);
-      setDisplay(true)
-      setColor('red')
-    }
-    else {
+      setDisplay(true);
+      setColor("red");
+    } else {
       setData(-1);
-      setDisplay(false)
+      setDisplay(false);
     }
-  }
+  };
 
-  const [CMTCode, setCMTCode] = useState('')
-  const [UserId, setUserId] = useState('')
-  const [provinceId, setProvinceId] = useState('')
-  const [districtId, setDistrictId] = useState('')
-
+  const [CMTCode, setCMTCode] = useState("");
+  const [UserId, setUserId] = useState("");
+  const [provinceId, setProvinceId] = useState("");
+  const [districtId, setDistrictId] = useState("");
 
   const handleChangeP = (e) => {
     setProvinceId(e.target.value);
-    console.log('provinceId: ' + provinceId)
-  }
+    console.log("provinceId: " + provinceId);
+  };
   const handleChangeD = (e) => {
     setDistrictId(e.target.value);
-    console.log('districtId: ' + districtId)
-  }
+    console.log("districtId: " + districtId);
+  };
 
   const handleRequest = (user) => {
     setUserId(user.id);
-    console.log('request:' + CMTCode)
-    console.log('request:' + user.id)
-    console.log('request:' + provinceId)
-    console.log('request:' + districtId)
+    console.log("request:" + CMTCode);
+    console.log("request:" + user.id);
+    console.log("request:" + provinceId);
+    console.log("request:" + districtId);
 
     let request = {
       CMTCode: CMTCode,
       UserId: user.id,
       provinceId: provinceId,
-      districtId: districtId
-    }
-    console.log(request)
+      districtId: districtId,
+    };
+    console.log(request);
 
-    fetch('https://localhost:6969/User/ShipperResgister?CMTCode=' + CMTCode +
-      '&UserId=' + UserId +
-      '&provideId=' + provinceId +
-      '&districtId=' + districtId, {
-      method: 'POST',
-      body: JSON.stringify(request),
-      headers: {
-        "Content-Type": 'application/json',
-        "Accept": '*/*'
+    fetch(
+      "https://localhost:6969/User/ShipperResgister?CMTCode=" +
+        CMTCode +
+        "&UserId=" +
+        UserId +
+        "&provideId=" +
+        provinceId +
+        "&districtId=" +
+        districtId,
+      {
+        method: "POST",
+        body: JSON.stringify(request),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "*/*",
+        },
       }
-    }).then(res => {
-      if (res.ok) {
-        return res.json()
-      }
-      throw res
-    })
-      .then(data => {
-        console.log('Status:' + data.status)
-        if (data.status == true) alert('Đăng ký thành công!');
-        else alert('Đăng ký không thành công!');
+    )
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw res;
       })
-      .catch(err => {
-        console.error('Fetching error of senting register requestion:' + err)
+      .then((data) => {
+        console.log("Status:" + data.status);
+        if (data.status == true) alert("Đăng ký thành công!");
+        else alert("Đăng ký không thành công!");
       })
-  }
+      .catch((err) => {
+        console.error("Fetching error of senting register requestion:" + err);
+      });
+  };
   const [isValid, setIsValid] = useState({
     CCCD: {
-      value: '',
+      value: "",
       isInputValid: true,
-      errorMessage: ''
-    }
-  })
-  const handleInput = event => {
+      errorMessage: "",
+    },
+  });
+  const handleInput = (event) => {
     const { name, value } = event.target;
-    const newState = { ...isValid[name] }
+    const newState = { ...isValid[name] };
     newState.value = value;
     setIsValid({ [name]: newState });
-  }
-  const handleInputValidation = event => {
+  };
+  const handleInputValidation = (event) => {
     const { name } = event.target;
-    const { isInputValid, errorMessage } = validateInput(name, isValid[name].value);
-    const newState = { ...isValid[name] }
-    newState.isInputValid = isInputValid
-    newState.errorMessage = errorMessage
-    setIsValid({ [name]: newState })
-  }
+    const { isInputValid, errorMessage } = validateInput(
+      name,
+      isValid[name].value
+    );
+    const newState = { ...isValid[name] };
+    newState.isInputValid = isInputValid;
+    newState.errorMessage = errorMessage;
+    setIsValid({ [name]: newState });
+  };
   return (
     <Modal
       {...props}
@@ -371,22 +388,27 @@ const ShipperRegister = (props) => {
                       id="fname"
                       name="CCCD"
                       required
-                      onChange={(e) => { setID(e.target.value); setCMTCode(e.target.value); handleInput(e) }}
+                      onChange={(e) => {
+                        setID(e.target.value);
+                        setCMTCode(e.target.value);
+                        handleInput(e);
+                      }}
                       onBlur={(e) => handleInputValidation(e)}
                     />
-                    <Button className={styles.subBtn} onClick={() => hanldeCheckID(id)}>Kiểm tra</Button>
+                    <Button
+                      className={styles.subBtn}
+                      onClick={() => hanldeCheckID(id)}
+                    >
+                      Kiểm tra
+                    </Button>
                   </div>
                 </div>
                 <FormError
-                  isHidden={isValid['CCCD'].isInputValid}
-                  errorMessage={isValid['CCCD'].errorMessage} />
-                <FormNoti
-                  isHidden={display}
-                  data={data}
-                  color={color}
+                  isHidden={isValid["CCCD"].isInputValid}
+                  errorMessage={isValid["CCCD"].errorMessage}
                 />
+                <FormNoti isHidden={display} data={data} color={color} />
                 {/* <p style={{ color: 'red', display: { display } }}>Đã tiêm {data} mũi</p> */}
-
               </div>
             </div>
           </div>
@@ -405,14 +427,16 @@ const ShipperRegister = (props) => {
                       onChange={(e) => handleChangeP(e)}
                       required
                     >
-                      <option value="" selected disabled>Chọn Tỉnh</option>
-                      {province.length > 0 ?
-                        (province.map((p, key) =>
-                          <option key={p.id} value={p.provinceId}>{p.name}</option>
-                        )
-                        )
-                        : null
-                      }
+                      <option value="" selected disabled>
+                        Chọn Tỉnh
+                      </option>
+                      {province.length > 0
+                        ? province.map((p, key) => (
+                            <option key={p.id} value={p.provinceId}>
+                              {p.name}
+                            </option>
+                          ))
+                        : null}
                     </select>
                   </div>
                   <div className="col col-md-6">
@@ -420,17 +444,19 @@ const ShipperRegister = (props) => {
                     <select
                       className={`form-control }`}
                       name="city"
-                      onChange={e => handleChangeD(e)}
+                      onChange={(e) => handleChangeD(e)}
                       required
                     >
-                      <option value="" selected disabled>Chọn Quận</option>
-                      {district.length > 0 ?
-                        (district.map((d, key) =>
-                          <option key={d.id} value={d.districtId}>{d.name}</option>
-                        )
-                        )
-                        : null
-                      }
+                      <option value="" selected disabled>
+                        Chọn Quận
+                      </option>
+                      {district.length > 0
+                        ? district.map((d, key) => (
+                            <option key={d.id} value={d.districtId}>
+                              {d.name}
+                            </option>
+                          ))
+                        : null}
                     </select>
                   </div>
                 </div>
@@ -440,33 +466,39 @@ const ShipperRegister = (props) => {
         </form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={() => { handleRequest(props.user) }}>Đăng Ký</Button>
+        <Button
+          onClick={() => {
+            handleRequest(props.user);
+          }}
+        >
+          Đăng Ký
+        </Button>
         <Button onClick={props.onHide}>Đóng</Button>
       </Modal.Footer>
-    </Modal >
+    </Modal>
   );
-}
+};
 
 const SellerRegister = (props) => {
   const [data, setData] = useState(1);
-  const [id, setID] = useState('');
+  const [id, setID] = useState("");
 
   const hanldeCheckID = (id) => {
-    console.log('CCCD: ' + id)
-    fetch('https://localhost:6969/DataRaw/checkCMT?CMTCode=' + id)
-      .then(res => {
+    console.log("CCCD: " + id);
+    fetch("https://localhost:6969/DataRaw/checkCMT?CMTCode=" + id)
+      .then((res) => {
         if (res.ok) {
-          return res.json()
+          return res.json();
         }
-        throw res
+        throw res;
       })
-      .then(data => {
-        setData(data)
+      .then((data) => {
+        setData(data);
       })
-      .catch(err => {
-        console.error('Fetching error amount of dose:' + err)
-      })
-  }
+      .catch((err) => {
+        console.error("Fetching error amount of dose:" + err);
+      });
+  };
   return (
     <Modal
       {...props}
@@ -495,12 +527,13 @@ const SellerRegister = (props) => {
                       id="fname"
                       name="fname"
                       required
-                      onChange={(e) => { setID(e.target.value) }}
+                      onChange={(e) => {
+                        setID(e.target.value);
+                      }}
                     />
                     <Button onClick={() => hanldeCheckID(id)}>Kiểm tra</Button>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
@@ -541,33 +574,18 @@ const SellerRegister = (props) => {
         <Button onClick={props.onHide}>Đăng Ký</Button>
         <Button onClick={props.onHide}>Đóng</Button>
       </Modal.Footer>
-    </Modal >
+    </Modal>
   );
-}
+};
 
-const User = () => {
+const User = (props) => {
   const [user, setUser] = useState({});
   useEffect(() => {
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        id: 1,
-        avatar: "avatar.jpg",
-        role: "Seller",
-        firstName: "Anh",
-        middleName: "Thế",
-        lastName: "Ngô",
-        fullName: "Ngô Thế Anh",
-        phone: "0357467491",
-        email: "timer217@gmail.com",
-        address: "Son La",
-        ward: "Phường Mỹ Đình 1",
-        district: "Quận Nam Từ Liêm",
-        province: "Thành phố Hà Nội",
-      })
-    );
-    setUser(JSON.parse(localStorage.getItem("user")));
-    console.log(user);
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      props.history.push("/");
+    }
+    setUser(user);
   }, []);
   const radiosGender = [
     { name: "Nam", value: "1" },
@@ -593,39 +611,44 @@ const User = () => {
   const [modalShipperShow, setModalShipperShow] = useState(false);
   const [modalSellerShow, setModalSellerShow] = useState(false);
 
-  const [roleInfo, setRoleInfo] = useState(
-    {
-      cmTCode: '3434',
-      city: '5454',
-      district: '5454'
-    }
-  )
+  const [roleInfo, setRoleInfo] = useState({
+    cmTCode: "3434",
+    city: "5454",
+    district: "5454",
+  });
 
   const displayExtraInfo = (user) => {
-    getRoleInfo(user.id, setRoleInfo)
+    getRoleInfo(user.id, setRoleInfo);
 
-    let displayComponent
+    let displayComponent;
     switch (user.role) {
-      case 'Admin':
-        displayComponent =
-          (<p>Admin</p>)
+      case "Admin":
+        displayComponent = <p>Admin</p>;
         break;
-      case 'Shipper':
-        displayComponent =
-          (shipperInfo(user, roleInfo))
+      case "Shipper":
+        displayComponent = shipperInfo(user, roleInfo);
         break;
-      case 'Seller':
-        displayComponent =
-          (sellerInfo(user, roleInfo))
+      case "Seller":
+        displayComponent = sellerInfo(user, roleInfo);
         break;
       default:
         return (
           <>
             <div>
-              <Button className={styles.subBtn} style={{ width: 'fit-content' }} variant="primary" onClick={() => setModalShipperShow(true)}>
+              <Button
+                className={styles.subBtn}
+                style={{ width: "fit-content" }}
+                variant="primary"
+                onClick={() => setModalShipperShow(true)}
+              >
                 Đăng ký trở thành Shipper
               </Button>
-              <Button className={styles.subBtn} style={{ width: 'fit-content' }} variant="primary" onClick={() => setModalSellerShow(true)}>
+              <Button
+                className={styles.subBtn}
+                style={{ width: "fit-content" }}
+                variant="primary"
+                onClick={() => setModalSellerShow(true)}
+              >
                 Đăng ký trở thành Seller
               </Button>
             </div>
@@ -640,10 +663,10 @@ const User = () => {
               user={user}
             />
           </>
-        )
+        );
     }
     return displayComponent;
-  }
+  };
 
   return (
     <div className={styles.container}>
@@ -677,7 +700,6 @@ const User = () => {
                   <div className={styles.scrpitDiv}>Định dạng:.JPEG, .PNG</div>
                 </div>
               </div>
-
             </div>
             <div className={styles.formInfo}>
               <form className={styles.formInfoMain}>
@@ -765,12 +787,16 @@ const User = () => {
                   <div className={styles.label1}>
                     <div className={styles.label2}>
                       <div className={styles.label3}>
-                        <label >ngày sinh</label>
+                        <label>ngày sinh</label>
                       </div>
                       <div className={styles.input1}>
                         <div className={styles.input2}>
                           <div className={styles.input3}>
-                            <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} className={styles.datePicker} />
+                            <DatePicker
+                              selected={startDate}
+                              onChange={(date) => setStartDate(date)}
+                              className={styles.datePicker}
+                            />
                           </div>
                         </div>
                       </div>
@@ -778,23 +804,16 @@ const User = () => {
                   </div>
                 </div>
 
-                {btn('Lưu')}
-
+                {btn("Lưu")}
               </form>
             </div>
           </div>
         </div>
 
-        <div className={styles.cardInfo}>
-          {displayExtraInfo(user)}
-
-        </div>
-
+        <div className={styles.cardInfo}>{displayExtraInfo(user)}</div>
       </div>
     </div>
   );
 };
-
-
 
 export default User;
