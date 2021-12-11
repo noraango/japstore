@@ -74,6 +74,7 @@ export default function Payment(props) {
     city: "",
     district: "",
     location: "",
+    price: 0,
   });
   const [province, setProvince] = useState("initialState");
   const error = {
@@ -179,6 +180,7 @@ export default function Payment(props) {
   const [msg, setMsg] = useState("");
   function onSubmit() {
     let user = JSON.parse(localStorage.getItem("user"));
+    infor.price = total + shippingFee;
     orderService
       .createOrder(user, infor)
       .then((res) => {

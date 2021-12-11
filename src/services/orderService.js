@@ -22,6 +22,7 @@ class OrderService {
     formData.append("Name", data.name);
     formData.append("Phone", data.phoneNumber);
     formData.append("Address", data.location);
+    formData.append("Price", data.price);
     return http.post("/order/create", formData);
   }
 }

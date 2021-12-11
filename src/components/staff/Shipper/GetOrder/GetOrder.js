@@ -6,6 +6,7 @@ import { formatVND } from "../../../../controller/constants";
 import ReactPaginate from "react-paginate";
 import { connect } from "react-redux";
 const OrderDetail = (props) => {
+  console.log(props.data);
   const [show, setShow] = useState(false);
   const relist = () => {
     fetch(
@@ -153,18 +154,23 @@ const OrderDetail = (props) => {
               Địa chỉ giao hàng: {props.data.order.address}
             </p>
             <p style={{ margin: "12px 30px" }}>
-              Tên Khách Hàng: {props.data.user.firstName}
+              Tên Khách Hàng:{" "}
+              {props.data.user.lastName +
+                " " +
+                props.data.user.middleName +
+                " " +
+                props.data.user.firstName}{" "}
             </p>
           </Col>
           <Col>
             <span className={styles.vl}>
               <small style={{ margin: "0 50px" }}>Giá Trị Đơn Hàng</small>
               <h5 style={{ color: "crimson" }}>
-                {formatVND(props.data.order.price)}
+                {formatVND(props.data.order.price)}đ
               </h5>
             </span>
             <p style={{ marginRight: "40px ", textAlign: "right" }}>
-              Giao Hàng Trong giờ hành chính
+              Giao hàng trong giờ hành chính
             </p>
           </Col>
         </Row>
@@ -173,6 +179,12 @@ const OrderDetail = (props) => {
   );
 };
 function GetOrder(props) {
+  let user = JSON.parse(localStorage.getItem("user"));
+  if (!user) {
+    props.history.push("/");
+  } else if (user.role != "Shipper") {
+    props.history.push("/");
+  }
   const [key, setKey] = useState(1);
   let active = 2;
   let items = [];
@@ -230,25 +242,26 @@ function GetOrder(props) {
   const userObject = JSON.parse(userStr);
 
   useEffect(() => {
-    if (userObject !== null) {
-      fetch(
-        "https://localhost:6969/Order/GetOrder?userId=" +
-          userObject.id +
-          "&filterType=2&page=1&size=10"
-      )
-        .then((res) => {
-          if (res.ok) return res.json();
-          throw res;
-        })
-        .then((data) => {
-          setOrders(data.data);
-          setTotalPage(data.totalPage);
-          setTotalRows(data.totalRow);
-        })
-        .catch((err) => {
-          console.error("Fetching order error: " + err);
-        });
-    }
+    if (userObject)
+      if (userObject !== null) {
+        fetch(
+          "https://localhost:6969/Order/GetOrder?userId=" +
+            userObject.id +
+            "&filterType=2&page=1&size=10"
+        )
+          .then((res) => {
+            if (res.ok) return res.json();
+            throw res;
+          })
+          .then((data) => {
+            setOrders(data.data);
+            setTotalPage(data.totalPage);
+            setTotalRows(data.totalRow);
+          })
+          .catch((err) => {
+            console.error("Fetching order error: " + err);
+          });
+      }
   }, []);
   const handlePageClick = (event) => {
     let index = event.selected;
