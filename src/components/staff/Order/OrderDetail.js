@@ -16,6 +16,7 @@ export default function OrderDetail({ order }) {
     storeService
       .getOrderDetail(order.id)
       .then((res) => {
+        
         setListItem(res.data.list);
         setBuyer(res.data.buyer);
         setCity(res.data.city);
@@ -134,7 +135,8 @@ export default function OrderDetail({ order }) {
         <td>{renderSwitch(order.orderStatusId)}</td>
       </tr>
       {listItem.map((item, index) => (
-        <Collapse in={open}>
+        
+        <Collapse in={open} key={item.id}>
           <tr>
             <td></td>
             <td>{item.name}</td>

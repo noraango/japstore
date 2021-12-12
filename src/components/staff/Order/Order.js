@@ -67,7 +67,7 @@ export default function List(props) {
                   <th>Tình Trạng</th>
                 </tr>
                 {dbitems.map((dbitem, index) => (
-                  <OrderDetail order={dbitem} />
+                  <OrderDetail order={dbitem} key={dbitem.id}/>
                 ))}
               </tbody>
             </table>
