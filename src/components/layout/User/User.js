@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styles from "./User.module.css";
-import DatePicker from "react-datepicker";
+import { Button } from "react-bootstrap";
 import { path } from "../../../controller/constants";
-import { Button, Modal } from "react-bootstrap";
-import "react-datepicker/dist/react-datepicker.css";
+import ShipperRegister from "./ShipperRegister";
+import SellerRegister from "./SellerRegister";
 
 const btn = (content, style) => {
   return (
@@ -22,43 +22,6 @@ const btn = (content, style) => {
   );
 };
 
-const validateInput = (type, checkingText) => {
-  /* reg exp để kiểm tra xem chuỗi có chỉ bao gồm 12 chữ số hay không */
-  if (type == "CCCD") {
-    const regexp = /^\d{12}$/;
-    const checkingResult = regexp.exec(checkingText);
-    if (checkingResult !== null) {
-      return {
-        isInputValid: true,
-        errorMessage: "",
-      };
-    } else {
-      return {
-        isInputValid: false,
-        errorMessage: "CCCD phải đủ 12 chữ số.",
-      };
-    }
-  }
-  // if( type === '')
-};
-
-const FormError = (props) => {
-  /* nếu isHidden = true, return null ngay từ đầu */
-  if (props.isHidden) {
-    return null;
-  }
-
-  return <div style={{ color: "red" }}>{props.errorMessage}</div>;
-};
-const FormNoti = (props) => {
-  /* nếu isHidden = true, return null ngay từ đầu */
-  if (!props.isHidden) {
-    return null;
-  } else {
-    return <div style={{ color: props.color }}>Đã tiêm {props.data} mũi</div>;
-  }
-};
-
 const getRoleInfo = (userId, setRoleInfo) => {
   fetch("https://localhost:6969/User/ViewRole?userId=" + userId)
     .then((res) => {
@@ -67,7 +30,7 @@ const getRoleInfo = (userId, setRoleInfo) => {
     })
     .then((data) => {
       setRoleInfo({
-        cmTCode: data.cmTCode,
+        cmTcode: data.cmTcode,
         city: data.city,
         district: data.district,
       });
@@ -77,7 +40,7 @@ const getRoleInfo = (userId, setRoleInfo) => {
     });
 };
 
-const sellerInfo = (user, roleInfo) => {
+const SellerInfo = ({user, roleInfo}) => {
   return (
     <>
       <div
@@ -103,7 +66,7 @@ const sellerInfo = (user, roleInfo) => {
                       type="text"
                       id="fname"
                       name="fname"
-                      value={roleInfo ? roleInfo.cmTCode : ""}
+                      value={roleInfo !== null ? roleInfo.cmTcode : ""}
                     />
                   </div>
                 </div>
@@ -139,7 +102,8 @@ const sellerInfo = (user, roleInfo) => {
   );
 };
 
-const shipperInfo = (user, roleInfo) => {
+const ShipperInfo = ({user, roleInfo}) => {
+  console.log(roleInfo)
   return (
     <>
       <div
@@ -165,7 +129,7 @@ const shipperInfo = (user, roleInfo) => {
                       type="text"
                       id="fname"
                       name="fname"
-                      value={roleInfo ? roleInfo.cmTCode : ""}
+                      value={roleInfo !== null ? roleInfo.cmTcode : ""}
                     />
                   </div>
                 </div>
@@ -201,385 +165,9 @@ const shipperInfo = (user, roleInfo) => {
   );
 };
 
-const ShipperRegister = (props) => {
-  const [data, setData] = useState(1);
-  const [id, setID] = useState("");
-  const [display, setDisplay] = useState(false);
-
-  const provinceRaw = [
-    {
-      id: 1,
-      provinceId: "01TTT",
-      name: "Thành phố Hà Nội",
-    },
-    {
-      id: 2,
-      provinceId: "79TTT",
-      name: "Thành Phố Hồ Chí Minh",
-    },
-  ];
-  const [province, setProvince] = useState(provinceRaw);
-
-  const districtRaw = [
-    {
-      id: 1,
-      wardId: "00001",
-      name: "Phường Phúc Xá",
-      districtId: "001HH",
-    },
-    {
-      id: 2,
-      wardId: "00004",
-      name: "Phường Trúc Bạch",
-      districtId: "002HH",
-    },
-  ];
-  const [district, setDistrict] = useState(districtRaw);
-  const [color, setColor] = useState("black");
-
-  const hanldeCheckID = (id) => {
-    console.log("CCCD: " + id);
-    fetch("https://localhost:6969/DataRaw/checkCMT?CMTCode=" + id)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then((data) => {
-        setData(data);
-      })
-      .catch((err) => {
-        console.error("Fetching error amount of dopes:" + err);
-      });
-
-    if (data === 1) {
-      setData(1);
-      setDisplay(true);
-      setColor("darkgoldenrod");
-    } else if (data === 2) {
-      setData(2);
-      setDisplay(true);
-      setColor("green");
-    } else if (data === 0) {
-      setData(0);
-      setDisplay(true);
-      setColor("red");
-    } else {
-      setData(-1);
-      setDisplay(false);
-    }
-  };
-
-  const [CMTCode, setCMTCode] = useState("");
-  const [UserId, setUserId] = useState("");
-  const [provinceId, setProvinceId] = useState("");
-  const [districtId, setDistrictId] = useState("");
-
-  const handleChangeP = (e) => {
-    setProvinceId(e.target.value);
-    console.log("provinceId: " + provinceId);
-  };
-  const handleChangeD = (e) => {
-    setDistrictId(e.target.value);
-    console.log("districtId: " + districtId);
-  };
-
-  const handleRequest = (user) => {
-    setUserId(user.id);
-    console.log("request:" + CMTCode);
-    console.log("request:" + user.id);
-    console.log("request:" + provinceId);
-    console.log("request:" + districtId);
-
-    let request = {
-      CMTCode: CMTCode,
-      UserId: user.id,
-      provinceId: provinceId,
-      districtId: districtId,
-    };
-    console.log(request);
-
-    fetch(
-      "https://localhost:6969/User/ShipperResgister?CMTCode=" +
-        CMTCode +
-        "&UserId=" +
-        UserId +
-        "&provideId=" +
-        provinceId +
-        "&districtId=" +
-        districtId,
-      {
-        method: "POST",
-        body: JSON.stringify(request),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "*/*",
-        },
-      }
-    )
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then((data) => {
-        console.log("Status:" + data.status);
-        if (data.status == true) alert("Đăng ký thành công!");
-        else alert("Đăng ký không thành công!");
-      })
-      .catch((err) => {
-        console.error("Fetching error of senting register requestion:" + err);
-      });
-  };
-  const [isValid, setIsValid] = useState({
-    CCCD: {
-      value: "",
-      isInputValid: true,
-      errorMessage: "",
-    },
-  });
-  const handleInput = (event) => {
-    const { name, value } = event.target;
-    const newState = { ...isValid[name] };
-    newState.value = value;
-    setIsValid({ [name]: newState });
-  };
-  const handleInputValidation = (event) => {
-    const { name } = event.target;
-    const { isInputValid, errorMessage } = validateInput(
-      name,
-      isValid[name].value
-    );
-    const newState = { ...isValid[name] };
-    newState.isInputValid = isInputValid;
-    newState.errorMessage = errorMessage;
-    setIsValid({ [name]: newState });
-  };
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Thông Tin Đăng Ký
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <form>
-          <div className={styles.label1}>
-            <div className={styles.label2}>
-              <div className={styles.label3}>
-                <label>Số CCCD</label>
-              </div>
-              <div className={styles.input1}>
-                <div className={styles.input2}>
-                  <label for="fname">
-                    Bạn phải tiêm đủ 2 mũi vắc xin để đăng ký
-                  </label>
-                  <div className={styles.input3}>
-                    <input
-                      className={`form-control ${styles.inputMain}}`}
-                      type="text"
-                      id="fname"
-                      name="CCCD"
-                      required
-                      onChange={(e) => {
-                        setID(e.target.value);
-                        setCMTCode(e.target.value);
-                        handleInput(e);
-                      }}
-                      onBlur={(e) => handleInputValidation(e)}
-                    />
-                    <Button
-                      className={styles.subBtn}
-                      onClick={() => hanldeCheckID(id)}
-                    >
-                      Kiểm tra
-                    </Button>
-                  </div>
-                </div>
-                <FormError
-                  isHidden={isValid["CCCD"].isInputValid}
-                  errorMessage={isValid["CCCD"].errorMessage}
-                />
-                <FormNoti isHidden={display} data={data} color={color} />
-                {/* <p style={{ color: 'red', display: { display } }}>Đã tiêm {data} mũi</p> */}
-              </div>
-            </div>
-          </div>
-          <div className={styles.label1}>
-            <div className={styles.label2}>
-              <div className={styles.label3}>
-                <label>Khu Vực Hoạt Động</label>
-              </div>
-              <div className={styles.input1}>
-                <div className="row">
-                  <div className="col col-md-6">
-                    <label for="city">Tỉnh,Thành phố</label>
-                    <select
-                      className={`form-control }`}
-                      name="city"
-                      onChange={(e) => handleChangeP(e)}
-                      required
-                    >
-                      <option value="" selected disabled>
-                        Chọn Tỉnh
-                      </option>
-                      {province.length > 0
-                        ? province.map((p, key) => (
-                            <option key={p.id} value={p.provinceId}>
-                              {p.name}
-                            </option>
-                          ))
-                        : null}
-                    </select>
-                  </div>
-                  <div className="col col-md-6">
-                    <label for="city">Quận,huyện</label>
-                    <select
-                      className={`form-control }`}
-                      name="city"
-                      onChange={(e) => handleChangeD(e)}
-                      required
-                    >
-                      <option value="" selected disabled>
-                        Chọn Quận
-                      </option>
-                      {district.length > 0
-                        ? district.map((d, key) => (
-                            <option key={d.id} value={d.districtId}>
-                              {d.name}
-                            </option>
-                          ))
-                        : null}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          onClick={() => {
-            handleRequest(props.user);
-          }}
-        >
-          Đăng Ký
-        </Button>
-        <Button onClick={props.onHide}>Đóng</Button>
-      </Modal.Footer>
-    </Modal>
-  );
-};
-
-const SellerRegister = (props) => {
-  const [data, setData] = useState(1);
-  const [id, setID] = useState("");
-
-  const hanldeCheckID = (id) => {
-    console.log("CCCD: " + id);
-    fetch("https://localhost:6969/DataRaw/checkCMT?CMTCode=" + id)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then((data) => {
-        setData(data);
-      })
-      .catch((err) => {
-        console.error("Fetching error amount of dose:" + err);
-      });
-  };
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Thông Tin Đăng Ký
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <form>
-          <div className={styles.label1}>
-            <div className={styles.label2}>
-              <div className={styles.label3}>
-                <label>Số CCCD</label>
-              </div>
-              <div className={styles.input1}>
-                <div className={styles.input2}>
-                  <div className={styles.input3}>
-                    <input
-                      className={`form-control ${styles.inputMain}}`}
-                      type="text"
-                      id="fname"
-                      name="fname"
-                      required
-                      onChange={(e) => {
-                        setID(e.target.value);
-                      }}
-                    />
-                    <Button onClick={() => hanldeCheckID(id)}>Kiểm tra</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.label1}>
-            <div className={styles.label2}>
-              <div className={styles.label3}>
-                <label>Địa chỉ cửa hàng</label>
-              </div>
-              <div className={styles.input1}>
-                <div className="row">
-                  <div className="col col-md-6">
-                    <label for="city">Tỉnh,Thành phố</label>
-                    <select
-                      className={`form-control 
-                  }`}
-                      name="city"
-                    >
-                      <option value="">Chọn Tỉnh</option>
-                    </select>
-                  </div>
-                  <div className="col col-md-6">
-                    <label for="city">Quận,huyện</label>
-                    <select
-                      className={`form-control 
-                  }`}
-                      name="city"
-                    >
-                      <option value="">Chọn Quận</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Đăng Ký</Button>
-        <Button onClick={props.onHide}>Đóng</Button>
-      </Modal.Footer>
-    </Modal>
-  );
-};
-
 const User = (props) => {
   const [user, setUser] = useState({});
+  
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
@@ -587,19 +175,8 @@ const User = (props) => {
     }
     setUser(user);
   }, []);
-  const radiosGender = [
-    { name: "Nam", value: "1" },
-    { name: "Nữ", value: "2" },
-    { name: "Khác", value: "3" },
-  ];
   const [imageFile, setImageFile] = useState(undefined);
   const [imageURL, setImageURL] = useState(path + "/images/upload.jpg");
-  const pushDate = (start, end, arr) => {
-    for (let i = start; i <= end; i++) {
-      arr.push(i);
-    }
-    return arr;
-  };
 
   const onChangeImage = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -611,25 +188,24 @@ const User = (props) => {
   const [modalShipperShow, setModalShipperShow] = useState(false);
   const [modalSellerShow, setModalSellerShow] = useState(false);
 
-  const [roleInfo, setRoleInfo] = useState({
-    cmTCode: "3434",
-    city: "5454",
-    district: "5454",
-  });
+  
 
-  const displayExtraInfo = (user) => {
-    getRoleInfo(user.id, setRoleInfo);
-
+  const DisplayExtraInfo = ({user}) => {
+    const [roleInfo, setRoleInfo] = useState({});
+  console.log('role: '+user.id)
+   useEffect(
+     ()=>getRoleInfo(user.id, setRoleInfo)
+     ,[]);
     let displayComponent;
     switch (user.role) {
       case "Admin":
-        displayComponent = <p>Admin</p>;
+        return <p>Admin</p>;
         break;
       case "Shipper":
-        displayComponent = shipperInfo(user, roleInfo);
+        return (<ShipperInfo user={user} roleInfo={roleInfo}/>);
         break;
       case "Seller":
-        displayComponent = sellerInfo(user, roleInfo);
+        return (<SellerInfo user={user} roleInfo={roleInfo}/>);
         break;
       default:
         return (
@@ -664,8 +240,8 @@ const User = (props) => {
             />
           </>
         );
+        break;
     }
-    return displayComponent;
   };
 
   return (
@@ -729,7 +305,7 @@ const User = (props) => {
                   <div className={styles.label1}>
                     <div className={styles.label2}>
                       <div className={styles.label3}>
-                        <label>Tên</label>
+                        <label>Họ và Tên</label>
                       </div>
                       <div className={styles.input1}>
                         <div className={styles.input2}>
@@ -739,7 +315,13 @@ const User = (props) => {
                               type="text"
                               id="fname"
                               name="fname"
-                              value={user.lastName}
+                              value={
+                                user.lastName +
+                                " " +
+                                user.middleName +
+                                " " +
+                                user.firstName
+                              }
                             />
                           </div>
                         </div>
@@ -783,25 +365,6 @@ const User = (props) => {
                       </div>
                     </div>
                   </div>
-
-                  <div className={styles.label1}>
-                    <div className={styles.label2}>
-                      <div className={styles.label3}>
-                        <label>ngày sinh</label>
-                      </div>
-                      <div className={styles.input1}>
-                        <div className={styles.input2}>
-                          <div className={styles.input3}>
-                            <DatePicker
-                              selected={startDate}
-                              onChange={(date) => setStartDate(date)}
-                              className={styles.datePicker}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 {btn("Lưu")}
@@ -809,8 +372,10 @@ const User = (props) => {
             </div>
           </div>
         </div>
-
-        <div className={styles.cardInfo}>{displayExtraInfo(user)}</div>
+        {console.log("user:" + user.id)}
+        <div className={styles.cardInfo}>
+          <DisplayExtraInfo user={user} />
+        </div>
       </div>
     </div>
   );

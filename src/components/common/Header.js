@@ -92,7 +92,7 @@ function Header(props) {
             )}
             <div className={`${styles.profileContainer}`}>
               {user != null ? (
-                user.role === "Admin" ? (
+                user.role === "Seller" ? (
                   <button onClick={redirectStaff}>Quản lí</button>
                 ) : user.role === "Shipper" ? (
                   <>
@@ -104,7 +104,7 @@ function Header(props) {
                       Lịch sử đơn hàng
                     </button>
                   </>
-                ) : user.role === "Seller" ? (
+                ) : user.role === "Admin" ? (
                   <>
                     <button onClick={redirectStaff}>Quản lí</button>
                   </>

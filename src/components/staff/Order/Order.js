@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import styles from "../store/List.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-regular-svg-icons";
-import { faTrash, faSearch, faLaptopHouse } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faSearch,
+  faLaptopHouse,
+} from "@fortawesome/free-solid-svg-icons";
 import OrderDetail from "./OrderDetail";
 import storeService from "../../../services/storeService";
 import ReactPaginate from "react-paginate";
@@ -12,11 +16,11 @@ export default function List(props) {
   const [totalPage, setTotalPage] = useState([]);
   const [totalRow, setTotalRow] = useState([]);
   const filterHeader =
-  "Hiển thị " +
-  dbitems.length +
-  " sản phẩm trên " +
-  totalRow +
-  " kết quả tìm thấy";
+    "Hiển thị " +
+    dbitems.length +
+    " sản phẩm trên " +
+    totalRow +
+    " kết quả tìm thấy";
   function retrieveStores() {
     storeService
       .getOrder(user.id, 1, 4)
@@ -54,20 +58,20 @@ export default function List(props) {
       {dbitems.length > 0 ? (
         <div className={styles.search}>
           <div>{filterHeader}</div>
-          <div className={`${styles.content}`}>
+          <div style={{ overflow: "auto" }} className={`${styles.content}`}>
             <table>
               <tbody>
                 <tr>
-                  <th>#</th>
-                  <th>Khách hàng</th>
-                  <th>Giá tiền</th>
-                  <th>Địa chỉ</th>
-                  <th>Xã</th>
-                  <th>Tỉnh</th>
-                  <th>Tình Trạng</th>
+                  <th className="text-r">#</th>
+                  <th className="text-l">Khách hàng</th>
+                  <th className="text-r">Giá tiền</th>
+                  <th className="text-l">Địa chỉ</th>
+                  <th className="text-l">Xã</th>
+                  <th className="text-l">Tỉnh</th>
+                  <th className="text-r">Tình Trạng</th>
                 </tr>
                 {dbitems.map((dbitem, index) => (
-                  <OrderDetail order={dbitem} key={dbitem.id}/>
+                  <OrderDetail order={dbitem} key={dbitem.id} />
                 ))}
               </tbody>
             </table>

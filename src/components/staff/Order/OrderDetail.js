@@ -16,7 +16,6 @@ export default function OrderDetail({ order }) {
     storeService
       .getOrderDetail(order.id)
       .then((res) => {
-        
         setListItem(res.data.list);
         setBuyer(res.data.buyer);
         setCity(res.data.city);
@@ -124,18 +123,21 @@ export default function OrderDetail({ order }) {
         className={styles.grey}
         style={{ height: "54px", borderBottom: "1px solid" }}
       >
-        <td>{order.id}</td>
-        <td>
-          {buyer.lastName + " " + buyer.middleName + " " + buyer.firstName}
+        <td className="text-r">{order.id}</td>
+        <td className="text-l">
+          {(buyer.lastName ? buyer.lastName : "") +
+            " " +
+            (buyer.middleName ? buyer.middleName : "") +
+            " " +
+            buyer.firstName}
         </td>
-        <td>{order.price}</td>
-        <td>{order.address}</td>
-        <td>{district}</td>
-        <td>{city}</td>
-        <td>{renderSwitch(order.orderStatusId)}</td>
+        <td className="text-r">{order.price}</td>
+        <td className="text-l">{order.address}</td>
+        <td className="text-l">{district}</td>
+        <td className="text-l">{city}</td>
+        <td className="text-r">{renderSwitch(order.orderStatusId)}</td>
       </tr>
       {listItem.map((item, index) => (
-        
         <Collapse in={open} key={item.id}>
           <tr>
             <td></td>

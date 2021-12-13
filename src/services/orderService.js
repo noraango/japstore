@@ -10,8 +10,6 @@ class OrderService {
   }
 
   createOrder(user, data) {
-    console.log(user);
-    console.log(data);
     let formData = new FormData();
     if (user) {
       formData.append("userid", user.id);
