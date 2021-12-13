@@ -52,14 +52,42 @@ class ProductService {
   getDetailImages(productId) {
     return http.get("/product/getImages/" + productId);
   }
-  getComment(productId,page,size) {
-    return http.get("/product/getComment/" + productId+"/"+page+"/"+size);
+  getComment(productId, page, size) {
+    return http.get(
+      "/product/getComment/" + productId + "/" + page + "/" + size
+    );
   }
-  buyProduct(productId,quantity,userId) {
-    return http.get("/order/buynow?productId="+productId+"&quantity="+quantity+"&userId="+userId);
+  buyProduct(productId, quantity, userId) {
+    return http.get(
+      "/order/buynow?productId=" +
+        productId +
+        "&quantity=" +
+        quantity +
+        "&userId=" +
+        userId
+    );
   }
-  Category(category,page,size) {
-    return http.get("/product/category?categoryId="+category+"&page="+page+"&size="+size);
+  Category(category, page, size) {
+    return http.get(
+      "/product/category?categoryId=" +
+        category +
+        "&page=" +
+        page +
+        "&size=" +
+        size
+    );
+  }
+  rate(userId, productId, rating, comment) {
+    return http.post(
+      "/product/rate?userId=" +
+        userId +
+        "&productId=" +
+        productId +
+        "&rating=" +
+        rating +
+        "&comment=" +
+        comment
+    );
   }
 }
 export default new ProductService();
