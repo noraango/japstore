@@ -310,13 +310,14 @@ const ShipperRegister = (props) => {
       </Modal.Body>
       <Modal.Footer>
         <Button
+        className={styles.subBtn}
           onClick={(e) => {
             handleRequest(user, e);
           }}
         >
           Đăng Ký
         </Button>
-        <Button onClick={props.onHide}>Đóng</Button>
+        <Button className={styles.subBtn} onClick={props.onHide}>Đóng</Button>
       </Modal.Footer>
     </Modal>
   );

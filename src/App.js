@@ -23,6 +23,7 @@ import ShipHistory from "./components/staff/Shipper/ViewHistory/ShippingHistory"
 import "react-toastify/dist/ReactToastify.css";
 
 import { ToastContainer } from "react-toastify";
+import Charts from "./components/staff/Charts";
 export default function App() {
   return (
     <div>
@@ -47,6 +48,8 @@ export default function App() {
             <Route path="/getOrder" component={GetOrder} />
             <Route path="/Shipping" component={Shipping} />
             <Route path="/ShippingHistory" component={ShipHistory} />
+            <Route path="/chart" component={Charts} />
+
           </div>
           <Footer></Footer>
         </BrowserRouter>

@@ -10,8 +10,9 @@ import { useHistory } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import Landing from "../../common/Landing/Landing";
 import { Redirect } from 'react-router';
-
+import { Button } from "react-bootstrap";
 import loading from "../../../services/loading.Service";
+import Rating from "./Rating";
 export default function Detail(props) {
   /**
    * Create data
@@ -19,7 +20,8 @@ export default function Detail(props) {
   const [product, setProduct] = useState({});
   const [number, setNumber] = useState(1);
   const [RatingList, setRatingList] = useState([]);
-
+  //show cmt
+  const [showCmtF, setShowCmtF] = useState(false);
   /**
    * Function
    */
@@ -216,6 +218,15 @@ export default function Detail(props) {
         <div className="rate">
           <h4>Đánh giá của khách hàng</h4>
         </div>
+        <Button
+                className={styles.subBtn}
+                style={{ width: "fit-content" }}
+                variant="primary"
+                onClick={() => setShowCmtF(true)}
+            >
+                Thêm nhận xét
+            </Button>
+        <Rating showCmtF={showCmtF} setShowCmtF={setShowCmtF}/>
         {RatingList.data ? (
           <div>
             <div className="comment">
