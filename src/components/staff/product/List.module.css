@@ -61,17 +61,17 @@
   font-size: 20px;
   color: #ffffff;
 }
-.content button {
-  height: fit-content;
-  background: #b8894e;
-  font-size: 15px;
-  font-weight: 525;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  padding: 11px;
-  cursor: pointer;
-}
+  .content button {
+    height: fit-content;
+    background: #b8894e;
+    font-size: 15px;
+    font-weight: 525;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 11px;
+    cursor: pointer;
+  }
 .btnAdd {
   grid-row: span 1;
   grid-column: span 1;

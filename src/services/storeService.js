@@ -1,5 +1,5 @@
 import http from "../http-common";
-import {storages} from "../controller/data";
+import { storages } from "../controller/data";
 class StoreService {
   getAll() {
     return storages;
@@ -10,21 +10,37 @@ class StoreService {
     return http.get("/store/get/");
     // return http.get(`/product/${id}`);
   }
-
-  getOrder(userId,page,size) {
-    return http.get("/order/getStoreOrder?userId="+userId+"&currentPage="+page+"&pageSize="+size);
+  getStoreDetail(storeId, currentPage, pageSize) {
+    return http.get(
+      "/store/detail?storeId=" +
+        storeId +
+        "&page=" +
+        currentPage +
+        "&size=" +
+        pageSize
+    );
   }
-
+  getOrder(userId, page, size) {
+    return http.get(
+      "/order/getStoreOrder?userId=" +
+        userId +
+        "&currentPage=" +
+        page +
+        "&pageSize=" +
+        size
+    );
+  }
   getOrderDetail(id) {
-    return http.get("/order/getOrderDetail?id="+id);
+    return http.get("/order/getOrderDetail?id=" + id);
   }
 
-  Cancel(idOrder,reason) {
-    return http.get("Order/CancelOrder?cancelType=1&orderId="+idOrder+"&reason="+reason);
+  Cancel(idOrder, reason) {
+    return http.get(
+      "Order/CancelOrder?cancelType=1&orderId=" + idOrder + "&reason=" + reason
+    );
   }
   checkOrder(idOrder) {
-    return http.get("Order/checkOrder?id="+idOrder);
+    return http.get("Order/checkOrder?id=" + idOrder);
   }
-  
 }
 export default new StoreService();

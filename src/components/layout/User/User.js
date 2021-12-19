@@ -158,6 +158,7 @@ const User = (props) => {
     let user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
       props.history.push("/");
+      return
     }
     setUser(user);
     let name = user.lastName + " " + user.middleName + " " + user.firstName;

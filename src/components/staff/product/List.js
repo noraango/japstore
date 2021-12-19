@@ -46,7 +46,7 @@ export default function ListProduct(props) {
       .then((res) => {
         setProducts(res.data.list);
         setPages(res.data.numberOfPage);
-        // console.log(res.data.list);
+        console.log(res.data.list);
       })
       .catch((e) => {
         console.log(e);

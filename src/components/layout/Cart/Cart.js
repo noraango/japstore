@@ -40,7 +40,6 @@ function Cart(props) {
       {cartitems.length > 0 ? (
         cartitems.map((item, index) => {
           return <CartDetail cart={item} key={item.id} />;
-        
         })
       ) : (
         <div className={styles.empty}>
