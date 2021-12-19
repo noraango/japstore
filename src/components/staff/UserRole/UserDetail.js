@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Collapse, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
+import userService from "../../../services/user.service";
 
 const UserDetail = (props) => {
   const [open, setOpen] = useState(false);
@@ -32,15 +34,8 @@ const UserDetail = (props) => {
   };
 
   const relist = () => {
-    fetch(
-      "https://localhost:6969/User/UserRequest?page=1&size=10&roleId=0&status=99"
-    )
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
+    userService
+      .getUserRequest()
       .then((data) => {
         props.relist(data.data);
       })
@@ -50,51 +45,64 @@ const UserDetail = (props) => {
   };
 
   const handleActiveAccount = (userId) => {
-    fetch(
-      "https://localhost:6969/User/UpdateUserStatus?userId=" +
-        userId +
-        "&status=" +
-        statusAccept
-    )
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
+    userService
+      .UpdateUserStatus(userId, statusAccept)
       .then((data) => {
-        if (data.status === true) {
-          alert("Mở hoạt động thành công!");
+        if (data.data.status === true) {
+          toast.success("Kích hoạt thành công!", {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+
           relist();
         }
       })
       .catch((err) => {
         console.log("Post accept requestion err: " + err);
-        alert("Mở hoạt động thất bại!");
+        toast.error("Kích hoạt thất bại!", {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
   };
   const handleDisactiveAccount = (userId) => {
-    fetch(
-      "https://localhost:6969/User/UpdateUserStatus?userId=" +
-        userId +
-        "&status=" +
-        statusRefuse
-    )
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
+    userService
+      .UpdateUserStatus(userId, statusRefuse)
       .then((data) => {
-        if (data.status === true) {
-          alert("Ngừng hoạt động thành công!");
+        if (data.data.status === true) {
+          toast.success("Hủy kích hoạt thành công!", {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
           relist();
         }
       })
       .catch((err) => {
         console.log("Post accept requestion err: " + err);
-        alert("Ngừng hoạt động thất bại!");
+        toast.error("Ngưng kích hoạt thất bại!", {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
   };
   return (

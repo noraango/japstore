@@ -4,19 +4,21 @@ import styles from "../../../layout/Order/Order.module.css";
 import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
 import { formatVND } from "../../../../controller/constants";
 import ReactPaginate from "react-paginate";
+import orderService from "../../../../services/orderService";
+import loadingService from "../../../../services/loading.Service";
 const OrderDetail = (props) => {
   const [show, setShow] = useState(false);
   const [cancel, setCancel] = useState(false);
   function renderSwitch(param) {
-    switch(param) {
+    switch (param) {
       case 3:
-        return 'Đang giao hàng';
-        case 4:
-        return 'Giao hàng thành công';
-        case 5:
-        return 'Đã hủy bỏ';
+        return "Đang giao hàng";
+      case 4:
+        return "Giao hàng thành công";
+      case 5:
+        return "Đã hủy bỏ";
       default:
-        return 'Chưa Rõ';
+        return "Chưa Rõ";
     }
   }
   const [orderD, setOrderD] = useState([]);
@@ -121,11 +123,12 @@ const OrderDetail = (props) => {
               Địa chỉ giao hàng: {props.data.order.address}
             </p>
             <p style={{ margin: "12px 30px" }}>
-              Tên Khách Hàng: {props.data.user.lastName +
-              " " +
-              props.data.user.middleName +
-              " " +
-              props.data.user.firstName}
+              Tên Khách Hàng:{" "}
+              {props.data.user.lastName +
+                " " +
+                props.data.user.middleName +
+                " " +
+                props.data.user.firstName}
             </p>
           </Col>
           <Col>
@@ -167,87 +170,42 @@ const OrderDetail = (props) => {
   );
 };
 export default function ShippingHistory() {
-  const [key, setKey] = useState(1);
-  const ordersRaw = [
-    {
-      id: 1,
-      shopName: "Astusy",
-      province: "Thành Phố Hà Nội",
-      district: "Cầu Giấy",
-      product: [
-        {
-          name: "Sữa bột",
-          quanity: 2,
-        },
-        {
-          name: "Bỉm",
-          quanity: 4,
-        },
-      ],
-      orderPrice: 15000,
-      userName: "vịt con",
-    },
-    {
-      id: 2,
-      shopName: "Astusy",
-      province: "Thành Phố Hà Nội",
-      district: "Cầu Giấy",
-      product: [
-        {
-          name: "Sữa bột",
-          quanity: 2,
-        },
-        {
-          name: "Bỉm",
-          quanity: 4,
-        },
-      ],
-      orderPrice: 15000,
-      userName: "vịt con",
-    },
-  ];
   const [orders, setOrders] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
   const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    if(user!==null){
-    fetch(
-      "https://localhost:6969/Order/GetHistory?userId=" +
-        user.id +
-        "&page=1&size=10"
-    )
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw res;
-      })
-      .then((data) => {setOrders(data.data)
-        setTotalPage(data.totalPage)
-        setTotalRows(data.totalRow)})
-      .catch((err) => {
-        console.error("Fetching list orders history error: " + err);
-      });
+    if (user !== null) {
+      loadingService.showLoading();
+      orderService
+        .GetOrderHistory(user.id, 1, 10)
+        .then((data) => {
+          setOrders(data.data.data);
+          setTotalPage(data.data.totalPage);
+          setTotalRows(data.data.totalRow);
+          loadingService.HideLoading();
+        })
+        .catch((err) => {
+          console.error("Fetching list orders history error: " + err);
+          loadingService.HideLoading();
+        });
     }
   }, []);
   const handlePageClick = (event) => {
-    let index =  event.selected;
-    fetch(
-      "https://localhost:6969/Order/GetHistory?userId=" +
-      user.id  +
-        "&filterType=2&page="+(index+1)+"&size=10"
-    )
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw res;
-      })
+    let index = event.selected;
+    loadingService.showLoading();
+    orderService
+      .GetOrderHistory(user.id, index + 1, 10)
       .then((data) => {
-        setOrders(data.data)
-        setTotalPage(data.totalPage)
-        setTotalRows(data.totalRow)
+        setOrders(data.data.data);
+        setTotalPage(data.data.totalPage);
+        setTotalRows(data.data.totalRow);
+        loadingService.HideLoading();
       })
       .catch((err) => {
         console.error("Fetching order error: " + err);
+        loadingService.HideLoading();
       });
   };
   return (

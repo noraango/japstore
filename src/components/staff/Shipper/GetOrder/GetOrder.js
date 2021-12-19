@@ -5,46 +5,68 @@ import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
 import { formatVND } from "../../../../controller/constants";
 import ReactPaginate from "react-paginate";
 import { connect } from "react-redux";
+import orderService from "../../../../services/orderService";
+import loading from "../../../../services/loading.Service";
+import { toast } from "react-toastify";
 const OrderDetail = (props) => {
   console.log(props.data);
   const [show, setShow] = useState(false);
   const relist = () => {
-    fetch(
-      "https://localhost:6969/Order/GetOrder?userId=" +
-        props.userId +
-        "&filterType=2&page=1&size=10"
-    )
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw res;
+    loading.showLoading();
+    orderService
+      .getOrder(props.userId, 2, 1, 10)
+      .then((data) => {
+        props.relist(data.data.data);
+        loading.HideLoading();
       })
-      .then((data) => props.relist(data.data))
       .catch((err) => {
         console.error("Fetching order error: " + err);
+        loading.HideLoading();
       });
   };
   function getOrder() {
     if (window.confirm("Nhận đơn hàng?")) {
-      fetch(
-        "https://localhost:6969/Order/ReceiveOrder?userId=" +
-          props.userId +
-          "&orderid=" +
-          props.data.order.id
-      )
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw res;
-        })
+      loading.showLoading();
+      orderService
+        .ReceiveOrder(props.userId, props.data.order.id)
         .then((data) => {
-          if (data == 1) {
-            alert("Nhận đơn hàng thành công!");
+          if (data.data === 1) {
+            toast.success("Nhận đơn hàng thành công!", {
+              position: "bottom-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
             relist();
             setShow(false);
-          } else alert("Nhận đơn hàng thất bại!");
+            loading.HideLoading();
+          } else {
+            loading.HideLoading();
+            toast.error("Nhận đơn hàng thất bại!", {
+              position: "bottom-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
         })
         .catch((err) => {
+          loading.HideLoading();
+          toast.error("Nhận đơn hàng thất bại!", {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
           console.error("Post receive api wrong:" + err);
         });
     }
@@ -52,12 +74,9 @@ const OrderDetail = (props) => {
   const [orderD, setOrderD] = useState([]);
   const listDetailOrder = async (idOrder) => {
     setShow(true);
-    fetch("https://localhost:6969/Order/ViewOrder?orderId=" + idOrder)
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw res;
-      })
-      .then((data) => setOrderD(data.listPro))
+    orderService
+      .getListOrder(idOrder)
+      .then((data) => setOrderD(data.data.listPro))
       .catch((err) => {
         console.error("Fetching order detail error: " + err);
       });
@@ -182,10 +201,9 @@ function GetOrder(props) {
   let user = JSON.parse(localStorage.getItem("user"));
   if (!user) {
     props.history.push("/");
-  } else if (user.role != "Shipper") {
+  } else if (user.role !== "Shipper") {
     props.history.push("/");
   }
-  const [key, setKey] = useState(1);
   let active = 2;
   let items = [];
   for (let number = 1; number <= 5; number++) {
@@ -195,44 +213,6 @@ function GetOrder(props) {
       </Pagination.Item>
     );
   }
-  const ordersRaw = [
-    {
-      id: 1,
-      shopName: "Astusy",
-      province: "Thành Phố Hà Nội",
-      district: "Cầu Giấy",
-      product: [
-        {
-          name: "Sữa bột",
-          quanity: 2,
-        },
-        {
-          name: "Bỉm",
-          quanity: 4,
-        },
-      ],
-      orderPrice: 15000,
-      userName: "vịt con",
-    },
-    {
-      id: 2,
-      shopName: "Astusy",
-      province: "Thành Phố Hà Nội",
-      district: "Cầu Giấy",
-      product: [
-        {
-          name: "Sữa bột",
-          quanity: 2,
-        },
-        {
-          name: "Bỉm",
-          quanity: 4,
-        },
-      ],
-      orderPrice: 15000,
-      userName: "vịt con",
-    },
-  ];
 
   const [orders, setOrders] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
@@ -244,46 +224,36 @@ function GetOrder(props) {
   useEffect(() => {
     if (userObject)
       if (userObject !== null) {
-        fetch(
-          "https://localhost:6969/Order/GetOrder?userId=" +
-            userObject.id +
-            "&filterType=2&page=1&size=10"
-        )
-          .then((res) => {
-            if (res.ok) return res.json();
-            throw res;
-          })
+        loading.showLoading();
+        orderService
+          .getOrder(userObject.id, 2, 1, 10)
           .then((data) => {
-            setOrders(data.data);
-            setTotalPage(data.totalPage);
-            setTotalRows(data.totalRow);
+            setOrders(data.data.data);
+            setTotalPage(data.data.totalPage);
+            setTotalRows(data.data.totalRow);
+            loading.HideLoading();
           })
           .catch((err) => {
             console.error("Fetching order error: " + err);
+            loading.HideLoading();
           });
       }
   }, []);
   const handlePageClick = (event) => {
     let index = event.selected;
-    fetch(
-      "https://localhost:6969/Order/GetOrder?userId=" +
-        userObject.id +
-        "&filterType=2&page=" +
-        (index + 1) +
-        "&size=10"
-    )
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw res;
-      })
+    loading.showLoading();
+    orderService
+      .getOrder(userObject.id, 2, index + 1, 10)
       .then((data) => {
-        console.log(data.data);
-        setOrders(data.data);
-        setTotalPage(data.totalPage);
-        setTotalRows(data.totalRow);
+        console.log(data.data.data);
+        setOrders(data.data.data);
+        setTotalPage(data.data.totalPage);
+        setTotalRows(data.data.totalRow);
+        loading.HideLoading();
       })
       .catch((err) => {
         console.error("Fetching order error: " + err);
+        loading.HideLoading();
       });
   };
   return (

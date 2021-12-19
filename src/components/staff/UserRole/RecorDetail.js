@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Collapse, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
+import userService from "../../../services/user.service";
 export default function RecorDetail(props) {
   const [open, setOpen] = useState(false);
   const statusAccept = 1;
   const statusRefuse = -1;
 
   const relist = () => {
-    fetch("https://localhost:6969/User/RoleRequest?page=1&size=10")
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
+    userService
+      .getRoleReq(1, 10)
       .then((data) => {
-        props.relist(data.data);
+        props.relist(data.data.data);
       })
       .catch((err) => {
         console.error("Fetching error user account list:" + err);
@@ -22,51 +19,64 @@ export default function RecorDetail(props) {
   };
 
   const handleAcceptRes = (requestId) => {
-    console.log("accept clicked");
-    fetch(
-      "https://localhost:6969/User/UpdateRequest?status=" +
-        statusAccept +
-        "&requestId=" +
-        requestId
-    )
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
+    userService
+      .updateRoleReq(statusAccept, requestId)
       .then((data) => {
-        if (data.status === true) {
-          alert("Chấp nhận yêu cầu thành công!");
+        if (data.data.status === true) {
+          toast.success("Chấp nhận yêu cầu thành công!", {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
           relist();
         }
       })
       .catch((err) => {
         console.log("Post accept requestion err: " + err);
+        toast.success("Chấp nhận yêu cầu thành công!", {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
   };
   const handleRefuseRes = (requestId) => {
     console.log("refuse clicked");
-    fetch(
-      "https://localhost:6969/User/UpdateRequest?status=" +
-        statusRefuse +
-        "&requestId=" +
-        requestId
-    )
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
+    userService
+      .updateRoleReq(statusRefuse, requestId)
       .then((data) => {
-        if (data.status === true) {
-          alert("Hủy yêu cầu thành công!");
+        if (data.data.status === true) {
+          toast.success("Hủy yêu cầu thành công!", {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
           relist();
         }
       })
       .catch((err) => {
         console.log("Post refuse requestion err: " + err);
+        toast.error("Hủy yêu cầu thất bại!", {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
   };
   return (

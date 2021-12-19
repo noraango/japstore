@@ -7,6 +7,7 @@ import RoleRecord from "./RoleRecord";
 import UserRecord from "./UserRecord";
 import ReactPaginate from "react-paginate";
 import styles from "../../layout/Order/Order.module.css";
+import userService from "../../../services/user.service";
 
 export default function UserRole() {
   const [tabIndex, setTabIndex] = useState(0, []);
@@ -18,7 +19,6 @@ export default function UserRole() {
   const [totalPage1, setTotalPage1] = useState(0);
   const [totalPage2, setTotalPage2] = useState(0);
   const user = JSON.parse(localStorage.getItem("user"));
-
   const [stsActive, setStsActive] = useState(99);
   const [role, setRole] = useState(1);
   const page = 1;
@@ -62,43 +62,22 @@ export default function UserRole() {
 
   //fetch data
   const getRoleRes = (page, size) => {
-    fetch(
-      "https://localhost:6969/User/RoleRequest?page=" + page + "&size=" + size
-    )
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
+    userService
+      .getRoleReq(page, size)
       .then((data) => {
-        setRequestList(data.data);
-        setTotalPage1(data.totalPage);
+        setRequestList(data.data.data);
+        setTotalPage1(data.data.totalPage);
       })
       .catch((err) => {
         console.error("Fetching err request list: " + err);
       });
   };
   const getUserRequest = (page, size, roleId, status) => {
-    fetch(
-      "https://localhost:6969/User/UserRequest?page=" +
-        page +
-        "&size=" +
-        size +
-        "&roleId=" +
-        roleId +
-        "&status=" +
-        status
-    )
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
+    userService
+      .getUserReq(page, size, roleId, status)
       .then((data) => {
-        setUserList(data.data);
-        setTotalPage2(data.totalPage);
+        setUserList(data.data.data);
+        setTotalPage2(data.data.totalPage);
       })
       .catch((err) => {
         console.error("Fetching error user account list:" + err);
@@ -109,10 +88,10 @@ export default function UserRole() {
     getRoleRes(page, size);
     getUserRequest(page, size, 1, 99);
   }, []);
-  
-  useEffect(()=>{;
+
+  useEffect(() => {
     getUserRequest(page, size, role, stsActive);
-  },[role, stsActive])
+  }, [role, stsActive]);
 
   const handleSearch = (strSearch) => {
     const listUser = userList;
@@ -159,33 +138,32 @@ export default function UserRole() {
                   <div>Không có data để hiển thị</div>
                 )}
               </tbody>
-              
             </table>
             <nav
-                aria-label="Page navigation example"
-                className={styles.navigation}
-                style={{display:"flex",justifyContent:"center"}}
-              >
-                <ReactPaginate
-                  nextLabel="next >"
-                  onPageChange={(e) => handlePageClick(e, 1)}
-                  pageRangeDisplayed={3}
-                  pageCount={totalPage1}
-                  previousLabel="< previous"
-                  pageClassName="page-item"
-                  pageLinkClassName="page-link"
-                  previousClassName="page-item"
-                  previousLinkClassName="page-link"
-                  nextClassName="page-item"
-                  nextLinkClassName="page-link"
-                  breakLabel="..."
-                  breakClassName="page-item"
-                  breakLinkClassName="page-link"
-                  containerClassName="pagination"
-                  activeClassName="active"
-                  renderOnZeroPageCount={null}
-                />
-              </nav>
+              aria-label="Page navigation example"
+              className={styles.navigation}
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <ReactPaginate
+                nextLabel="next >"
+                onPageChange={(e) => handlePageClick(e, 1)}
+                pageRangeDisplayed={3}
+                pageCount={totalPage1}
+                previousLabel="< previous"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                breakLabel="..."
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                activeClassName="active"
+                renderOnZeroPageCount={null}
+              />
+            </nav>
           </div>
         </TabPanel>
         <TabPanel>

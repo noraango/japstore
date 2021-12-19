@@ -5,6 +5,9 @@ import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { formatVND } from "../../../../controller/constants";
 import ReactPaginate from "react-paginate";
+import orderService from "../../../../services/orderService";
+import loadingService from "../../../../services/loading.Service";
+import { toast } from "react-toastify";
 const OrderDetail = (props) => {
   const [show, setShow] = useState(false);
   const [cancel, setCancel] = useState(false);
@@ -15,66 +18,96 @@ const OrderDetail = (props) => {
   const cancleId = 5;
 
   const relist = () => {
-    fetch(
-      "https://localhost:6969/Order/GetShipping?userId=" +
-        user.id +
-        "&page=1&size=10"
-    )
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw res;
-      })
+    loadingService.showLoading();
+    orderService
+      .getOrderShipping(user.id, 1, 10)
       .then((data) => {
-        props.relist(data.data);
-        props.totalPage(data.totalPage);
-        props.totalRow(data.totalRow);
+        props.relist(data.data.data);
+        props.totalPage(data.data.totalPage);
+        props.totalRow(data.data.totalRow);
+        loadingService.HideLoading();
       })
       .catch((err) => {
         console.error("Fetching list orders history error: " + err);
+        loadingService.HideLoading();
       });
   };
 
   function finishOrder() {
     if (window.confirm("Xác nhận hoàn thành đơn hàng?")) {
-      fetch(
-        "https://localhost:6969/Order/UpdateOrder?orderId=" +
-          props.data.order.id +
-          "&status=4"
-      )
-        .then((res) => {
-          if (res.ok) return res.json();
-          throw res;
-        })
+      loadingService.showLoading();
+      orderService
+        .UpdateOrderShipping(props.data.order.id, 4)
         .then(() => {
-          alert("Xác nhận thành công");
+          loadingService.HideLoading();
+          toast.success("Xác nhận thành công!", {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
           relist();
         })
         .catch((err) => {
           console.error("Fetching list orders history error: " + err);
+          toast.error("Xác nhận thất bại!", {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          loadingService.HideLoading();
         });
     }
   }
   function handleCancle(idOrder) {
     if (window.confirm("Xác nhận hủy đơn hàng?")) {
-      fetch(
-        "https://localhost:6969/Order/CancelOrder?cancelType=" +
-          cancleId +
-          "&orderId=" +
-          idOrder +
-          "&reason=" +
-          reason
-      )
-        .then((res) => {
-          if (res.ok) return res.json();
-          throw res;
-        })
+      loadingService.showLoading();
+      orderService
+        .CancelOrder(cancleId, idOrder, reason)
         .then((data) => {
-          if (data === 1) {
-            alert("Hủy nhận thành công");
+          if (data.data === 1) {
+            toast.success("Hủy đơn hàng thành công!", {
+              position: "bottom-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            loadingService.HideLoading();
             relist();
-          } else alert("Không thể hủy đơn hàng");
+          } else {
+            toast.error("Hủy đơn hàng thất bại!", {
+              position: "bottom-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            loadingService.HideLoading();
+          }
         })
         .catch((err) => {
+          toast.error("Hủy đơn hàng thất bại!", {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          loadingService.HideLoading();
           console.error("Fetching list orders shipping error: " + err);
         });
     }
@@ -83,14 +116,16 @@ const OrderDetail = (props) => {
   const [orderD, setOrderD] = useState([]);
   const listDetailOrder = async (idOrder) => {
     setShow(true);
-    fetch("https://localhost:6969/Order/ViewOrder?orderId=" + idOrder)
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw res;
+    loadingService.showLoading();
+    orderService
+      .ViewOrder(idOrder)
+      .then((data) => {
+        setOrderD(data.data.listPro);
+        loadingService.HideLoading();
       })
-      .then((data) => setOrderD(data.listPro))
       .catch((err) => {
         console.error("Fetching order detail error: " + err);
+        loadingService.HideLoading();
       });
   };
   return (
@@ -274,7 +309,6 @@ const OrderDetail = (props) => {
 };
 
 export default function Ship() {
-  const [key, setKey] = useState(1);
   const [orders, setOrders] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
   const [totalRows, setTotalRows] = useState(0);
@@ -282,19 +316,12 @@ export default function Ship() {
 
   useEffect(() => {
     if (user !== null) {
-      fetch(
-        "https://localhost:6969/Order/GetShipping?userId=" +
-          user.id +
-          "&page=1&size=10"
-      )
-        .then((res) => {
-          if (res.ok) return res.json();
-          throw res;
-        })
+      orderService
+        .getOrderShipping(user.id, 1, 10)
         .then((data) => {
-          setOrders(data.data);
-          setTotalPage(data.totalPage);
-          setTotalRows(data.totalRow);
+          setOrders(data.data.data);
+          setTotalPage(data.data.totalPage);
+          setTotalRows(data.data.totalRow);
         })
         .catch((err) => {
           console.error("Fetching list orders history error: " + err);
@@ -304,24 +331,18 @@ export default function Ship() {
 
   const handlePageClick = (event) => {
     let index = event.selected;
-    fetch(
-      "https://localhost:6969/Order/GetHistory?userId=" +
-        user.id +
-        "&filterType=2&page=" +
-        (index + 1) +
-        "&size=10"
-    )
-      .then((res) => {
-        if (res.ok) return res.json();
-        throw res;
-      })
+    loadingService.showLoading();
+    orderService
+      .getOrderShipping(user.id, index + 1, 10)
       .then((data) => {
-        setOrders(data.data);
-        setTotalPage(data.totalPage);
-        setTotalRows(data.totalRow);
+        setOrders(data.data.data);
+        setTotalPage(data.data.totalPage);
+        setTotalRows(data.data.totalRow);
+        loadingService.HideLoading();
       })
       .catch((err) => {
         console.error("Fetching order error: " + err);
+        loadingService.HideLoading();
       });
   };
   //local storage user
