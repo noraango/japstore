@@ -50,6 +50,34 @@ class UserService {
       "/User/UpdateRequest?status=" + statusAccept + "&requestId=" + requestId
     );
   }
+
+  ShipperResgister(CMTCode, UserId, provinceId, districtId) {
+    return http.post(
+      "/User/ShipperResgister?CMTCode=" +
+        CMTCode +
+        "&UserId=" +
+        UserId +
+        "&provideId=" +
+        provinceId +
+        "&districtId=" +
+        districtId
+    );
+  }
+  ShopResgister(CMTCode, UserId, provinceId, districtId) {
+    return http.post(
+      "/User/ShopResgister?CMTCode=" +
+        CMTCode +
+        "&UserId=" +
+        UserId +
+        "&provideId=" +
+        provinceId +
+        "&districtId=" +
+        districtId
+    );
+  }
+  checkCode(id) {
+    return http.post("/DataRaw/checkCMT?CMTCode=" + id);
+  }
   update(data) {
     return "OK";
     //return http.put(`/product/${id}`, data);

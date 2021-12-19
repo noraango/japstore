@@ -3,6 +3,10 @@ import styles from "./User.module.css";
 import { path } from "../../../controller/constants";
 import { Button, Modal } from "react-bootstrap";
 
+import loading from "../../../services/loading.Service";
+import userService from "../../../services/user.service";
+import { toast } from "react-toastify";
+
 const ShipperRegister = (props) => {
   const validateInput = (type, checkingText) => {
     /* reg exp để kiểm tra xem chuỗi có chỉ bao gồm 12 chữ số hay không */
@@ -77,15 +81,10 @@ const ShipperRegister = (props) => {
 
   const hanldeCheckID = (id) => {
     console.log("CCCD: " + id);
-    fetch("https://localhost:6969/DataRaw/checkCMT?CMTCode=" + id)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
+    userService
+      .checkCode(id)
       .then((data) => {
-        setData(data);
+        setData(data.data);
       })
       .catch((err) => {
         console.error("Fetching error amount of dopes:" + err);
@@ -133,48 +132,29 @@ const ShipperRegister = (props) => {
     };
     console.log(request);
     if (
-      CMTCode !== '' &&
+      CMTCode !== "" &&
       user.id !== null &&
-      provinceId !== '' &&
-      districtId !== ''
+      provinceId !== "" &&
+      districtId !== ""
     ) {
-      fetch(
-        "https://localhost:6969/User/ShipperResgister?CMTCode=" +
-          CMTCode +
-          "&UserId=" +
-          UserId +
-          "&provideId=" +
-          provinceId +
-          "&districtId=" +
-          districtId,
-        {
-          method: "POST",
-          body: JSON.stringify(request),
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "*/*",
-          },
-        }
-      )
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw res;
-        })
+      loading.showLoading();
+      userService
+        .ShipperResgister(CMTCode, UserId, provinceId, districtId)
         .then((data) => {
           console.log("Status:" + data.status);
-          if (data.status == true) {
+          if (data.data.status === true) {
             alert("Đăng ký thành công!");
             window.location.reload();
-          } else alert("Đăng ký không thành công!");
+          } else {
+            alert("Đăng ký không thành công!");
+          }
         })
         .catch((err) => {
           console.error("Fetching error of senting register requestion:" + err);
         });
     } else {
-        alert('Chưa đủ thông tin')
-        // e.preventDefault();
+      alert("Chưa đủ thông tin");
+      // e.preventDefault();
     }
   };
   const [isValid, setIsValid] = useState({
@@ -310,14 +290,16 @@ const ShipperRegister = (props) => {
       </Modal.Body>
       <Modal.Footer>
         <Button
-        className={styles.subBtn}
+          className={styles.subBtn}
           onClick={(e) => {
             handleRequest(user, e);
           }}
         >
           Đăng Ký
         </Button>
-        <Button className={styles.subBtn} onClick={props.onHide}>Đóng</Button>
+        <Button className={styles.subBtn} onClick={props.onHide}>
+          Đóng
+        </Button>
       </Modal.Footer>
     </Modal>
   );

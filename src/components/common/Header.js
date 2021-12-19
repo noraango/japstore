@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 function Header(props) {
   const [searchText, setSearchText] = useState("");
   const history = useHistory();
-  let amoutnCart = JSON.parse(localStorage.getItem('cartAmount'));
+  let amoutnCart = JSON.parse(localStorage.getItem("cartAmount"));
   let path = process.env.PUBLIC_URL + "/images";
   let user = JSON.parse(localStorage.getItem("user"));
   console.log(user);
@@ -30,8 +30,7 @@ function Header(props) {
   function logout() {
     localStorage.removeItem("user");
     localStorage.removeItem("User");
-    window.location.reload();
-    toHome();
+    window.location.href("/");
   }
   function redirectStaff() {
     history.push("/staff/product");
@@ -140,7 +139,9 @@ function Header(props) {
         </div>
         <button onClick={onClickCart} className={`${styles.cartButton}`}>
           <div className={styles.cart1}>
-            <p>{props.cart.numberCart!==0? props.cart.numberCart : amoutnCart}</p>
+            <p>
+              {props.cart.numberCart !== 0 ? props.cart.numberCart : amoutnCart}
+            </p>
           </div>
           <div className={styles.cart2}>
             <FontAwesomeIcon

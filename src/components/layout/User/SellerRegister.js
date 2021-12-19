@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styles from "./User.module.css";
 import { Button, Modal } from "react-bootstrap";
+import userService from "../../../services/user.service";
 
 const SellerRegister = (props) => {
   const [data, setData] = useState(1);
   const [id, setID] = useState("");
   const [CMTCode, setCMTCode] = useState("");
   const [UserId, setUserId] = useState("");
-  const [provinceId, setProvinceId] = useState('01TTT');
+  const [provinceId, setProvinceId] = useState("01TTT");
   const [districtId, setDistrictId] = useState("00001");
 
   const provinceRaw = [
@@ -47,61 +48,48 @@ const SellerRegister = (props) => {
     setDistrictId(e.target.value);
   };
 
-
   //post request register
-  const postRequest=(request)=>{
-    fetch(
-        "https://localhost:6969/User/ShopResgister?userId=" +
-          request.UserId +
-          "&CMTCode=" +
-          request.CMTCode +
-          "&provideId=" +
-          request.provinceId +
-          "&districtId=" +
-          request.districtId,
-        {
-          method: "POST",
-          body: JSON.stringify(request),
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "*/*",
-          },
-        }
+  const postRequest = (request) => {
+    userService
+      .ShopResgister(
+        request.CMTCode,
+        request.UserId,
+        request.provinceId,
+        request.districtId
       )
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          throw res;
-        })
-        .then((data) => {
-          console.log("Status:" + data.status);
-          if (data.status == true) alert("Đăng ký thành công!");
-          else alert("Đăng ký không thành công!");
-          window.location.reload()
-        })
-        .catch((err) => {
-          console.error("Fetching error of senting register requestion:" + err);
-        });
-  }
+      .then((data) => {
+        console.log("Status:" + data.status);
+        if (data.data.status === true) alert("Đăng ký thành công!");
+        else alert("Đăng ký không thành công!");
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.error("Fetching error of senting register requestion:" + err);
+      });
+  };
 
-  let user= JSON.parse(localStorage.getItem('user'))//local user
-  const handleRequest = (user,e) => {
+  let user = JSON.parse(localStorage.getItem("user")); //local user
+  const handleRequest = (user, e) => {
     setUserId(user.id);
-    
+
     let request = {
       CMTCode: CMTCode,
       UserId: user.id,
       provinceId: provinceId,
       districtId: districtId,
     };
-    console.log('request: '+request);
-    if( CMTCode !==null && user.id!==null && provinceId!==null && districtId!=null) postRequest(request)
+    console.log("request: " + request);
+    if (
+      CMTCode !== null &&
+      user.id !== null &&
+      provinceId !== null &&
+      districtId != null
+    )
+      postRequest(request);
     else {
-        alert('Chưa đủ thông tin')
-        e.preventDefault()
+      alert("Chưa đủ thông tin");
+      e.preventDefault();
     }
-    
   };
   //validate
   const validateInput = (type, checkingText) => {
@@ -212,7 +200,7 @@ const SellerRegister = (props) => {
                     }`}
                       name="city"
                       onChange={(e) => handleChangeP(e)}
-                      onClick={()=>setProvinceId(province[0].id)}
+                      onClick={() => setProvinceId(province[0].id)}
                     >
                       <option value="" disabled>
                         Chọn Tỉnh
@@ -233,7 +221,7 @@ const SellerRegister = (props) => {
                     }`}
                       name="district"
                       onChange={(e) => handleChangeD(e)}
-                      onClick={()=>setDistrictId(district[0].id)}
+                      onClick={() => setDistrictId(district[0].id)}
                     >
                       <option value="" disabled>
                         Chọn Quận
@@ -257,7 +245,7 @@ const SellerRegister = (props) => {
         <Button
           onClick={props.onHide}
           onClick={(e) => {
-            handleRequest(user,e);
+            handleRequest(user, e);
           }}
         >
           Đăng Ký
