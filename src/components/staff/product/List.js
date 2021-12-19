@@ -39,9 +39,10 @@ export default function ListProduct(props) {
     setCurrentPage(value);
     // console.log(value);
   }
+  let user = JSON.parse(localStorage.getItem("user"));
   function retrieveProducts() {
     productService
-      .search(searchText, currentPage, pageSize)
+      .shopProduct(user.id,searchText, currentPage, pageSize)
       .then((res) => {
         setProducts(res.data.list);
         setPages(res.data.numberOfPage);

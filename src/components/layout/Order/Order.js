@@ -18,45 +18,53 @@ const ProductDetail = ({ product }) => {
   };
   const name = nameProduct(product);
   return (
-    <Row>
-      <Col>
-        <div className={styles.cardInfo}>
-          <Col>
-            <div className={styles.imgContainer}>
-              <img src={imageService.get(product.displayImageName)} />
-            </div>
-          </Col>
-          <Col style={{ display: "flex", justifyContent: "center" }}>
-            <p>{name}</p>
-          </Col>
-          <Col
-            className={styles.col}
-            style={{
-              justifyContent: "flex-start",
-            }}
-          >
-            <p>X {product.quantity}</p>
-          </Col>
-        </div>
-      </Col>
-      <Col></Col>
-      <Col
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-        }}
-      >
-        <div className={styles.price} style={{ marginRight: "10%" }}>
-          {formatVND(priceQuantity)}đ
-        </div>
-      </Col>
-    </Row>
+    <>
+      <Row>
+        <Col>
+          <div className={styles.cardInfo}>
+            <Col>
+              <div className={styles.imgContainer}>
+                <img src={imageService.get(product.displayImageName)} />
+              </div>
+            </Col>
+            <Col style={{ display: "flex", justifyContent: "center" }}>
+              <p>{name}</p>
+            </Col>
+            <Col
+              className={styles.col}
+              style={{
+                justifyContent: "flex-start",
+              }}
+            >
+              <p>X {product.quantity}</p>
+            </Col>
+          </div>
+        </Col>
+        <Col></Col>
+        <Col
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          <div className={styles.price} style={{ marginRight: "10%" }}>
+            {formatVND(priceQuantity)}đ
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <span className={styles.vl}>
+          <small style={{ margin: "0 50px" }}>Tiền ship đơn hàng</small>
+          <h5 style={{ color: "crimson", marginRight: '2em' }}>{formatVND('15000')}đ</h5>
+        </span>
+      </Row>
+    </>
   );
 };
 
 const OrderDetail = ({ order }) => {
-  const [orderId,setOrderId]=useState(order.id);
+  const [orderId, setOrderId] = useState(order.id);
   const [orderD, setOrderD] = useState([]);
   //get data
   function fetchOrderItems(orderId) {
@@ -73,7 +81,7 @@ const OrderDetail = ({ order }) => {
   useEffect(() => {
     fetchOrderItems(orderId);
     setOrderId(order.id);
-  }, [orderId,orderD]);
+  }, [orderId, orderD]);
 
   // sum total price
   const totalPrice = (orderD) => {
@@ -128,16 +136,14 @@ const OrderDetail = ({ order }) => {
         </Row>
 
         {orderD.map((p, key) => {
-          return <ProductDetail product={p} />;
+          return <ProductDetail product={p} key={p.id} />;
         })}
 
         <Row style={{ borderTop: "2px solid red" }}>
           <Col>
             <span className={styles.vl}>
-              <small style={{ margin: "0 50px" }}>Tổng số tiền</small>
-              <h5 style={{ color: "crimson" }}>
-                {formatVND(totalPrice(orderD))}đ
-              </h5>
+              <small style={{ margin: "0 50px" }}>Tổng số tiền đơn hàng</small>
+              <h5 style={{ color: "crimson" }}>{formatVND(order.price)}đ</h5>
             </span>
           </Col>
         </Row>
@@ -196,7 +202,8 @@ const Order = () => {
     };
     return (
       <>
-        {currentItems && currentItems.map((o) => <OrderDetail order={o} />)}
+        {currentItems &&
+          currentItems.map((o) => <OrderDetail order={o} key={o.id} />)}
         <nav aria-label="Page navigation example" className={styles.navigation}>
           <ReactPaginate
             nextLabel="next >"
@@ -263,9 +270,12 @@ const Order = () => {
         activeKey={key}
         onSelect={(k) => hanldeListOrder(k)}
         className={styles.tab}
+        style={{
+          color: "black",
+        }}
       >
         {tabTitle.map((t) => (
-          <Tab eventKey={t.key} title={t.name}>
+          <Tab eventKey={t.key} title={t.name} key={t.key}>
             <DisplayTabTitle orders={orders} />
           </Tab>
         ))}

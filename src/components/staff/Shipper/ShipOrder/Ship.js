@@ -79,6 +79,20 @@ const OrderDetail = (props) => {
         });
     }
   }
+  //fetch order detail
+  const [orderD, setOrderD] = useState([]);
+  const listDetailOrder = async (idOrder) => {
+    setShow(true);
+    fetch("https://localhost:6969/Order/ViewOrder?orderId=" + idOrder)
+      .then((res) => {
+        if (res.ok) return res.json();
+        throw res;
+      })
+      .then((data) => setOrderD(data.listPro))
+      .catch((err) => {
+        console.error("Fetching order detail error: " + err);
+      });
+  };
   return (
     <div className={styles.container} style={{ margin: "0" }}>
       <Modal
@@ -134,18 +148,21 @@ const OrderDetail = (props) => {
         </Modal.Header>
         <Modal.Body>
           <p>Tên Khách Hàng: {props.data.order.userName}</p>
-          <p>Số lượng sản phẩm: {}</p>
           <p>
-            {/* {order.product.map((pro) => {
+            Số lượng sản phẩm:
+            {orderD.length}
+          </p>
+          <div>
+            {orderD.map((pro) => {
               return (
                 <div>
                   <p>
-                    {pro.name} - số lượng : {pro.quanity}
+                    {pro.name} - số lượng : {pro.quantity}
                   </p>
                 </div>
               );
-            })} */}
-          </p>
+            })}
+          </div>
           <p>Giá Đơn Hàng: {props.data.order.price}</p>
         </Modal.Body>
       </Modal>
@@ -162,7 +179,7 @@ const OrderDetail = (props) => {
                     textDecoration: "none",
                     marginLeft: "20px",
                   }}
-                  onClick={() => setShow(true)}
+                  onClick={() => listDetailOrder(props.data.order.id)}
                 >
                   Xem Chi tiết
                 </button>

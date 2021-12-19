@@ -7,10 +7,14 @@ class UserService {
   }
 
   get(userid) {
-    return users.find((x) => x.userid === userid);
-    // return http.get(`/product/${id}`);
+    return http.get("/User/ViewRole?userId=" + userid);
   }
-
+  getRole(userid) {
+    return http.get("/User/ViewRole?userId=" + userid);
+  }
+  updateInfor(userId,name,phone) {
+    return http.post("/User/UpdateInfor?userId="+userId+"&name=" + name+"&phone=" + phone);
+  }
   create(data) {
     console.log(data);
     return http.post("/user", data);

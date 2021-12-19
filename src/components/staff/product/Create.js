@@ -114,6 +114,7 @@ export default function CreateProduct(prop) {
       });
   }
   function onSubmit() {
+    const user = JSON.parse(localStorage.getItem("user"));
     var data = {
       code: code,
       name: name,
@@ -129,8 +130,8 @@ export default function CreateProduct(prop) {
       packingMethodId: packingId,
       statusId: statusId,
       displayImage: imageFile,
+      shopId: user.id
     };
-
     productService
       .create(data)
       .then((res) => {

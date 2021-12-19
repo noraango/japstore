@@ -66,6 +66,7 @@ function ProductCard(props) {
         displayImageName: props.data.displayImageName,
         quantity: quantity,
         price: props.data.price,
+        shopId:props.data.shopId
       };
       cartService.addItemToLocalCart(item);
       toast.success('Thêm sản phẩm '+props.data.name+" vào giỏ hàng thành công", {
@@ -81,7 +82,8 @@ function ProductCard(props) {
     }
   }
   function redirectProduct() {
-    history.push("/product/" + props.data.id);
+    //history.push("/product/" + props.data.id);
+    window.location.href = "/product/" + props.data.id;
   }
   return (
     <div className={styles.productCard}>

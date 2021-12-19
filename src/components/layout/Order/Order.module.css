@@ -240,3 +240,6 @@ td:nth-child(6) {
   align-items: center;
   justify-content: center;
 }
+.nav-link{
+  color: black;
+}

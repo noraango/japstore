@@ -26,7 +26,7 @@ export default function UserRole() {
   const status = [
     {
       key: 1,
-      name: "Admin",
+      name: "Tất Cả",
     },
     {
       key: 2,
@@ -159,9 +159,12 @@ export default function UserRole() {
                   <div>Không có data để hiển thị</div>
                 )}
               </tbody>
-              <nav
+              
+            </table>
+            <nav
                 aria-label="Page navigation example"
                 className={styles.navigation}
+                style={{display:"flex",justifyContent:"center"}}
               >
                 <ReactPaginate
                   nextLabel="next >"
@@ -183,7 +186,6 @@ export default function UserRole() {
                   renderOnZeroPageCount={null}
                 />
               </nav>
-            </table>
           </div>
         </TabPanel>
         <TabPanel>

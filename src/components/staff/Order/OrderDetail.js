@@ -3,6 +3,9 @@ import { Collapse, Button } from "react-bootstrap";
 import styles from "../store/List.module.css";
 import storeService from "../../../services/storeService";
 import { Container, Row, Col, Modal, Pagination } from "react-bootstrap";
+
+import { toast } from "react-toastify";
+import loading from "../../../services/loading.Service";
 export default function OrderDetail({ order }) {
   const [open, setOpen] = useState(false);
 
@@ -27,31 +30,83 @@ export default function OrderDetail({ order }) {
   }, []);
   function handleCancle(idOrder) {
     if (window.confirm("Xác nhận hủy đơn hàng?")) {
-      storeService
-        .Cancel(idOrder, reason)
-        .then((data) => {
-          if (data.data === 1) {
-            alert("Hủy nhận thành công");
-            window.location.reload();
-          } else {
-            alert("Không thể hủy đơn hàng");
-          }
-        })
-        .catch((err) => {
-          console.error("Fetching list orders shipping error: " + err);
+      if (reason === "" || reason === undefined) {
+        toast.warning("Vui lòng điền lý do hủy đơn", {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
         });
+      } else {
+        loading.showLoading();
+        storeService
+          .Cancel(idOrder, reason)
+          .then((data) => {
+            if (data.data === 1) {
+              toast.success("Hủy đơn hàng thành công", {
+                position: "bottom-right",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+              loading.HideLoading();
+              setCancel(false);
+             order.orderStatusId = 8;
+            } else {
+              toast.success("Hủy đơn hàng thành công", {
+                position: "bottom-right",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+              loading.HideLoading();
+            }
+          })
+          .catch((err) => {
+            console.error("Fetching list orders shipping error: " + err);
+            loading.HideLoading();
+          });
+      }
     }
   }
   function handleOk(idOrder) {
     if (window.confirm("Xác nhận giao đơn hàng?")) {
+      loading.showLoading();
       storeService
         .checkOrder(idOrder)
         .then((data) => {
+          loading.HideLoading();
           if (data.data.data === 1) {
-            alert("nhận thành công");
-            window.location.reload();
+            toast.success("Xác nhận đơn hàng thành công", {
+              position: "bottom-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            order.orderStatusId = 2;
           } else {
-            alert("Không thể xác nhận đơn hàng");
+            loading.HideLoading();
+            toast.error("Xác nhận đơn hàng thất bại", {
+              position: "bottom-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
           }
         })
         .catch((err) => {
@@ -72,7 +127,7 @@ export default function OrderDetail({ order }) {
       case 5:
         return "Đã hủy bỏ";
       default:
-        return "Chưa Rõ";
+        return "Đã Hủy";
     }
   }
 
@@ -91,10 +146,10 @@ export default function OrderDetail({ order }) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div class="form-group">
+          <div className="form-group">
             <label for="exampleFormControlTextarea1">Lý Do Hủy Đơn Hàng:</label>
             <textarea
-              class="form-control"
+              className="form-control"
               id="exampleFormControlTextarea1"
               rows="3"
               onChange={(e) => setReason(e.target.value)}
@@ -110,6 +165,10 @@ export default function OrderDetail({ order }) {
               backgroundColor: "red",
               textDecoration: "none",
               marginLeft: "20px",
+              padding: "8px 10px",
+              fontSize: "24px",
+              border: "none",
+              borderRadius: "10px",
             }}
             onClick={() => handleCancle(order.id)}
           >
@@ -123,19 +182,15 @@ export default function OrderDetail({ order }) {
         className={styles.grey}
         style={{ height: "54px", borderBottom: "1px solid" }}
       >
-        <td className="text-r">{order.id}</td>
-        <td className="text-l">
-          {(buyer.lastName ? buyer.lastName : "") +
-            " " +
-            (buyer.middleName ? buyer.middleName : "") +
-            " " +
-            buyer.firstName}
+        <td>{order.id}</td>
+        <td>
+          {buyer.lastName + " " + buyer.middleName + " " + buyer.firstName}
         </td>
-        <td className="text-r">{order.price}</td>
-        <td className="text-l">{order.address}</td>
-        <td className="text-l">{district}</td>
-        <td className="text-l">{city}</td>
-        <td className="text-r">{renderSwitch(order.orderStatusId)}</td>
+        <td>{order.price}</td>
+        <td>{order.address}</td>
+        <td>{district}</td>
+        <td>{city}</td>
+        <td>{renderSwitch(order.orderStatusId)}</td>
       </tr>
       {listItem.map((item, index) => (
         <Collapse in={open} key={item.id}>

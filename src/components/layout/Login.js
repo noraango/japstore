@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import authService from "../../services/auth.Service";
+
+import cartService from "../../services/cartService";
 import styles from "./Login.module.css";
 import { toast } from "react-toastify";
 
@@ -46,7 +48,21 @@ export default function Login(props) {
         if (res.data.status) {
           setMsgStyle(`${styles.hide}`);
           localStorage.setItem("user", JSON.stringify(res.data.user));
-          window.location.reload();
+         
+          cartService
+            .getCount(res.data.user.id)
+            .then((resp) => {
+              if (resp.data) {console.log(resp.data);
+                localStorage.setItem("cartAmount", resp.data.data);
+                cartService.onLogin(res.data.user.id);
+              }
+            })
+            .catch((e) => {
+              setMsg("Thông tin đăng nhập không chính xác");
+              setMsgStyle(`${styles.show}`);
+              console.log(e);
+            });
+          
         } else {
           setMsg("Thông tin đăng nhập không chính xác");
           setMsgStyle(`${styles.show}`);

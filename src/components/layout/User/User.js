@@ -4,7 +4,10 @@ import { Button } from "react-bootstrap";
 import { path } from "../../../controller/constants";
 import ShipperRegister from "./ShipperRegister";
 import SellerRegister from "./SellerRegister";
-
+import userService from "../../../services/user.service";
+import loadingService from "../../../services/loading.Service";
+import { toast } from "react-toastify";
+let user = JSON.parse(localStorage.getItem("user"));
 const btn = (content, style) => {
   return (
     <div className={styles.subBtnDiv} style={style}>
@@ -22,25 +25,7 @@ const btn = (content, style) => {
   );
 };
 
-const getRoleInfo = (userId, setRoleInfo) => {
-  fetch("https://localhost:6969/User/ViewRole?userId=" + userId)
-    .then((res) => {
-      if (res.ok) return res.json();
-      throw res;
-    })
-    .then((data) => {
-      setRoleInfo({
-        cmTcode: data.cmTcode,
-        city: data.city,
-        district: data.district,
-      });
-    })
-    .catch((err) => {
-      console.error("Fetch Role Information error:" + err);
-    });
-};
-
-const SellerInfo = ({user, roleInfo}) => {
+const SellerInfo = ({ user, roleInfo }) => {
   return (
     <>
       <div
@@ -95,15 +80,14 @@ const SellerInfo = ({user, roleInfo}) => {
               </div>
             </div>
           </div>
-          {btn("Lưu")}
         </form>
       </div>
     </>
   );
 };
 
-const ShipperInfo = ({user, roleInfo}) => {
-  console.log(roleInfo)
+const ShipperInfo = ({ user, roleInfo }) => {
+  console.log(roleInfo);
   return (
     <>
       <div
@@ -167,13 +151,37 @@ const ShipperInfo = ({user, roleInfo}) => {
 
 const User = (props) => {
   const [user, setUser] = useState({});
-  
+  const [name, setName] = useState();
+  const [phone, setPhone] = useState();
+  const [roleInfo, setRoleInfo] = useState({});
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
       props.history.push("/");
     }
     setUser(user);
+    let name = user.lastName + " " + user.middleName + " " + user.firstName;
+    setPhone(user.phone);
+    setName(name);
+    userService
+      .getRole(user.id)
+      .then((data) => {
+        if (data.data === "") {
+          setRoleInfo({
+            notCheck: true,
+          });
+        } else {
+          setRoleInfo({
+            status: data.data.status,
+            cmTcode: data.data.cmTcode,
+            city: data.data.city,
+            district: data.data.district,
+          });
+        }
+      })
+      .catch((err) => {
+        console.error("Fetch Role Information error:" + err);
+      });
   }, []);
   const [imageFile, setImageFile] = useState(undefined);
   const [imageURL, setImageURL] = useState(path + "/images/upload.jpg");
@@ -184,50 +192,46 @@ const User = (props) => {
       setImageURL(URL.createObjectURL(e.target.files[0]));
     }
   };
-  const [startDate, setStartDate] = useState(new Date());
   const [modalShipperShow, setModalShipperShow] = useState(false);
   const [modalSellerShow, setModalSellerShow] = useState(false);
-
-  
-
-  const DisplayExtraInfo = ({user}) => {
-    const [roleInfo, setRoleInfo] = useState({});
-  console.log('role: '+user.id)
-   useEffect(
-     ()=>getRoleInfo(user.id, setRoleInfo)
-     ,[]);
+  const DisplayExtraInfo = ({ user }) => {
     let displayComponent;
     switch (user.role) {
       case "Admin":
         return <p>Admin</p>;
         break;
       case "Shipper":
-        return (<ShipperInfo user={user} roleInfo={roleInfo}/>);
+        return <ShipperInfo user={user} roleInfo={roleInfo} />;
         break;
       case "Seller":
-        return (<SellerInfo user={user} roleInfo={roleInfo}/>);
+        return <SellerInfo user={user} roleInfo={roleInfo} />;
         break;
       default:
         return (
           <>
-            <div>
-              <Button
-                className={styles.subBtn}
-                style={{ width: "fit-content" }}
-                variant="primary"
-                onClick={() => setModalShipperShow(true)}
-              >
-                Đăng ký trở thành Shipper
-              </Button>
-              <Button
-                className={styles.subBtn}
-                style={{ width: "fit-content" }}
-                variant="primary"
-                onClick={() => setModalSellerShow(true)}
-              >
-                Đăng ký trở thành Seller
-              </Button>
-            </div>
+            {roleInfo.notCheck ? (
+              <div>
+                <Button
+                  className={styles.subBtn}
+                  style={{ width: "fit-content" }}
+                  variant="primary"
+                  onClick={() => setModalShipperShow(true)}
+                >
+                  Đăng ký trở thành Shipper
+                </Button>
+                <Button
+                  className={styles.subBtn}
+                  style={{ width: "fit-content" }}
+                  variant="primary"
+                  onClick={() => setModalSellerShow(true)}
+                >
+                  Đăng ký trở thành Seller
+                </Button>
+              </div>
+            ) : (
+              <div>Đã đăng ký và đang chờ xét duyệt</div>
+            )}
+
             <ShipperRegister
               show={modalShipperShow}
               onHide={() => setModalShipperShow(false)}
@@ -244,6 +248,31 @@ const User = (props) => {
     }
   };
 
+  function changeInfor() {
+    loadingService.showLoading();
+    userService
+      .updateInfor(user.id, name, phone)
+      .then((data) => {
+        loadingService.HideLoading();
+        let userm = JSON.parse(localStorage.getItem("user"));
+        userm.firstName = name;
+        setUser(userm);
+        localStorage.setItem("user", JSON.stringify(userm));
+        toast.success("Thay đổi thành công", {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+      .catch((err) => {
+        loadingService.HideLoading();
+        console.error("Fetch Role Information error:" + err);
+      });
+  }
   return (
     <div className={styles.container}>
       <div className={styles.card}>
@@ -278,7 +307,7 @@ const User = (props) => {
               </div>
             </div>
             <div className={styles.formInfo}>
-              <form className={styles.formInfoMain}>
+              <div className={styles.formInfoMain}>
                 <div>
                   <div className={styles.label1}>
                     <div className={styles.label2}>
@@ -294,6 +323,7 @@ const User = (props) => {
                               id="fname"
                               name="fname"
                               value={user.email}
+                              disabled
                             />
                             <br />
                           </div>
@@ -315,13 +345,10 @@ const User = (props) => {
                               type="text"
                               id="fname"
                               name="fname"
-                              value={
-                                user.lastName +
-                                " " +
-                                user.middleName +
-                                " " +
-                                user.firstName
-                              }
+                              value={name}
+                              onChange={(e) => {
+                                setName(e.target.value);
+                              }}
                             />
                           </div>
                         </div>
@@ -336,10 +363,7 @@ const User = (props) => {
                       </div>
                       <div className={styles.input1}>
                         <div className={styles.email1}>
-                          <div className={styles.email2}>
-                            {user.email}
-                            <button class={styles.emailBtn}>Thay đổi</button>
-                          </div>
+                          <div className={styles.email2}>{user.email}</div>
                         </div>
                       </div>
                     </div>
@@ -358,7 +382,10 @@ const User = (props) => {
                               type="text"
                               id="fname"
                               name="fname"
-                              value={user.phone}
+                              value={phone}
+                              onChange={(e) => {
+                                setPhone(e.target.value);
+                              }}
                             />
                           </div>
                         </div>
@@ -366,13 +393,24 @@ const User = (props) => {
                     </div>
                   </div>
                 </div>
-
-                {btn("Lưu")}
-              </form>
+                <div className={styles.subBtnDiv}>
+                  <div
+                    style={{
+                      width: "15rem",
+                      display: "flex",
+                      justifyContent: "inherit",
+                      alignContent: "center",
+                    }}
+                  >
+                    <button className={styles.subBtn} onClick={changeInfor}>
+                      Lưu
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        {console.log("user:" + user.id)}
         <div className={styles.cardInfo}>
           <DisplayExtraInfo user={user} />
         </div>

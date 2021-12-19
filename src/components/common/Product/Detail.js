@@ -9,10 +9,11 @@ import cartService from "../../../services/cartService";
 import { useHistory } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import Landing from "../../common/Landing/Landing";
-import { Redirect } from 'react-router';
+import { Redirect } from "react-router";
 import { Button } from "react-bootstrap";
 import loading from "../../../services/loading.Service";
 import Rating from "./Rating";
+import { toast } from "react-toastify";
 export default function Detail(props) {
   /**
    * Create data
@@ -27,11 +28,9 @@ export default function Detail(props) {
    */
 
   useEffect(() => {
-    
     fetchProduct();
-    fetchProductComment(1,4);
+    fetchProductComment(1, 4);
     setData1(getProductList(6));
-    
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   function fetchProduct() {
     loading.showLoading();
@@ -45,9 +44,9 @@ export default function Detail(props) {
         console.log(e);
       });
   }
-  function fetchProductComment(page,size) {
+  function fetchProductComment(page, size) {
     productService
-      .getComment(props.match.params.id, page,size)
+      .getComment(props.match.params.id, page, size)
       .then((res) => {
         setRatingList(res.data);
         console.log(res.data);
@@ -57,7 +56,7 @@ export default function Detail(props) {
       });
   }
   const handlePageClick = (event) => {
-    fetchProductComment(event.selected + 1,4);
+    fetchProductComment(event.selected + 1, 4);
   };
   function incrementValue(e) {
     setNumber(number + 1);
@@ -68,21 +67,49 @@ export default function Detail(props) {
   }
 
   function onBuyNowClick() {
-    // let user = JSON.parse(localStorage.getItem("user"));
-    // productService
-    //   .buyProduct(props.match.params.id,number,user.id)
-    //   .then((res) => {
-    //     console.log("buy done")
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
-
-    <Redirect to={{
-      pathname: '/payment',
-      state: { id: '123' }
-  }}
-/>
+    let user = JSON.parse(localStorage.getItem("user"));
+    loading.showLoading();
+    productService
+      .buyProduct(props.match.params.id, number, user.id)
+      .then((res) => {
+        if (res.data == 0) {
+          toast.error("Mua hàng thất bại", {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          loading.HideLoading();
+        } else {
+          toast.success("Mua hàng thành công", {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          loading.HideLoading();
+          history.push("/payment/" + res.data);
+        }
+      })
+      .catch((e) => {
+        toast.error("Mua hàng thất bại", {
+          position: "bottom-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        loading.HideLoading();
+        console.log(e);
+      });
   }
   /**
    * View
@@ -126,10 +153,7 @@ export default function Detail(props) {
       });
   }
   return (
-    <div
-      className={`container ${styles.container}`}
-     
-    >
+    <div className={`container ${styles.container}`}>
       <h3 className={"product-name"}>{product.name}</h3>
       <div className={`row`}>
         <div
@@ -138,7 +162,7 @@ export default function Detail(props) {
           <ImageMagnifiers linkImage={props.match.params.id} />
         </div>
         <div className={`col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6`}>
-          <div className={"product-infor"}>
+          <div className={"product-infor"} style={{ position: "relative" }}>
             <div style={{ borderBlockEnd: "1px solid #e9a3a3" }}>
               <div className="total-rate">
                 Đánh Giá : <span className={" red"}>{product.rating}/5</span>
@@ -191,14 +215,11 @@ export default function Detail(props) {
               </div>
               <div className="col col-md-8 col-12 pt-2">
                 <div className="buying-button">
-                  <button
-                    className="addCart"
-                    onClick={onBuyNowClick}
-                  >
+                  <button className="addCart" onClick={onBuyNowClick}>
                     Mua ngay
                   </button>
                   <button className="addCart" onClick={onClickAddCart}>
-                    thêm giỏ hàng
+                    Thêm giỏ hàng
                   </button>
                 </div>
               </div>
@@ -206,11 +227,13 @@ export default function Detail(props) {
           </div>
         </div>
       </div>
-      <div  style={{
-        marginTop: "25px",
-        paddingTop: "25px",
-        borderBlockStart: "1px solid black",
-      }}>
+      <div
+        style={{
+          marginTop: "25px",
+          paddingTop: "25px",
+          borderBlockStart: "1px solid black",
+        }}
+      >
         <h4>Sản Phẩm Liên Quan</h4>
         <Landing data={data1} col={6} />
       </div>
@@ -218,15 +241,11 @@ export default function Detail(props) {
         <div className="rate">
           <h4>Đánh giá của khách hàng</h4>
         </div>
-        <Button
-                className={styles.subBtn}
-                style={{ width: "fit-content" }}
-                variant="primary"
-                onClick={() => setShowCmtF(true)}
-            >
-                Thêm nhận xét
-            </Button>
-        <Rating showCmtF={showCmtF} setShowCmtF={setShowCmtF}/>
+        <Rating
+          showCmtF={showCmtF}
+          setShowCmtF={setShowCmtF}
+          productId={product.id}
+        />
         {RatingList.data ? (
           <div>
             <div className="comment">

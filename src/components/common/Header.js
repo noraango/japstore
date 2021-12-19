@@ -36,6 +36,9 @@ function Header(props) {
   function redirectStaff() {
     history.push("/staff/product");
   }
+  function redirectAdmin() {
+    history.push("/role");
+  }
   function redirectOrder() {
     history.push("/order");
   }
@@ -106,7 +109,7 @@ function Header(props) {
                   </>
                 ) : user.role === "Admin" ? (
                   <>
-                    <button onClick={redirectStaff}>Quản lí</button>
+                    <button onClick={redirectAdmin}>Quản lí Role</button>
                   </>
                 ) : null
               ) : null}

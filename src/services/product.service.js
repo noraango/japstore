@@ -12,6 +12,18 @@ class ProductService {
   getStore() {
     return http.get("/store/get");
   }
+  postComment(userId, productId, rating, comment) {
+    return http.post(
+      "/product/addComment?userId=" +
+        userId +
+        "&productId=" +
+        productId +
+        "&rating=" +
+        rating +
+        "&comment=" +
+        comment
+    );
+  }
   create(data) {
     let formData = new FormData();
     formData.append("code", data.code);
@@ -26,8 +38,8 @@ class ProductService {
     formData.append("originId", data.originId);
     formData.append("packingMethodId", data.packingMethodId);
     formData.append("productStatusId", data.statusId);
-    formData.append("storageId", data.storageId);
     formData.append("displayImage", data.displayImage);
+    formData.append("shopId", data.shopId);
     for (let i = 0; i < data.images.length; i++) {
       formData.append("images[]", data.images[i]);
     }
@@ -39,6 +51,46 @@ class ProductService {
   search(text, currentPage, pageSize) {
     return http.get(
       "/product/search?querySearch=" +
+        text +
+        "&CurrentPage=" +
+        currentPage +
+        "&PageSize=" +
+        pageSize
+    );
+  }
+  searchFilter(text, price, rate, currentPage, pageSize) {
+    return http.get(
+      "/product/searchFilter?querySearch=" +
+        text +
+        "&price=" +
+        price +
+        "&rate=" +
+        rate +
+        "&CurrentPage=" +
+        currentPage +
+        "&PageSize=" +
+        pageSize
+    );
+  }
+  CategoryFilter(category, price, rate, page, size) {
+    return http.get(
+      "/product/categoryFilter?categoryId=" +
+        category +
+        "&price=" +
+        price +
+        "&rate=" +
+        rate +
+        "&page=" +
+        page +
+        "&size=" +
+        size
+    );
+  }
+  shopProduct(userId, text, currentPage, pageSize) {
+    return http.get(
+      "/product/getShopProduct?userId=" +
+        userId +
+        "&querySearch=" +
         text +
         "&CurrentPage=" +
         currentPage +
@@ -75,18 +127,6 @@ class ProductService {
         page +
         "&size=" +
         size
-    );
-  }
-  rate(userId, productId, rating, comment) {
-    return http.post(
-      "/product/rate?userId=" +
-        userId +
-        "&productId=" +
-        productId +
-        "&rating=" +
-        rating +
-        "&comment=" +
-        comment
     );
   }
 }

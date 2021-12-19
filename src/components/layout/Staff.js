@@ -13,7 +13,7 @@ export default function Staff(prop) {
   if (user === null) {
     history.push("/");
     return <div></div>;
-  } else if (user.role !== "Admin") {
+  } else if (user.role !== "Seller") {
     history.push("/");
     return <div></div>;
   }

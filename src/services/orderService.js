@@ -9,7 +9,9 @@ class OrderService {
     return http.get("/order/getorderitems/" + orderId);
   }
 
-  createOrder(user, data) {
+  createOrder(user, data,cartId) {
+    console.log(user);
+    console.log(data);
     let formData = new FormData();
     if (user) {
       formData.append("userid", user.id);
@@ -21,7 +23,7 @@ class OrderService {
     formData.append("Phone", data.phoneNumber);
     formData.append("Address", data.location);
     formData.append("Price", data.price);
-    return http.post("/order/create", formData);
+    return http.post("/order/create?cartId="+cartId, formData);
   }
 }
 export default new OrderService();

@@ -8,6 +8,7 @@ import MessageBox from "../MessageBox/MessageBox";
 import "./Payment.css";
 import ProductOverview from "./ProductOverview";
 
+import { toast } from 'react-toastify';
 export default function Payment(props) {
   const [items, setItems] = useState([]);
   const [provinces, setProvinces] = useState([]);
@@ -35,7 +36,7 @@ export default function Payment(props) {
   function fetchCartItems() {
     if (user) {
       cartService
-        .getCart(user.id)
+        .getCartDetail(props.match.params.orderId)
         .then((res) => {
           setItems(res.data);
           let sum = 0;
@@ -49,13 +50,16 @@ export default function Payment(props) {
           console.log(e);
         });
     } else {
-      let cart = cartService.getLocalCart();
-      setItems(cart);
-      let sum = 0;
-      cart.forEach((e) => {
-        sum += e.price * e.quantity;
-      });
-      setTotal(sum);
+      history.push("/login");
+      toast.error('Bạn phải đăng nhập để thanh toán sản phẩm', {
+        position: "bottom-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
     }
   }
   function fetchProvince() {
@@ -182,15 +186,30 @@ export default function Payment(props) {
     let user = JSON.parse(localStorage.getItem("user"));
     infor.price = total + shippingFee;
     orderService
-      .createOrder(user, infor)
+      .createOrder(user, infor,props.match.params.orderId)
       .then((res) => {
         console.log(res);
         if (res.data === 1) {
-          setMsg("Tạo đơn hàng thành công");
-          setCreateOrderSuccess(true);
+          toast.success('Thanh Toán thành công', {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+            history.push("/order");
         } else {
-          setMsg("Tạo đơn hàng thất bại");
-          setCreateOrderSuccess(false);
+          toast.error('Thanh Toán thất bại', {
+            position: "bottom-right",
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
         }
       })
       .catch((e) => {
