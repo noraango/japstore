@@ -30,7 +30,8 @@ function Header(props) {
   function logout() {
     localStorage.removeItem("user");
     localStorage.removeItem("User");
-    window.location.href("/");
+    history.push("/");
+    window.location.reload();
   }
   function redirectStaff() {
     history.push("/staff/product");
@@ -65,8 +66,7 @@ function Header(props) {
         <div className={`${styles.top}`}>
           <div className={`${styles.navList} ${app.colLeft}`}>
             <button className={`${styles.btnProfile}`} onClick={toHome}>
-              <img src={path + "/logo.png"} alt="text" />
-              <span>Jap Store</span>
+              <img src={path + "/logo-2.png"} alt="text" />
             </button>
           </div>
           <div className={`${styles.navList} ${app.colRight}`}>
